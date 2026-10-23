@@ -2,58 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Family Budget</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Budget">
-<meta name="theme-color" content="#111614">
+<meta name="theme-color" content="#000000">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F2F4F3; --surface:#FFFFFF; --ink:#16211F; --muted:#5D6A67; --line:#DCE2E0;
-  --soft:#E8EDEB; --check:#E2AC17; --check-ink:#2B2000; --good:#1F6B4A; --bad:#B3361D;
-  --accent:#16211F; --accent-ink:#FFFFFF; --banner:#FFF4D6; --banner-ink:#4A3800; --red-bg:#FBE1DB; --red-ink:#7A1E0E; --extra-bg:#E2F2E9; --extra-ink:#17583B;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#111614; --surface:#1A211F; --ink:#ECF1EF; --muted:#9AA8A4; --line:#2B3532;
-    --soft:#222B28; --check:#E8B52B; --check-ink:#241A00; --good:#5BC08F; --bad:#F27A61;
-    --accent:#ECF1EF; --accent-ink:#111614; --banner:#3A3010; --banner-ink:#F5E3A8; --red-bg:#401A13; --red-ink:#F8C4B8; --extra-bg:#16301F; --extra-ink:#8FDDB4;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#111614; --surface:#1A211F; --ink:#ECF1EF; --muted:#9AA8A4; --line:#2B3532;
-  --soft:#222B28; --check:#E8B52B; --check-ink:#241A00; --good:#5BC08F; --bad:#F27A61;
-  --accent:#ECF1EF; --accent-ink:#111614; --banner:#3A3010; --banner-ink:#F5E3A8; --red-bg:#401A13; --red-ink:#F8C4B8; --extra-bg:#16301F; --extra-ink:#8FDDB4;
+  --bg:#000000; --surface:#1C1C1E; --ink:#F5F5F7; --muted:#8E8E93; --line:#2C2C2E; --dim:#636366; --raise:#3A3A3C;
+  --soft:#2C2C2E; --check:#30C77B; --check-ink:#000000; --good:#30D158; --bad:#FF453A;
+  --accent:#F5F5F7; --accent-ink:#000000; --banner:#2B2508; --banner-ink:#FFE27A; --red-bg:#3B1411; --red-ink:#FF9C8F; --extra-bg:#2B2508; --extra-ink:#FFD60A; --plan:#22533C; --xbar:#FFD60A;
   color-scheme:dark;
 }
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
 html{scroll-padding-top:env(safe-area-inset-top,0px);}
 *,*::before,*::after{box-sizing:inherit}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--check);outline-offset:2px;border-radius:8px}
 .num{font-variant-numeric:tabular-nums}
 .muted{color:var(--muted)}
 .good{color:var(--good)} .bad{color:var(--bad)}
-.wrap{max-width:560px;margin:0 auto;padding:4px 16px 80px}
+.wrap{max-width:560px;margin:0 auto;padding:4px 16px 96px}
 
 .top{display:flex;align-items:baseline;justify-content:space-between;padding:8px 2px 4px}
 .top h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-0.02em}
 .status{font-size:13px;color:var(--muted)}
 
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:8px 0 10px;margin:0 -16px;padding-left:16px;padding-right:16px}
-.seg{display:grid;grid-template-columns:repeat(2,1fr);background:var(--soft);border-radius:12px;padding:3px;gap:3px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:12px;padding:3px;gap:3px}
 .seg button{border:0;background:transparent;border-radius:9px;padding:9px 4px;font-weight:600;font-size:15px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
 .seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .count{font-size:12px;font-weight:700;background:var(--check);color:var(--check-ink);border-radius:999px;padding:1px 7px;min-width:20px}
@@ -65,7 +51,7 @@ button{cursor:pointer}
 .pc-head{display:flex;width:100%;align-items:baseline;justify-content:space-between;border:0;background:none;padding:0;text-align:left}
 .pc-date{font-size:24px;font-weight:800;letter-spacing:-0.01em}
 .pc-amt{font-size:20px;font-weight:700}
-.pc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 10px}
+.pc-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 8px;margin:12px 0 10px}
 .pc-stats .k{display:block;font-size:12px;color:var(--muted)}
 .pc-stats .v{display:block;font-size:17px;font-weight:700}
 .pc-stats .lead .v{font-size:22px}
@@ -166,23 +152,6 @@ dialog h2{margin:0 0 14px;font-size:20px;font-weight:800}
 .extra-v{font-size:19px;font-weight:800}
 details.pc .extra{margin:4px 16px 10px}
 .pane-title{display:none}
-body[data-tab="pay"] #paneExp, body[data-tab="exp"] #panePay{display:none}
-@media (orientation: landscape) and (min-width: 640px){
-  html, body{height:100%;overflow:hidden}
-  .wrap{max-width:none;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;
-    padding:4px max(16px, env(safe-area-inset-right,0px)) 0 max(16px, env(safe-area-inset-left,0px))}
-  .tabs{position:fixed;top:calc(env(safe-area-inset-top,0px) + 2px);right:max(18px, env(safe-area-inset-right,0px));z-index:6;margin:0;padding:0;background:transparent}
-  .tabs .seg{display:none}
-  .tabs .gear{width:30px;height:30px;border-radius:8px}
-  .tabs .gear svg{width:16px;height:16px}
-  #app{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  body[data-tab] #panePay, body[data-tab] #paneExp{display:block}
-  .pane{min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 2px 40px}
-  .pane-title{display:block;position:sticky;top:0;z-index:2;background:var(--bg);margin:0;padding:4px 2px 8px;font-size:15px;font-weight:700;color:var(--muted)}
-  #panePay .banner{display:none}
-  #paneExp .sec-head:nth-of-type(1){margin-top:12px}
-  .pc-date{font-size:21px}
-}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .tabs{display:flex;align-items:center;gap:8px}
 .tabs .seg{flex:1}
@@ -191,11 +160,11 @@ body[data-tab="pay"] #paneExp, body[data-tab="exp"] #panePay{display:none}
 .status{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;background:var(--soft);color:var(--muted);font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none}
 .status.show{opacity:1}
 /* status-bar strip when opened from the home screen (status bar text is white) */
-body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#111614;z-index:40}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#000000;z-index:40}
 .login{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:auto;
   padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px))}
 .login-card{width:100%;max-width:380px}
-.login-icon{width:64px;height:64px;border-radius:16px;background:#16211F;display:grid;place-items:center;margin-bottom:18px}
+.login-icon{width:64px;height:64px;border-radius:16px;background:#1C1C1E;display:grid;place-items:center;margin-bottom:18px}
 .login-icon span{width:34px;height:34px;border-radius:50%;background:var(--check);display:grid;place-items:center}
 .login-icon svg{width:20px;height:20px;fill:none;stroke:var(--check-ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .login h2{margin:0 0 4px;font-size:28px;font-weight:800;letter-spacing:-0.02em}
@@ -217,6 +186,16 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area
 .acct-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .acct-btns button{border:0;background:var(--soft);border-radius:12px;padding:10px 6px;font-weight:700;font-size:14px}
 .acct-btns .danger{color:var(--bad)}
+.pill{display:inline-block;margin-left:7px;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--soft);color:var(--muted);vertical-align:2px}
+.sugg{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg);margin:0 0 10px}
+.sugg-h{margin:0;padding:8px 12px 2px;font-size:12px;font-weight:700;color:var(--muted)}
+.sugg button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;border:0;border-top:1px solid var(--line);background:none;padding:10px 12px;text-align:left}
+.sugg .sugg-h + button{border-top:0}
+.sugg .s-name{display:block;font-weight:600}
+.sugg .s-sub{display:block;font-size:12.5px;color:var(--muted)}
+.empty.small{padding:12px 4px;font-size:14px}
+.check-row{display:flex;gap:10px;align-items:center;margin:8px 0;font-size:15px}
+.check-row input{width:20px;height:20px;accent-color:var(--check)}
 .count.red{background:var(--bad);color:#fff}
 .banner.red{background:var(--red-bg);color:var(--red-ink)}
 div.banner{cursor:default}
@@ -240,7 +219,247 @@ div.banner{cursor:default}
 .buy-sum button{flex:none;border:0;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:8px 12px;font-weight:700;font-size:14px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;display:flex;align-items:center;gap:14px;background:var(--accent);color:var(--accent-ink);border-radius:14px;padding:10px 10px 10px 16px;max-width:calc(100% - 32px);box-shadow:0 6px 20px rgba(0,0,0,.25);font-size:15px}
 .toast button{border:0;background:transparent;color:var(--check);font-weight:800;padding:6px 8px}
-@media (prefers-reduced-motion: reduce){.bar span{transition:none}}
+/* no double-tap zoom on buttons */
+html{touch-action:manipulation}
+button,a,input,select,label,textarea,summary{touch-action:manipulation}
+/* iOS date fields: stay inside the screen, text on the left */
+input[type="date"],input[type="month"],input[type="time"]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;display:block;min-height:46px}
+.add input[type="date"]{display:inline-block;min-height:0}
+input::-webkit-date-and-time-value{text-align:left;margin:0}
+.field textarea{font-size:16px}
+#sheetTitle:focus{outline:none}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+/* settings */
+.set-list{list-style:none;margin:0 0 14px;padding:0;background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.set-row{display:flex;width:100%;align-items:center;gap:12px;border:0;border-top:1px solid var(--line);background:none;padding:12px 14px;text-align:left}
+.set-list li:first-child .set-row{border-top:0}
+.set-row .t{display:block;font-weight:700}
+.set-row .s{display:block;font-size:13px;color:var(--muted)}
+.set-row .chev{margin-left:auto;color:var(--muted);font-size:22px;line-height:1}
+.set-ico{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--soft)}
+.set-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.grp-h{font-size:13px;font-weight:700;color:var(--muted);margin:18px 2px 6px}
+.grp-h:first-child{margin-top:0}
+.card-box{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:2px 14px;margin-bottom:10px}
+.card-box .field{margin:10px 0}
+.sw-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);cursor:pointer}
+.card-box > .sw-row:first-child,.card-box > div:first-child > .sw-row:first-child{border-top:0}
+.sw-row > span{flex:1;min-width:0}
+.sw-row .t{display:block;font-weight:600}
+.sw-row .s{display:block;font-size:13px;color:var(--muted)}
+.switch{flex:none;position:relative;width:51px;height:31px;-webkit-appearance:none;appearance:none;background:var(--line);border-radius:999px;margin:0;cursor:pointer;transition:background .2s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.switch:checked{background:var(--check)}
+.switch:checked::after{transform:translateX(20px)}
+.sub-opts{padding:0 0 10px}
+.sub-opts .field{margin:0 0 8px}
+.sub-opts .two .field{margin:0}
+.note{background:var(--banner);color:var(--banner-ink);border-radius:12px;padding:10px 12px;font-size:14px;margin:0 0 12px}
+.plans{display:grid;gap:8px;margin-bottom:6px}
+.plans label{position:relative;display:block;border:1.5px solid var(--line);border-radius:14px;padding:11px 14px;cursor:pointer;background:var(--bg)}
+.plans input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.plans label:has(input:checked){border-color:var(--ink)}
+.plans .pn{display:flex;justify-content:space-between;gap:10px;font-weight:700}
+.plans .pd{display:block;font-size:13px;color:var(--muted)}
+.badge{display:inline-block;font-size:11px;font-weight:800;background:var(--check);color:var(--check-ink);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+.soft-btn{border:0;background:var(--soft);border-radius:12px;padding:10px 14px;font-weight:700;font-size:14px}
+.soft-btn.danger{color:var(--bad)}
+.btn-line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}
+.people{list-style:none;margin:0;padding:0}
+.people li{padding:10px 0;border-top:1px solid var(--line);font-size:15px;overflow-wrap:anywhere}
+.people li:first-child{border-top:0}
+.form-err{color:var(--bad);font-weight:600;font-size:14px;margin:0 0 10px}
+.lbl{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.seg button{min-width:0;white-space:nowrap;font-size:14.5px;padding:9px 2px}
+.cat-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-bottom:6px}
+.cat-grid.one{grid-template-columns:1fr}
+.cat-btn{display:flex;align-items:center;gap:9px;min-height:50px;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:8px 10px;text-align:left;font-weight:600;font-size:14.5px;line-height:1.2}
+.cat-btn.sug{border-color:var(--ink);background:var(--surface)}
+.cat-e{flex:none;font-size:20px;line-height:1}
+.rng{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--soft);border-radius:12px;padding:3px;gap:3px;margin:0 0 12px}
+.rng button{border:0;background:transparent;border-radius:9px;padding:8px 2px;font-weight:600;font-size:13.5px;color:var(--muted);white-space:nowrap}
+.rng button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.ana-kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 4px}
+.ana-kv .k{display:block;font-size:12px;color:var(--muted)}
+.ana-kv .v{display:block;font-size:17px;font-weight:700}
+.need-cat{border-color:var(--check)}
+.need-cat h3{margin:0 0 4px;font-size:16px}
+.need-cat .pick{flex:none;font-weight:700;font-size:14px;background:var(--soft);border-radius:10px;padding:6px 12px}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--muted);margin:-2px 2px 8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend i.p{background:var(--check)} .legend i.u{background:var(--plan)}
+.pc.cats{padding:4px 14px}
+.cat-row{border-top:1px solid var(--line)}
+.cat-row:first-child{border-top:0}
+.cat-row summary{list-style:none;display:flex;align-items:flex-start;gap:10px;padding:12px 0;cursor:pointer}
+.cat-row summary::-webkit-details-marker{display:none}
+.cat-row .cat-e{margin-top:1px}
+.cat-mid{flex:1;min-width:0}
+.cat-top{display:flex;justify-content:space-between;gap:10px}
+.cat-n{font-weight:600;min-width:0}
+.cat-v{font-weight:700}
+.cat-sub{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
+.hbar{display:flex;gap:2px;height:10px;margin-top:7px}
+.hbar span{display:block;height:100%;border-radius:4px;min-width:3px}
+.hbar .p{background:var(--check)} .hbar .u{background:var(--plan)}
+.cat-row .items{padding:0 0 8px 30px}
+.pc.months{padding:8px 14px}
+.mrow{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 0}
+.mrow .hbar{margin:0}
+.mlab{font-size:14px;color:var(--muted);font-weight:600}
+.mval{font-weight:600;font-size:14px;min-width:64px;text-align:right}
+/* paycheck summary: one line of numbers over one bar of the whole check */
+.pc-line{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:12px 0 8px}
+.pc-line .st{min-width:0}
+.pc-line .k{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;letter-spacing:-0.02em}
+.pc-line .v{display:block;margin-top:2px;font-size:16px;font-weight:800;white-space:nowrap;letter-spacing:-0.01em}
+.pc-line.sm .v{font-size:14px}
+.pc-line .v.good{color:var(--xbar)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:4px;flex:none}
+.dot.p{background:var(--check)} .dot.u{background:var(--plan)} .dot.x{background:var(--xbar)}
+.dot.eb{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.pc-sum{margin:6px 4px 12px}
+.pc-bar{position:relative;display:flex;gap:2px;height:12px}
+.pc-bar span{display:block;height:100%;min-width:3px;border-radius:4px}
+.pc-bar .p{background:var(--check)} .pc-bar .u{background:var(--plan)} .pc-bar .x{background:var(--xbar)}
+.pc-bar .eb{display:flex;gap:2px;min-width:8px;border-radius:5px;outline:2px solid var(--ink);outline-offset:2px}
+.pc-bar .p + .eb{margin-left:5px}
+.pc-bar .eb + .ovs{margin-left:5px}
+.pc-bar .ovs{background:repeating-linear-gradient(135deg,var(--bad) 0 3px,var(--plan) 3px 6px)}
+.pc-bar .ov{position:absolute;top:-2px;bottom:-2px;right:0;min-width:0;border-radius:0 7px 7px 0;border-left:2px solid var(--bad);background:repeating-linear-gradient(135deg,rgba(179,54,29,.6) 0 3px,transparent 3px 6px)}
+/* ===== Midnight design: black, emerald for what's paid, white chrome ===== */
+.pc{background:var(--surface);border:0;border-radius:22px}
+.xcard{border:0;border-radius:20px}
+.addcard{border-color:#3A3A3C;border-radius:20px}
+.set-list{background:var(--surface);border:0;border-radius:20px}
+.radios input:checked+span,.rng button[aria-selected="true"]{background:var(--raise);box-shadow:none}
+.pc.need-cat{border:1px solid var(--xbar)}
+.page-h{margin:12px 4px 14px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
+.sec-head h2{font-size:19px;font-weight:700}
+.sub-head h3{font-size:15px;font-weight:700;color:#A1A1A6}
+/* bottom tab bar: white when selected, dimmed when not */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  height:calc(60px + env(safe-area-inset-bottom,0px));padding:6px max(12px, env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(12px, env(safe-area-inset-left,0px));
+  background:rgba(8,8,9,.94);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:.5px solid #232325}
+.tabbar button{position:relative;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 0 0;color:var(--dim);font-size:10.5px;font-weight:600}
+.tabbar button[aria-current="page"]{color:#FFFFFF}
+.tabbar svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button[aria-current="page"] svg{stroke-width:2.1}
+.tabbar .count{position:absolute;top:-3px;left:calc(50% + 5px);min-width:17px;height:17px;padding:0 5px;display:grid;place-items:center;font-size:11px;line-height:1;background:var(--xbar);color:#000}
+.tabbar .count.red{background:var(--bad);color:#fff}
+.status{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+.toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+/* paychecks: swipe between checks */
+.pc-rail{position:relative;display:flex;align-items:flex-start;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 16px;padding:0 16px;margin:0 -16px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.pc-rail::-webkit-scrollbar{display:none}
+.pc-card{flex:0 0 calc(100% - 40px);max-width:460px;scroll-snap-align:start;box-sizing:border-box;background:var(--surface);border-radius:24px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:12px}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.pc-top > div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pc-card .pc-date{font-size:14px;font-weight:600;color:#A1A1A6;letter-spacing:0}
+.pc-card .pc-amt{font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
+.pc-adjust{flex:none;border:1px solid #3A3A3C;border-radius:16px;background:none;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink)}
+.pc-card .pc-sub{margin:-6px 0 0;font-size:12.5px;color:var(--muted)}
+.pc-card .pc-line{margin:0;display:flex;justify-content:space-between;gap:6px}
+.pc-card .pc-sum{margin:4px 4px 2px}
+.pc-add{border:1.5px dashed #5A5A5E;background:var(--bg);align-items:center;justify-content:center;gap:8px;color:var(--ink);text-align:center;min-height:190px}
+.pc-plus{width:50px;height:50px;border-radius:25px;background:var(--ink);display:grid;place-items:center;margin-bottom:2px}
+.pc-plus svg{width:24px;height:24px;fill:none;stroke:#000;stroke-width:2.4;stroke-linecap:round}
+.pc-add-t{font-size:18px;font-weight:700}
+.pc-add-s{font-size:14px;font-weight:500;color:#A1A1A6}
+.dots{display:flex;justify-content:center;align-items:center;gap:6px;margin:12px 0 16px;min-height:10px}
+.dots .d{width:6px;height:6px;border-radius:3px;background:#3A3A3C;transition:width .2s}
+.dots .d.on{width:18px;background:var(--ink)}
+.dot-plus{width:10px;height:10px;fill:none;stroke:#5A5A5E;stroke-width:1.8;stroke-linecap:round}
+.dot-plus.on{stroke:var(--ink)}
+/* items grouped: To pay, then Paid */
+.grp-head{display:flex;justify-content:space-between;padding:0 6px;margin:0 0 6px;font-size:14px;font-weight:700;color:#A1A1A6}
+.rows{list-style:none;margin:0 0 8px;padding:2px 16px;background:var(--surface);border-radius:24px}
+.row{display:flex;align-items:center;gap:6px;border-top:.5px solid var(--line)}
+.row:first-child{border-top:0}
+.row-main{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:none;padding:10px 0;min-height:56px;text-align:left}
+.row-name{flex:1;min-width:0;font-size:16px;font-weight:500;overflow-wrap:anywhere}
+.row-sub{display:block;font-size:12.5px;font-weight:500;color:var(--muted)}
+.row-amt{flex:none;font-size:16px;font-weight:700}
+.row.is-paid .row-name,.row.is-paid .row-amt{color:var(--muted)}
+.row.is-paid .cat-ico{opacity:.5}
+.tick{flex:none;width:44px;height:44px;margin-right:-9px;border:0;background:none;display:grid;place-items:center;padding:0}
+.tick::before{content:"";grid-area:1/1;width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px #48484A}
+.tick svg{grid-area:1/1;width:14px;height:14px;fill:none;stroke:var(--check-ink);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.row.is-paid .tick::before{background:var(--check);box-shadow:none}
+.row.is-paid .tick svg{opacity:1}
+.rows-empty{margin:0 0 8px;padding:16px;background:var(--surface);border-radius:24px;color:var(--muted);font-size:15px;text-align:center}
+.newitem{display:flex;width:100%;align-items:center;justify-content:center;gap:8px;height:42px;margin:0 0 18px;border:1px solid var(--ink);border-radius:16px;background:var(--bg);color:var(--ink);font-size:15px;font-weight:600}
+.newitem svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.pc-empty{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:12px 28px;color:var(--muted);font-size:14px;line-height:1.45}
+.pc-empty strong{color:var(--ink);font-size:16px}
+/* category icons */
+.cat-ico{flex:none;width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
+.cat-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cat-ico.sm{width:28px;height:28px;border-radius:8px}
+.cat-ico.sm svg{width:16px;height:16px}
+.cat-row .cat-ico{margin-top:1px}
+.item.rec .item-main{justify-content:flex-start}
+.item.rec .item-main .item-name{flex:1}
+/* one screen at a time when upright; Paychecks plus one more side by side when sideways */
+.pane{display:none}
+body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="ana"] #paneAna, body[data-tab="set"] #paneSet{display:block}
+@media (orientation: landscape) and (min-width: 640px){
+  html, body{height:100%;overflow:hidden}
+  .wrap{max-width:none;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;
+    padding:0 max(16px, env(safe-area-inset-right,0px)) 60px max(16px, env(safe-area-inset-left,0px))}
+  #app{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  body[data-tab] #panePay, body[data-tab="pay"] #paneExp{display:block}
+  .pane{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 2px 24px}
+  .pc-rail{margin:0;padding:0;scroll-padding:0}
+  .pc-card{flex-basis:calc(100% - 40px)}
+}
+/* analysis charts */
+.rng{display:flex;overflow-x:auto;scrollbar-width:none}
+.rng::-webkit-scrollbar{display:none}
+.rng button{flex:1 0 auto;padding:8px 5px;font-size:12.5px}
+.ana-rail{position:relative;display:flex;align-items:flex-start;gap:10px;overflow-x:auto;overflow-y:hidden;transition:height .25s ease;scroll-snap-type:x mandatory;scroll-padding:0 16px;padding:0 16px;margin:0 -16px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.ana-rail::-webkit-scrollbar{display:none}
+.ana-slide{flex:0 0 calc(100% - 28px);max-width:520px;scroll-snap-align:start;box-sizing:border-box;min-width:0;background:var(--surface);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.ana-slide-h{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:30px}
+.ana-slide-h h3{margin:0;font-size:16px;font-weight:700}
+.mini-seg{display:flex;background:var(--soft);border-radius:9px;padding:2px;gap:2px}
+.mini-seg button{border:0;background:none;border-radius:7px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--muted)}
+.mini-seg button[aria-pressed="true"]{background:var(--raise);color:var(--ink)}
+.chart{display:block;width:100%;height:auto}
+.chart .cg{stroke:#2C2C2E;stroke-width:1}
+.chart .cg.base{stroke:#48484A}
+.chart .cy{fill:#8E8E93;font-size:10px;text-anchor:end;font-family:inherit}
+.chart .cx{fill:#8E8E93;font-size:10px;text-anchor:middle;font-family:inherit}
+.chart .cline{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .cdot{stroke:var(--surface);stroke-width:2}
+.chart .chit{fill:transparent;cursor:pointer}
+.chart .cguide{stroke:#636366;stroke-width:1;stroke-dasharray:3 3}
+.ana-read{margin:0;min-height:18px;font-size:13px;color:var(--muted)}
+.ana-read strong{color:var(--ink);font-weight:700}
+.ana-read .rd{display:inline-flex;align-items:center;gap:5px;margin-right:10px;white-space:nowrap}
+.ana-read .rd i,.chip i,.pie-legend i{display:inline-block;width:8px;height:8px;border-radius:4px;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #3A3A3C;border-radius:999px;background:none;padding:6px 10px;font-size:12px;font-weight:600;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--raise);border-color:var(--ink)}
+.ana-slide .legend{margin:0}
+.pie-wrap{position:relative;width:min(100%,250px);margin:2px auto 4px}
+.pie-wrap svg{display:block;width:100%;height:auto}
+.pslice{fill:none;cursor:pointer;pointer-events:stroke}
+.pie-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;padding:0 56px}
+.pie-mid .k{font-size:12.5px;font-weight:600;color:var(--muted);line-height:1.25}
+.pie-mid .v{font-size:24px;font-weight:800;letter-spacing:-0.02em}
+.pie-mid .s{font-size:12px;color:var(--muted)}
+.pie-legend{display:flex;flex-direction:column}
+.pie-legend button{display:flex;align-items:center;gap:9px;min-width:0;border:0;border-radius:10px;background:none;padding:7px 8px;text-align:left;font-size:14px;font-weight:600;color:var(--ink)}
+.pie-legend .a{font-weight:700}
+.pie-legend .p{min-width:36px;text-align:right;font-size:13px}
+.pie-legend button[aria-pressed="true"]{background:var(--raise)}
+.pie-legend .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pie-legend .p{color:var(--muted);font-variant-numeric:tabular-nums}
+.pie-legend i{width:9px;height:9px;border-radius:3px}
+.ana-dots{margin:12px 0 18px}
+@media (prefers-reduced-motion: reduce){.ana-rail{transition:none}.bar span{transition:none}.dots .d{transition:none}}
 </style>
 </head>
 <body>
@@ -259,28 +478,27 @@ div.banner{cursor:default}
 
 <div class="wrap">
   <h1 class="sr-only">Family budget</h1>
-  <nav class="tabs" aria-label="Sections">
-    <div class="seg" role="tablist">
-      <button role="tab" data-act="tab" data-tab="pay" aria-selected="true">Paychecks</button>
-      <button role="tab" data-act="tab" data-tab="exp" aria-selected="false">Expenses <span class="count" id="expCount" hidden></span></button>
-    </div>
-    <button class="gear" data-act="settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
-  </nav>
   <div class="status" id="status" role="status" aria-live="polite"></div>
-  <main id="app"><div class="pane" id="panePay"><p class="empty">Loading your budget…</p></div><div class="pane" id="paneExp"></div></main>
+  <main id="app"><div class="pane" id="panePay"><p class="empty">Loading your budget…</p></div><div class="pane" id="paneExp"></div><div class="pane" id="paneAna"></div><div class="pane" id="paneSet"></div></main>
+  <nav class="tabbar" aria-label="Sections">
+    <button type="button" data-act="tab" data-tab="pay" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/></svg>Paychecks</button>
+    <button type="button" data-act="tab" data-tab="exp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Expenses<span class="count" id="expCount" hidden></span></button>
+    <button type="button" data-act="tab" data-tab="ana"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V5M19 20v-10"/></svg>Analysis</button>
+    <button type="button" data-act="tab" data-tab="set"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.9-1.9M17.5 6.5l1.9-1.9"/></svg>Settings</button>
+  </nav>
 </div>
 
 <div id="toast" class="toast" role="status" hidden><span id="toastMsg"></span><button type="button" id="toastUndo">Undo</button></div>
 
 <dialog id="sheet">
   <form id="sheetForm">
-    <h2 id="sheetTitle"></h2>
+    <h2 id="sheetTitle" tabindex="-1" autofocus></h2>
     <div id="sheetBody"></div>
     <div class="sheet-actions">
       <button type="button" class="ghost danger" id="sheetDelete" hidden>Delete</button>
       <span class="spacer"></span>
       <button type="button" class="ghost" id="sheetCancel">Cancel</button>
-      <button type="submit" class="primary">Save</button>
+      <button type="submit" class="primary" id="sheetSave">Save</button>
     </div>
   </form>
 </dialog>
@@ -312,76 +530,165 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const sum = list => list.reduce((a, b) => a + (Number(b.amount) || 0), 0);
 
   // ---------- paycheck math (from the weekly paycheck calculator) ----------
-  const S0 = {rate: 0, k401: 0, ben: 0, ocAmt: 0, p2: 0, p3: 0, budgetFrom: "main", n1: "Main checking", n2: "Second checking", n3: "Savings"};
+  const S0 = {rate: 0, k401: 0, ben: 0, ocAmt: 0, p2: 0, p3: 0, budgetFrom: "main", n1: "Main checking", n2: "Second checking", n3: "Savings",
+    payType: "hourly", salary: 0, payFreq: "weekly", semiDays: "15-last", payDay: 0, stdHours: 0, otOn: true, otMult: 1.5, ocOn: false, bonusOn: true,
+    filing: "mfj", stateTax: 0, groupsOff: [], sugg: true, autoNew: "short", warnDays: 14, redDays: 7};
+  const PAY_FREQS = ["weekly", "biweekly", "semimonthly", "monthly"];
+  const PAY_LABEL = {weekly: "Every week", biweekly: "Every 2 weeks", semimonthly: "Twice a month", monthly: "Once a month"};
+  const PERIODS = {weekly: 52, biweekly: 26, semimonthly: 24, monthly: 12};
+  const PERIOD_DAYS = {weekly: 7, biweekly: 14, semimonthly: 365 / 24, monthly: 365 / 12};
+  const STD_HOURS = {weekly: 40, biweekly: 80, semimonthly: 86.67, monthly: 173.33};
+  const FILING = {mfj: "Married filing jointly", single: "Single", hoh: "Head of household"};
+  const stdHours = s => s.stdHours > 0 ? s.stdHours : (STD_HOURS[s.payFreq] || 40);
   const R = n => Math.round(n * 100 + 1e-7) / 100;
   const Fl = n => Math.floor(n * 100 + 1e-6) / 100;
   const pos = v => { const n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; };
   const moneyC = n => (n < 0 ? "-" : "") + "$" + Math.abs(n).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  // 2026 annual percentage method, married filing jointly
-  const TABLE = [[0,0,0],[19300,0,.10],[44100,2480,.12],[120100,11600,.22],[230700,35932,.24],[422850,82048,.32],[531750,116896,.35],[788000,206583.5,.37]];
-  function fedWeekly(taxable){
-    const annual = taxable * 52 - 12900;
+  // 2026 annual percentage method (IRS Pub 15-T, W-4 from 2020 or later, step 2 box unchecked)
+  const FED = {
+    mfj: {adj: 12900, t: [[0,0,0],[19300,0,.10],[44100,2480,.12],[120100,11600,.22],[230700,35932,.24],[422850,82048,.32],[531750,116896,.35],[788000,206583.5,.37]]},
+    single: {adj: 8600, t: [[0,0,0],[7500,0,.10],[19900,1240,.12],[57900,5800,.22],[113200,17966,.24],[209275,41024,.32],[263725,58448,.35],[648100,192979.25,.37]]},
+    hoh: {adj: 8600, t: [[0,0,0],[15550,0,.10],[33250,1770,.12],[83000,7740,.22],[121250,16155,.24],[217300,39207,.32],[271750,56631,.35],[656150,191171,.37]]}
+  };
+  function fedPer(taxable, s){
+    const n = PERIODS[s.payFreq] || 52, f = FED[s.filing] || FED.mfj;
+    const annual = taxable * n - f.adj;
     if (annual <= 0) return 0;
-    let row = TABLE[0];
-    for (const r of TABLE){ if (annual >= r[0]) row = r; }
-    return Math.max(0, (row[1] + row[2] * (annual - row[0])) / 52);
+    let row = f.t[0];
+    for (const r of f.t){ if (annual >= r[0]) row = r; }
+    return Math.max(0, (row[1] + row[2] * (annual - row[0])) / n);
   }
   function payCalc(h, s){
-    const rate = pos(s.rate), kp = pos(s.k401) / 100, ben = pos(s.ben);
-    const reg = R(pos(h.reg) * rate), otRate = R(rate * 1.5), ot = R(pos(h.ot) * otRate);
-    const oc = h.oncall ? pos(s.ocAmt) : 0, bonus = R(pos(h.bonus));
+    const rate = pos(s.rate), kp = pos(s.k401) / 100, ben = pos(s.ben), salaried = s.payType === "salary";
+    const reg = salaried ? R(pos(s.salary) / (PERIODS[s.payFreq] || 52)) : R(pos(h.reg) * rate);
+    const otRate = R(rate * (pos(s.otMult) || 1.5)), ot = salaried || !s.otOn ? 0 : R(pos(h.ot) * otRate);
+    const oc = h.oncall && s.ocOn ? pos(s.ocAmt) : 0, bonus = s.bonusOn ? R(pos(h.bonus)) : 0;
     const gross = R(reg + ot + oc + bonus), k = R(gross * kp);
     const ficaWage = Math.max(0, gross - ben);
     const ss = Fl(ficaWage * .062), med = Fl(ficaWage * .0145);
     let fed;
     if (bonus > 0 && h.bonusMethod !== "agg"){
       const base = gross - bonus;
-      fed = Fl(fedWeekly(Math.max(0, base - ben - R(base * kp)))) + Fl(Math.max(0, bonus - R(bonus * kp)) * .22);
-    } else fed = Fl(fedWeekly(Math.max(0, gross - ben - k)));
-    const net = R(gross - fed - ss - med - ben - k), p = Math.max(0, net);
+      fed = Fl(fedPer(Math.max(0, base - ben - R(base * kp)), s)) + Fl(Math.max(0, bonus - R(bonus * kp)) * .22);
+    } else fed = Fl(fedPer(Math.max(0, gross - ben - k), s));
+    const st = Fl(Math.max(0, gross - ben - k) * pos(s.stateTax) / 100);
+    const net = R(gross - fed - ss - med - st - ben - k), p = Math.max(0, net);
     const d2 = R(p * pos(s.p2) / 100), sav = R(p * pos(s.p3) / 100);
-    return {gross, fed, ss, med, ben, k, net, d2, sav, main: R(p - d2 - sav), otRate};
+    return {gross, fed, ss, med, st, ben, k, net, d2, sav, main: R(p - d2 - sav), otRate};
   }
   const budgetAmt = c => state.settings.budgetFrom === "net" ? c.net : c.main;
-  const pcAmount = p => p.hours ? budgetAmt(payCalc(p.hours, state.settings)) : p.amount;
+  // checks from today on follow the current pay settings; past checks keep the amount they had
+  const pcAmount = p => p.hours && (p.date >= iso(today()) || !p.amount) ? budgetAmt(payCalc(p.hours, state.settings)) : p.amount;
+  function refreshAmounts(){ const t = iso(today()); for (const p of state.paychecks) if (p.hours && p.date >= t) p.amount = budgetAmt(payCalc(p.hours, state.settings)); }
   const fmtH = n => String(Math.round(n * 100) / 100);
   function hoursLabel(h){
-    let t = fmtH(h.reg) + " hrs";
-    if (h.ot) t += " + " + fmtH(h.ot) + " OT";
-    if (h.oncall) t += ", on call";
-    if (h.bonus) t += ", " + money(h.bonus) + " bonus";
+    const s = state.settings;
+    let t = s.payType === "salary" ? "Salary" : fmtH(h.reg) + " hrs";
+    if (h.ot && s.otOn && s.payType !== "salary") t += " + " + fmtH(h.ot) + " OT";
+    if (h.oncall && s.ocOn) t += ", on call";
+    if (h.bonus && s.bonusOn) t += ", " + money(h.bonus) + " bonus";
     return t;
   }
 
   // ---------- state ----------
-  let state = {paychecks: [], payments: [], wishlist: [], recurring: [], settings: Object.assign({}, S0)};
+  let state = {paychecks: [], payments: [], wishlist: [], recurring: [], people: {}, settings: Object.assign({}, S0)};
+  // notification choices, kept per person
+  const NOTIF_KEYS = ["due", "payday", "changes", "hours", "leftover", "over"];
+  const N0 = {due: true, dueDays: 14, payday: true, changes: true, hours: true, hoursDay: 5, hoursTime: "15:00", hoursAgain: 0,
+    leftover: true, over: true, quiet: true, quietFrom: "21:00", quietTo: "07:00"};
+  function normNotify(n){
+    n = n && typeof n === "object" ? n : {};
+    const o = Object.assign({}, N0), tm = /^\d{2}:\d{2}$/;
+    for (const k of NOTIF_KEYS.concat("quiet")) if (typeof n[k] === "boolean") o[k] = n[k];
+    if ([7, 10, 14, 21].includes(Number(n.dueDays))) o.dueDays = Number(n.dueDays);
+    if (Number.isInteger(n.hoursDay) && n.hoursDay >= 0 && n.hoursDay <= 6) o.hoursDay = n.hoursDay;
+    if (Number.isInteger(n.hoursAgain) && n.hoursAgain >= -1 && n.hoursAgain <= 6) o.hoursAgain = n.hoursAgain;
+    for (const k of ["hoursTime", "quietFrom", "quietTo"]) if (tm.test(n[k] || "")) o[k] = n[k];
+    return o;
+  }
   let ready = false, tab = "pay";
   let docRef = null, readOnly = false;
   let saveTimer = null, inflight = false, again = false;
 
+  const FREQS = ["weekly", "biweekly", "monthly", "yearly"];
+  const FREQ_LABEL = {weekly: "Weekly", biweekly: "Every 2 weeks", monthly: "Monthly", yearly: "Yearly"};
+  const FREQ_TEXT = {weekly: "Every week", biweekly: "Every 2 weeks", monthly: "Every month", yearly: "Every year"};
+  const AUTO_WEEKS = ["1", "2", "3", "4", "last"];
   function normalize(d){
     d = d && typeof d === "object" ? d : {};
     const arr = a => Array.isArray(a) ? a : [];
     const str = v => typeof v === "string" ? v.slice(0, 200) : "";
     const num = v => { const n = Number(v); return isFinite(n) ? n : 0; };
-    const item = it => { const o = {id: str(it && it.id) || uid(), name: str(it && it.name), amount: num(it && it.amount), paid: !!(it && it.paid), due: str(it && it.due)};
+    const isoRe = /^\d{4}-\d{2}-\d{2}$/, monRe = /^\d{4}-\d{2}$/;
+    const isoOr = v => (typeof v === "string" && isoRe.test(v)) ? v : "";
+    const cat = v => CAT_MAP[v] ? v : "";
+    const item = it => { const o = {id: str(it && it.id) || uid(), name: str(it && it.name), amount: num(it && it.amount), paid: !!(it && it.paid), due: str(it && it.due), cat: cat(it && it.cat)};
       if (it && it.recId){ o.recId = str(it.recId); o.recFor = str(it.recFor); } return o; };
     const hrs = h => h && typeof h === "object" ? {reg: num(h.reg), ot: num(h.ot), oncall: !!h.oncall, bonus: num(h.bonus), bonusMethod: h.bonusMethod === "agg" ? "agg" : "flat"} : null;
-    const s = Object.assign({}, S0);
-    if (d.settings && typeof d.settings === "object"){
-      for (const k of ["rate","k401","ben","ocAmt","p2","p3"]) if (isFinite(Number(d.settings[k])) && d.settings[k] !== "" && d.settings[k] != null) s[k] = Number(d.settings[k]);
-      s.budgetFrom = d.settings.budgetFrom === "net" ? "net" : "main";
-      for (const k of ["n1","n2","n3"]) if (typeof d.settings[k] === "string" && d.settings[k].trim()) s[k] = d.settings[k].trim().slice(0, 40);
+    const s = Object.assign({}, S0, {groupsOff: []}), ds = d.settings && typeof d.settings === "object" ? d.settings : null;
+    if (ds){
+      for (const k of Object.keys(ds)) if (!(k in S0)) s[k] = ds[k];   // keep settings added by newer versions
+      for (const k of ["rate","k401","ben","ocAmt","p2","p3","salary","stateTax","stdHours"]) if (isFinite(Number(ds[k])) && ds[k] !== "" && ds[k] != null) s[k] = Math.max(0, Number(ds[k]));
+      s.budgetFrom = ds.budgetFrom === "net" ? "net" : "main";
+      for (const k of ["n1","n2","n3"]) if (typeof ds[k] === "string" && ds[k].trim()) s[k] = ds[k].trim().slice(0, 40);
+      s.groupsOff = arr(ds.groupsOff).filter(f => FREQS.includes(f));
+      s.payType = ds.payType === "salary" ? "salary" : "hourly";
+      s.payFreq = PAY_FREQS.includes(ds.payFreq) ? ds.payFreq : "weekly";
+      s.semiDays = ds.semiDays === "1-15" ? "1-15" : "15-last";
+      s.payDay = Math.max(0, Math.min(31, Math.round(num(ds.payDay))));
+      s.otOn = ds.otOn !== false;
+      s.otMult = Number(ds.otMult) === 2 ? 2 : 1.5;
+      s.ocOn = typeof ds.ocOn === "boolean" ? ds.ocOn : s.ocAmt > 0;
+      s.bonusOn = ds.bonusOn !== false;
+      s.filing = FILING[ds.filing] ? ds.filing : "mfj";
+      s.sugg = ds.sugg !== false;
+      s.autoNew = ["short", "all", "none"].includes(ds.autoNew) ? ds.autoNew : "short";
+      s.warnDays = [7, 10, 14, 21, 30].includes(Number(ds.warnDays)) ? Number(ds.warnDays) : 14;
+      s.redDays = [3, 5, 7, 10].includes(Number(ds.redDays)) ? Number(ds.redDays) : 7;
     }
-    return {
+    const t0 = today(), month1 = iso(new Date(t0.getFullYear(), t0.getMonth(), 1));
+    const recurring = arr(d.recurring).map(r => {
+      r = r && typeof r === "object" ? r : {};
+      const o = {id: str(r.id) || uid(), name: str(r.name), amount: num(r.amount),
+        freq: FREQS.includes(r.freq) ? r.freq : "monthly",
+        day: Math.max(0, Math.min(31, Math.round(num(r.day)))),
+        anchor: isoOr(r.anchor), since: isoOr(r.since), paidThrough: isoOr(r.paidThrough),
+        auto: !!r.auto, autoWeek: AUTO_WEEKS.includes(r.autoWeek) ? r.autoWeek : "",
+        skip: arr(r.skip).filter(x => typeof x === "string" && isoRe.test(x)).slice(-60), cat: cat(r.cat)};
+      if (!r.freq){ // older format: monthly bills tracked by month ("2026-10")
+        const dm = monRe.test(r.doneFor || "") ? r.doneFor : "";
+        o.since = dm ? dm + "-01" : month1;
+        if (dm){ const q = dm.split("-").map(Number); o.paidThrough = monthlyDate(o, q[0], q[1] - 1); }
+      }
+      if (!o.since) o.since = o.anchor || iso(t0);
+      if (o.freq !== "monthly" && !o.anchor) o.anchor = o.since;
+      return o;
+    });
+    const recMap = {}; for (const r of recurring) recMap[r.id] = r;
+    const paychecks = arr(d.paychecks).map(p => ({id: str(p && p.id) || uid(), date: str(p && p.date), amount: num(p && p.amount), hours: hrs(p && p.hours), hoursSet: !!(p && p.hoursSet),
+      items: arr(p && p.items).map(item).filter(i => i.name.trim().toLowerCase() !== "extra")}));
+    for (const p of paychecks) for (const it of p.items){
+      if (!it.recId) continue;
+      const r = recMap[it.recId];
+      if (!r){ delete it.recId; delete it.recFor; continue; }
+      if (monRe.test(it.recFor)){ const q = it.recFor.split("-").map(Number); it.recFor = monthlyDate(r, q[0], q[1] - 1); }
+    }
+    const people = {};
+    if (d.people && typeof d.people === "object") for (const k of Object.keys(d.people).slice(0, 20)){
+      const pp = d.people[k]; if (!pp || typeof pp !== "object") continue;
+      people[k.slice(0, 128)] = Object.assign({}, pp, {email: str(pp.email), notify: normNotify(pp.notify)});
+    }
+    const out = {};   // keep anything a newer version stored
+    for (const k of Object.keys(d)) if (!["settings","paychecks","payments","recurring","wishlist","people"].includes(k)) out[k] = d[k];
+    return Object.assign(out, {
       settings: s,
-      paychecks: arr(d.paychecks).map(p => ({id: str(p && p.id) || uid(), date: str(p && p.date), amount: num(p && p.amount), hours: hrs(p && p.hours), items: arr(p && p.items).map(item).filter(i => i.name.trim().toLowerCase() !== "extra")})),
+      people,
+      paychecks,
       payments: arr(d.payments).map(item),
-      recurring: arr(d.recurring).map(r => ({id: str(r && r.id) || uid(), name: str(r && r.name), amount: num(r && r.amount),
-        day: Math.max(0, Math.min(31, Math.round(num(r && r.day)))), doneFor: str(r && r.doneFor), planFor: str(r && r.planFor)})),
+      recurring,
       wishlist: arr(d.wishlist).map(w => ({id: str(w && w.id) || uid(), name: str(w && w.name), cost: num(w && w.cost),
-        kind: w && w.kind === "big" ? "big" : "small", target: str(w && w.target), saved: num(w && w.saved), done: !!(w && w.done)}))
-    };
+        kind: w && w.kind === "big" ? "big" : "small", target: str(w && w.target), saved: num(w && w.saved), done: !!(w && w.done), cat: cat(w && w.cat)}))
+    });
   }
   let statusTimer = null;
   const STICKY = ["Saving…", "Couldn't save. Retrying…", "Couldn't save", "This account can't save", "Daily limit reached, try tomorrow", "Signed out, sign in again", "Can't reach the budget. Check your connection"];
@@ -442,39 +749,85 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     for (const p of upcoming){ if (p.date <= due) pick = p; }
     return pick.id;
   }
-  function wishPerWeek(w){
+  // how much to put aside from each paycheck to have it by the target month
+  function wishPerCheck(w){
     if (w.done || !w.target) return 0;
     const need = Math.max(0, w.cost - w.saved);
     if (!need) return 0;
     const p = w.target.split("-").map(Number);
     const target = new Date(p[0], (p[1] || 1) - 1, 1);
-    const weeks = Math.max(1, Math.floor((target - today()) / (7 * 864e5)));
-    return need / weeks;
+    const checks = Math.max(1, Math.floor((target - today()) / 864e5 / (PERIOD_DAYS[state.settings.payFreq] || 7)));
+    return need / checks;
   }
+  const weeklyPay = () => state.settings.payFreq === "weekly";
   const findPc = id => state.paychecks.find(p => p.id === id);
   const recById = id => state.recurring.find(r => r.id === id);
   const MONTHS_LONG = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const mKey = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
-  const curMonth = () => mKey(today());
-  const addMonth = (m, n) => { const p = m.split("-").map(Number); return mKey(new Date(p[0], p[1] - 1 + n, 1)); };
   const monthName = m => MONTHS_LONG[Number(m.split("-")[1]) - 1];
-  const ordinal = n => n + ((n % 100 >= 11 && n % 100 <= 13) ? "th" : (["th","st","nd","rd"][n % 10] || "th"));
   const daysUntil = s => Math.round((parseISO(s) - today()) / 864e5);
-  // the next bill of a recurring payment that isn't marked paid yet
-  function occ(r){
-    const cm = curMonth();
-    let m = cm;
-    if (r.doneFor && r.doneFor >= m) m = addMonth(r.doneFor, 1);
-    let date = "";
-    if (r.day){ const p = m.split("-").map(Number); const dim = new Date(p[0], p[1], 0).getDate(); date = m + "-" + String(Math.min(r.day, dim)).padStart(2, "0"); }
-    return {month: m, date, planned: linkedAll(r, m).length > 0, paidThisMonth: !!(r.doneFor && r.doneFor >= cm), days: date ? daysUntil(date) : null};
+  const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
+  const STEP = {weekly: 7, biweekly: 14};
+  const HALF = {weekly: 3, biweekly: 7, monthly: 14, yearly: 182};
+  const groupOff = r => (state.settings.groupsOff || []).includes(r.freq);
+  const noDay = r => r.freq === "monthly" && !r.day;
+  function monthlyDate(r, y, m0){
+    const dim = new Date(y, m0 + 1, 0).getDate();
+    return iso(new Date(y, m0, r.day ? Math.min(r.day, dim) : 1));
   }
-  function linkedAll(r, month){
+  function yearlyDate(r, y){
+    const a = parseISO(r.anchor || r.since || iso(today()));
+    const dim = new Date(y, a.getMonth() + 1, 0).getDate();
+    return iso(new Date(y, a.getMonth(), Math.min(a.getDate(), dim)));
+  }
+  // first due date on or after `from` (all dates are YYYY-MM-DD)
+  function occOnOrAfter(r, from){
+    const f = parseISO(from);
+    if (r.freq === "monthly"){
+      let y = f.getFullYear(), m = f.getMonth(), d = monthlyDate(r, y, m);
+      if (d < from){ m++; if (m > 11){ m = 0; y++; } d = monthlyDate(r, y, m); }
+      return d;
+    }
+    if (r.freq === "yearly"){ const d = yearlyDate(r, f.getFullYear()); return d < from ? yearlyDate(r, f.getFullYear() + 1) : d; }
+    const step = STEP[r.freq] || 7, a = parseISO(r.anchor || from);
+    const k = Math.ceil(Math.round((f - a) / 864e5) / step);
+    const d = new Date(a.getFullYear(), a.getMonth(), a.getDate() + k * step);
+    return iso(d);
+  }
+  const nextOcc = (r, o) => occOnOrAfter(r, addDays(o, 1));
+  function prevOcc(r, o){
+    if (r.freq === "monthly"){ const d = parseISO(o); return d.getMonth() === 0 ? monthlyDate(r, d.getFullYear() - 1, 11) : monthlyDate(r, d.getFullYear(), d.getMonth() - 1); }
+    if (r.freq === "yearly") return yearlyDate(r, parseISO(o).getFullYear() - 1);
+    return addDays(o, -(STEP[r.freq] || 7));
+  }
+  // the next due date that isn't marked paid yet
+  function openOcc(r){
+    const start = r.paidThrough && r.paidThrough >= r.since ? addDays(r.paidThrough, 1) : r.since;
+    return occOnOrAfter(r, start);
+  }
+  // the due date the bill is working toward right now: today or the next one after it.
+  // Once a due date passes, the bill moves on to the next one and shows as unpaid until that one is paid.
+  // Bills without a set day count by month.
+  function curOcc(r){
+    const t = today();
+    if (noDay(r)){ const c = monthlyDate(r, t.getFullYear(), t.getMonth()); return c < r.since ? occOnOrAfter(r, r.since) : c; }
+    const ti = iso(t);
+    return occOnOrAfter(r, ti < r.since ? r.since : ti);
+  }
+  function isPaidNow(r){ return !!(r.paidThrough && r.paidThrough >= curOcc(r)); }
+  function paidLabel(r){
+    const k = r.paidThrough; if (!k) return "Paid";
+    if (r.freq === "monthly") return "Paid for " + monthName(k);
+    if (r.freq === "yearly") return "Paid for " + k.slice(0, 4);
+    return "Paid for " + dayLabel(k);
+  }
+  const perMonth = r => r.freq === "weekly" ? r.amount * 52 / 12 : r.freq === "biweekly" ? r.amount * 26 / 12 : r.freq === "yearly" ? r.amount / 12 : r.amount;
+  const nearestOcc = (r, s) => occOnOrAfter(r, addDays(s, -(HALF[r.freq] || 14)));
+  function linkedAll(r, o){
     const out = [];
-    for (const pc of state.paychecks) for (const it of pc.items) if (it.recId === r.id && it.recFor === month) out.push({pc, it});
+    for (const pc of state.paychecks) for (const it of pc.items) if (it.recId === r.id && it.recFor === o) out.push({pc, it});
     return out;
   }
-  function findLinked(r, month){ return linkedAll(r, month)[0] || null; }
+  function findLinked(r, o){ return linkedAll(r, o)[0] || null; }
   function dueText(days, date){
     if (days < 0) return "overdue, was due " + dayLabel(date);
     if (days === 0) return "due today";
@@ -482,91 +835,594 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (days <= 7) return "due in " + days + " days, " + dayLabel(date);
     return "due " + dayLabel(date);
   }
-  function unlink(it){ if (it && it.recId){ const r = recById(it.recId); if (r && r.planFor === it.recFor) r.planFor = ""; } }
+  function unlink(it){}
+  // remember that an automatic bill was taken off a paycheck on purpose, so it isn't added back
+  function skipOcc(it){ const r = it && it.recId && recById(it.recId); if (r && r.auto && it.recFor && !r.skip.includes(it.recFor)) r.skip.push(it.recFor); }
   function syncRec(it){
     const r = it.recId && recById(it.recId); if (!r) return;
     const all = linkedAll(r, it.recFor);
-    if (all.length && all.every(l => l.it.paid)){ if (!r.doneFor || r.doneFor < it.recFor) r.doneFor = it.recFor; }
-    else if (r.doneFor && r.doneFor >= it.recFor) r.doneFor = addMonth(it.recFor, -1);
+    if (all.length && all.every(l => l.it.paid)){ if (!r.paidThrough || r.paidThrough < it.recFor) r.paidThrough = it.recFor; }
+    else if (r.paidThrough && r.paidThrough >= it.recFor){ const pv = prevOcc(r, it.recFor); r.paidThrough = pv >= r.since ? pv : ""; }
   }
-  // red = due within 7 days (or overdue) and not on a paycheck; yellow = everything else coming up that isn't on one
+  // red = due soon (or overdue) and not on a paycheck; yellow = due a bit later, or one-time payments not on one. Windows come from Settings > Bills.
+  const warnDays = () => state.settings.warnDays || 14, redDays = () => state.settings.redDays || 7;
   function alerts(){
-    const red = [], yellow = [];
+    const red = [], yellow = [], W = warnDays(), RD = redDays();
     for (const p of state.payments){
       const days = p.due ? daysUntil(p.due) : null;
       const e = {name: p.name, amount: p.amount, due: p.due, days};
-      if (days !== null && days <= 7) red.push(e); else yellow.push(e);
+      if (days !== null && days <= RD) red.push(e); else yellow.push(e);
     }
     for (const r of state.recurring){
-      const o = occ(r);
-      if (o.planned) continue;
-      const e = {name: r.name, amount: r.amount, due: o.date, days: o.days};
-      if (!o.date){ if (!o.paidThisMonth) yellow.push(e); continue; }
-      if (o.days <= 7) red.push(e); else if (o.days <= 14) yellow.push(e);
+      if (groupOff(r)) continue;
+      const o = openOcc(r);
+      if (linkedAll(r, o).length) continue;
+      const days = daysUntil(o);
+      const e = {name: r.name, amount: r.amount, due: o, days};
+      if (noDay(r)){ if (!isPaidNow(r)) yellow.push(e); continue; }
+      if (days <= RD) red.push(e); else if (days <= W) yellow.push(e);
     }
     red.sort((a, b) => a.days - b.days);
     return {red, yellow};
   }
 
+  // ---------- automatic bills ----------
+  // ---------- pay schedule ----------
+  const lastDayOf = (y, m0) => new Date(y, m0 + 1, 0).getDate();
+  function schedIn(y, m0){
+    const s = state.settings, L = lastDayOf(y, m0);
+    const days = s.payFreq === "semimonthly" ? (s.semiDays === "1-15" ? [1, 15] : [15, L]) : [s.payDay ? Math.min(s.payDay, L) : L];
+    return days.map(d => iso(new Date(y, m0, d)));
+  }
+  // twice-a-month and monthly pay: the scheduled paydays around d, and which one d is (paydays moved a day or two still match)
+  function schedAround(d){
+    const x = parseISO(d), list = [];
+    for (let k = -2; k <= 2; k++){ const m = new Date(x.getFullYear(), x.getMonth() + k, 1); list.push(...schedIn(m.getFullYear(), m.getMonth())); }
+    let best = 0;
+    for (let i = 1; i < list.length; i++) if (Math.abs(parseISO(list[i]) - x) < Math.abs(parseISO(list[best]) - x)) best = i;
+    return {list, i: best};
+  }
+  const stepPay = () => ({weekly: 7, biweekly: 14})[state.settings.payFreq];
+  function nextPayday(d){ const st = stepPay(); if (st) return addDays(d, st); const a = schedAround(d); return a.list[a.i + 1]; }
+  function prevPayday(d){ const st = stepPay(); if (st) return addDays(d, -st); const a = schedAround(d); return a.list[a.i - 1]; }
+  function snapPay(d){ if (stepPay()) return d; const a = schedAround(d); return a.list[a.i]; }
+  // 1 for the first paycheck of its month, 2 for the second...
+  function payIndex(p){
+    const d = snapPay(p.date), m = d.slice(0, 7); let n = 1, x = d;
+    for (let g = 0; g < 6; g++){ x = prevPayday(x); if (x.slice(0, 7) !== m) break; n++; }
+    return n;
+  }
+  function lastInMonth(p){ const d = snapPay(p.date); return nextPayday(d).slice(0, 7) !== d.slice(0, 7); }
+  function weekOk(p, w){ return w === "last" ? lastInMonth(p) : payIndex(p) === Number(w); }
+  function placeOcc(r, o, p){
+    if (o < r.since || (r.paidThrough && o <= r.paidThrough) || r.skip.includes(o) || linkedAll(r, o).length) return false;
+    const nm = r.name.trim().toLowerCase();
+    const ex = p.items.find(i => !i.recId && i.name.trim().toLowerCase() === nm);
+    if (ex){ ex.recId = r.id; ex.recFor = o; if (!ex.cat) ex.cat = r.cat || ""; return true; }
+    p.items.push({id: "a-" + r.id + "-" + o, name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""});
+    return true;
+  }
+  // puts bills marked "automatic" on the right upcoming paychecks; true if anything changed
+  function autoFill(){
+    const t = iso(today());
+    const all = [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+    const upcoming = all.filter(p => p.date >= t);
+    if (!upcoming.length) return false;
+    const end = addDays(upcoming[upcoming.length - 1].date, Math.max(6, Math.round(PERIOD_DAYS[state.settings.payFreq] || 7) - 1));
+    let changed = false;
+    for (const r of state.recurring){
+      if (!r.auto || groupOff(r)) continue;
+      if (r.skip.length > 30) r.skip = r.skip.filter(x => x >= addDays(t, -60));
+      if (r.freq === "monthly" && r.autoWeek){
+        for (const p of upcoming) if (weekOk(p, r.autoWeek)) changed = placeOcc(r, occOnOrAfter(r, p.date), p) || changed;
+        continue;
+      }
+      let o = occOnOrAfter(r, upcoming[0].date), guard = 0;
+      while (o <= end && guard++ < 80){
+        let p = null; for (const q of all) if (q.date <= o) p = q;
+        if (p && p.date >= t) changed = placeOcc(r, o, p) || changed;
+        o = nextOcc(r, o);
+      }
+    }
+    return changed;
+  }
+
+  // ---------- suggestions while adding an item to a paycheck ----------
+  function suggestionsFor(pc, q){
+    q = (q || "").trim().toLowerCase();
+    const has = s => !q || s.toLowerCase().includes(q);
+    const out = [];
+    for (const r of state.recurring){
+      if (groupOff(r) || !has(r.name)) continue;
+      const o = openOcc(r);
+      if (linkedAll(r, o).length) continue;
+      out.push({kind: "rec", id: r.id, name: r.name, amount: r.amount, sub: noDay(r) ? "Recurring bill" : "Recurring, " + dueText(daysUntil(o), o), sort: o});
+    }
+    for (const it of state.payments) if (has(it.name)) out.push({kind: "pay", id: it.id, name: it.name, amount: it.amount, sub: it.due ? "To pay, " + dueText(daysUntil(it.due), it.due) : "To pay", sort: it.due || "9999"});
+    for (const w of state.wishlist) if (!w.done && has(w.name)) out.push({kind: "buy", id: w.id, name: w.name, amount: Math.max(0, w.cost - w.saved), sub: "To buy", sort: "9999z"});
+    out.sort((a, b) => a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0);
+    const onPc = new Set(pc.items.map(i => i.name.trim().toLowerCase()));
+    const taken = new Set(out.map(s => s.name.trim().toLowerCase()));
+    const seen = new Map();
+    for (const p of [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : 1)) for (const it of p.items){
+      const k = it.name.trim().toLowerCase(); if (!k || it.recId) continue;
+      const e = seen.get(k) || {name: it.name.trim(), amount: it.amount, n: 0, cat: ""}; e.n++; e.amount = it.amount; if (it.cat) e.cat = it.cat; seen.set(k, e);
+    }
+    const usual = [...seen.entries()].filter(([k, e]) => e.n >= (q ? 1 : 2) && !onPc.has(k) && !taken.has(k) && has(e.name))
+      .sort((a, b) => b[1].n - a[1].n)
+      .map(([k, e]) => ({kind: "usual", id: e.name, name: e.name, amount: e.amount, cat: e.cat, sub: "On " + e.n + " past check" + (e.n === 1 ? "" : "s")}));
+    return out.slice(0, q ? 6 : 4).concat(usual.slice(0, q ? 6 : 4)).slice(0, 8);
+  }
+  function renderSugg(form){
+    const pc = findPc(form.dataset.id); if (!pc) return;
+    let box = form.nextElementSibling;
+    if (!state.settings.sugg){ if (box && box.classList.contains("sugg")) box.hidden = true; return; }
+    if (!box || !box.classList.contains("sugg")){ box = document.createElement("div"); box.className = "sugg"; form.after(box); }
+    const list = suggestionsFor(pc, form.elements.name.value);
+    if (!list.length){ box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    box.innerHTML = '<p class="sugg-h">Suggestions</p>' + list.map(s =>
+      '<button type="button" data-act="sugg" data-pc="' + pc.id + '" data-kind="' + s.kind + '" data-id="' + esc(s.id) + '" data-amt="' + s.amount + '" data-cat="' + (s.cat || "") + '">' +
+      '<span><span class="s-name">' + esc(s.name) + '</span><span class="s-sub">' + esc(s.sub) + '</span></span><span class="num">' + money(s.amount) + '</span></button>').join("");
+  }
+
+  // ---------- categories ----------
+  const CATS = [
+    ["bills", "Bills & utilities", "🧾"], ["subs", "Subscriptions", "🔁"], ["cards", "Credit card bills", "💳"], ["health", "Health & wellness", "🩺"],
+    ["family", "Family care", "👨‍👩‍👧"], ["gifts", "Gifts & donations", "🎁"], ["shopping", "Shopping", "🛍️"],
+    ["auto", "Auto & transportation", "🚗"], ["alcohol", "Alcohol & tobacco", "🍺"], ["dining", "Dining out & takeout", "🍽️"],
+    ["groceries", "Groceries", "🛒"], ["fun", "Travel & entertainment", "✈️"], ["pocket", "Pocket spending", "💵"],
+    ["savings", "Savings & investments", "🏦"], ["misc", "Miscellaneous", "📦"]
+  ];
+  const CAT_MAP = {}; for (const c of CATS) CAT_MAP[c[0]] = c;
+  // one colored tile per category: [tile color, glyph, glyph color]
+  const CAT_ICONS = {
+    bills: ["#0A84FF", '<path d="M13 3L5.5 13.5H11l-1 7.5 7.5-10.5H12z"/>', "#fff"],
+    subs: ["#BF5AF2", '<path d="M17 3l3 3-3 3"/><path d="M4 12v-1a5 5 0 0 1 5-5h11"/><path d="M7 21l-3-3 3-3"/><path d="M20 12v1a5 5 0 0 1-5 5H4"/>', "#fff"],
+    cards: ["#5E5CE6", '<rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18M7 14.5h3"/>', "#fff"],
+    health: ["#FF375F", '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>', "#fff"],
+    family: ["#64D2FF", '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9.5" r="2.3"/><path d="M15.8 14.3A4.5 4.5 0 0 1 21 18.5"/>', "#002A3D"],
+    gifts: ["#FF8AD8", '<rect x="3.5" y="8" width="17" height="4.5" rx="1"/><path d="M5.5 12.5V20h13v-7.5M12 8v12M12 8C10 4.5 6.5 5 7.5 7c.6 1.1 4.5 1 4.5 1zM12 8c2-3.5 5.5-3 4.5-1-.6 1.1-4.5 1-4.5 1z"/>', "#4A0A36"],
+    shopping: ["#AC8E68", '<path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>', "#fff"],
+    auto: ["#FF9F0A", '<path d="M5 16v-4l2-5h10l2 5v4M4 16h16M6 16v2.5M18 16v2.5"/>', "#fff"],
+    alcohol: ["#C9932E", '<path d="M7 3h10l-1.2 6.5a3.9 3.9 0 0 1-7.6 0zM12 13.5V20M8.5 20h7"/>', "#fff"],
+    dining: ["#FF6B3D", '<path d="M7 3v7a2 2 0 0 0 2 2v9M11 3v7a2 2 0 0 1-2 2M17 21V3c-2 1.5-3 4-3 7v3h3"/>', "#fff"],
+    groceries: ["#30D158", '<circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M3 4h2.2l2.2 11h10.4l2-8H6.3"/>', "#fff"],
+    fun: ["#FFD60A", '<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14.5 7.5v2M14.5 11v2M14.5 14.5v2"/>', "#3A2E00"],
+    pocket: ["#00C7BE", '<rect x="3" y="7" width="18" height="10" rx="2"/><circle cx="12" cy="12" r="2.2"/>', "#fff"],
+    savings: ["#9BE15D", '<path d="M3.5 10L12 4.5l8.5 5.5M5.5 10v7.5M9.8 10v7.5M14.2 10v7.5M18.5 10v7.5M3.5 20h17"/>', "#1E3A00"],
+    misc: ["#8E8E93", '<path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v8"/>', "#fff"],
+    "": ["#3A3A3C", '<path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17.5h.01"/>', "#AEAEB2"]
+  };
+  function catIcon(key, cls){
+    const c = CAT_ICONS[key] || CAT_ICONS[""];
+    return '<span class="cat-ico' + (cls ? " " + cls : "") + '" style="background:' + c[0] + ';color:' + c[2] + '" aria-hidden="true"><svg viewBox="0 0 24 24">' + c[1] + '</svg></span>';
+  }
+
+  const NO_CAT = ["", "No category", "❔"];
+  // first match wins, so the more specific groups come first
+  const CAT_WORDS = [
+    ["savings", /\bsav(e|es|ing|ings)\b|invest|\bira\b|\broth\b|401k|emergency fund|brokerage|stocks?\b|crypto|bitcoin|robinhood|fidelity|vanguard|schwab|acorns|webull/],
+    ["health", /health|medic|doctor|dentist|dental|pharmac|prescription|ibuprofen|tylenol|advil|vitamin|hospital|clinic|therap|\bgym\b|appointment|copay|optometr|glasses|contacts/],
+    ["subs", /subscri|membership|netflix|hulu|spotify|youtube|\bhbo\b|\bmax\b|disney\+|paramount|peacock|apple (music|tv|one)|icloud|\bprime\b|audible|kindle|chatgpt|claude|patreon|xbox|playstation|nintendo online|siriusxm|\bsirius\b/],
+    ["auto", /\bcar\b|\bgas\b|fuel|\btags?\b|\btolls?\b|sunpass|oil change|\btires?\b|mechanic|\buber\b(?! ?eats)|\blyft\b|parking|\bauto\b|camaro|truck|registration|car wash/],
+    ["gifts", /gift|donat|church|tithe|charity|present/],
+    ["cards", /\bcards?\b|\bciti\b|chase|amex|american express|discover|capital one|barclays|synchrony|credit/],
+    ["groceries", /grocer|publix|aldi|walmart|winn.?dixie|whole foods|trader joe|costco|sam'?s club|kroger|supermarket/],
+    ["dining", /restaurant|pizza|burger|mcdonald|chick.?fil|wendy'?s|taco|sushi|starbucks|dunkin|coffee|\bdin(e|ing|ner)\b|lunch|breakfast|take ?out|doordash|uber ?eats|grubhub/],
+    ["alcohol", /whisk|beer|wine|liquor|vodka|tequila|\brum\b|bourbon|cigar|vape|tobacco|\bbar\b|brewery/],
+    ["pocket", /allowance|pocket|spending money|fun money|\bcash\b/],
+    ["family", /class|school|daycare|tuition|diaper|babysit|lesson|\bcamp\b|\bkids\b|childcare|formula/],
+    ["fun", /travel|\btrip\b|flight|hotel|airbnb|movie|cinema|concert|ticket|disney|vacation|\bgames?\b|museum|\bzoo\b/],
+    ["shopping", /amazon|target|clothes|clothing|shoes|costume|\bmall\b|home depot|lowe'?s|ikea|best buy|furniture/],
+    ["bills", /\brent\b|mortgage|electric|\bfpl\b|lcec|\bpower\b|water|sewer|internet|wifi|phone|t-mobile|verizon|at&t|utilit|trash|insurance|\bhoa\b|cable/]
+  ];
+  const normName = s => String(s || "").trim().toLowerCase();
+  // the category this name had last time, or one the name makes obvious; "" if neither
+  function catGuess(name){
+    const k = normName(name); if (!k) return "";
+    let last = "";
+    for (const p of [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0)) for (const it of p.items) if (it.cat && normName(it.name) === k) last = it.cat;
+    if (last) return last;
+    for (const x of state.recurring.concat(state.payments, state.wishlist)) if (x.cat && normName(x.name) === k) return x.cat;
+    for (const [c, re] of CAT_WORDS) if (re.test(k)) return c;
+    return "";
+  }
+  // gives older items a category when the name makes it obvious; true if anything changed
+  function fillCats(){
+    let changed = false;
+    const fix = o => { if (o.cat) return; const g = catGuess(o.name); if (g){ o.cat = g; changed = true; } };
+    state.recurring.forEach(fix);
+    for (const p of state.paychecks) for (const it of p.items){
+      if (it.cat) continue;
+      const r = it.recId && recById(it.recId);
+      if (r && r.cat){ it.cat = r.cat; changed = true; } else fix(it);
+    }
+    state.payments.forEach(fix); state.wishlist.forEach(fix);
+    return changed;
+  }
+  function setCatForName(name, cat){
+    const k = normName(name);
+    const set = o => { if (!o.cat && normName(o.name) === k) o.cat = cat; };
+    state.recurring.forEach(set); state.payments.forEach(set); state.wishlist.forEach(set);
+    for (const p of state.paychecks) p.items.forEach(set);
+  }
+  const catField = cur => field("Category", '<select name="cat">' + (cur ? "" : '<option value="" selected>Pick a category</option>') +
+    CATS.map(c => '<option value="' + c[0] + '"' + (c[0] === cur ? " selected" : "") + '>' + c[1] + '</option>').join("") + '</select>');
+  const catFrom = (fd, cur) => CAT_MAP[fd.get("cat")] ? fd.get("cat") : cur;
+  // asked every time a new expense is added
+  let catPending = null;
+  function askCategory(name, amount, guess, onPick){
+    const btn = c => '<button type="button" class="cat-btn' + (c[0] === guess ? " sug" : "") + '" data-act="pickCat" data-cat="' + c[0] + '">' +
+      catIcon(c[0]) + '<span>' + c[1] + '</span></button>';
+    const g = guess && CAT_MAP[guess];
+    openSheet({
+      title: "What kind of expense?", noSave: true,
+      body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + (amount ? ", " + money(amount) : "") + '</p>' +
+        (g ? '<p class="grp-h">Suggested</p><div class="cat-grid one">' + btn(g) + '</div><p class="grp-h">All categories</p>' : "") +
+        '<div class="cat-grid">' + CATS.map(btn).join("") + '</div>'
+    });
+    catPending = onPick;
+  }
+
+  // ---------- spending analysis ----------
+  let anaRange = lsGet("ana-range") || "month";
+  const anaOpen = new Set();
+  const RANGES = [["month", "This month"], ["last", "Last month"], ["3m", "3 months"], ["6m", "6 months"], ["year", "Year"]];
+  const RANGE_LEN = {"3m": 3, "6m": 6};
+  function rangeFor(key, shift){
+    const t = today(), y = t.getFullYear(), m = t.getMonth();
+    if (key === "year"){ const yy = y - shift; return {from: yy + "-01-01", to: yy + "-12-31", label: String(yy), short: String(yy)}; }
+    const len = RANGE_LEN[key] || 1, endM = (key === "last" ? m - 1 : m) - shift * len;
+    const a = new Date(y, endM - len + 1, 1), b = new Date(y, endM + 1, 0);
+    const label = len === 1 ? MONTHS_LONG[a.getMonth()] + " " + a.getFullYear() : MONTHS[a.getMonth()] + " to " + MONTHS[b.getMonth()] + " " + b.getFullYear();
+    return {from: iso(a), to: iso(b), label, short: len === 1 ? MONTHS[a.getMonth()] : "the " + len + " months before"};
+  }
+  // everything on the paychecks dated in the range: paid (checked off) and still planned
+  function spendIn(rg){
+    const by = {}, out = {checks: 0, income: 0, spent: 0, paid: 0, saved: 0, uncat: [], by};
+    for (const p of state.paychecks){
+      if (p.date < rg.from || p.date > rg.to) continue;
+      out.checks++; out.income += pcAmount(p);
+      for (const it of p.items){
+        const c = it.cat || "";
+        const e = by[c] || (by[c] = {total: 0, paid: 0, items: []});
+        e.total += it.amount; if (it.paid) e.paid += it.amount; e.items.push({pc: p, it});
+        if (!c) out.uncat.push(it);
+        if (c === "savings") out.saved += it.amount;
+        else { out.spent += it.amount; if (it.paid) out.paid += it.amount; }
+      }
+    }
+    return out;
+  }
+  function hbar(paid, total, max){
+    const w = v => (max > 0 ? Math.max(1.5, v / max * 100) : 0).toFixed(1) + "%", un = total - paid;
+    return '<span class="hbar" title="' + money(paid) + ' checked off, ' + money(un) + ' still planned">' +
+      (paid > 0.004 ? '<span class="p" style="width:' + w(paid) + '"></span>' : "") +
+      (un > 0.004 ? '<span class="u" style="width:' + w(un) + '"></span>' : "") + '</span>';
+  }
+
+  // ---------- charts: pie, line and bar, swiped side to side ----------
+  let anaSlide = 0, anaSplit = lsGet("ana-split") === "1", anaFocus = "", anaPt = -1, anaSlice = "";
+  const chartColor = key => key === "" ? "#636366" : (CAT_ICONS[key] || CAT_ICONS[""])[0];
+  const catName = key => (CAT_MAP[key] || NO_CAT)[1];
+  const f1 = n => (Math.round(n * 10) / 10).toString();
+  const isWeekly = () => anaRange === "month" || anaRange === "last";
+  // time slices: the weeks of the month for one month, months for longer periods
+  function chartBuckets(rg){
+    const a = parseISO(rg.from), b = parseISO(rg.to), out = [];
+    if (isWeekly()){
+      const y = a.getFullYear(), m = a.getMonth(), L = lastDayOf(y, m);
+      for (let d = 1; d <= L; d += 7){ const e = Math.min(L, d + 6); out.push({from: iso(new Date(y, m, d)), to: iso(new Date(y, m, e)), label: (m + 1) + "/" + d, long: MONTHS[m] + " " + d + (e > d ? "–" + e : "")}); }
+      return out;
+    }
+    for (let d = new Date(a.getFullYear(), a.getMonth(), 1); d <= b; d = new Date(d.getFullYear(), d.getMonth() + 1, 1))
+      out.push({from: iso(d), to: iso(new Date(d.getFullYear(), d.getMonth() + 1, 0)), label: MONTHS[d.getMonth()], long: MONTHS_LONG[d.getMonth()] + " " + d.getFullYear()});
+    if (anaRange === "year"){   // stop at this month, or the last month that has paychecks
+      const t = iso(today()).slice(0, 7);
+      let last = out.findIndex(x => x.from.slice(0, 7) === t);
+      out.forEach((x, i) => { if (state.paychecks.some(p => p.date >= x.from && p.date <= x.to)) last = Math.max(last, i); });
+      if (last >= 0) out.length = last + 1;
+    }
+    return out;
+  }
+  function chartData(rg, keys){
+    return chartBuckets(rg).map(bk => {
+      const s = spendIn(bk), by = {};
+      for (const k of keys) by[k] = s.by[k] ? s.by[k].total : 0;
+      return Object.assign(bk, {total: s.spent, paid: s.paid, by, empty: !s.checks});
+    });
+  }
+  const niceMax = v => { if (v <= 0) return 100; const p = Math.pow(10, Math.floor(Math.log10(v))); for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= v - 1e-9) return m * p; return 10 * p; };
+  const shortMoney = v => v >= 1000 ? "$" + (Math.round(v / 100) / 10) + "k" : "$" + Math.round(v);
+  const CW = 320, CH = 190, PL = 40, PR = 10, PT = 12, PB = 24, PW = CW - PL - PR, PH = CH - PT - PB;
+  function chartSvg(label, data, max, inner){
+    let g = "";
+    for (let k = 0; k <= 4; k++){
+      const v = max * k / 4, y = PT + PH - PH * k / 4;
+      g += '<line class="cg' + (k ? "" : " base") + '" x1="' + PL + '" x2="' + (CW - PR) + '" y1="' + f1(y) + '" y2="' + f1(y) + '"/>';
+      if (k % 2 === 0) g += '<text class="cy" x="' + (PL - 6) + '" y="' + f1(y + 3.5) + '">' + shortMoney(v) + '</text>';
+    }
+    const band = PW / data.length, every = data.length > 8 ? 2 : 1;
+    data.forEach((d, i) => { if (i % every === 0 || i === data.length - 1) g += '<text class="cx" x="' + f1(PL + band * i + band / 2) + '" y="' + (CH - 7) + '">' + d.label + '</text>'; });
+    const hits = data.map((d, i) => '<rect class="chit" data-act="anaPt" data-i="' + i + '" x="' + f1(PL + band * i) + '" y="' + PT + '" width="' + f1(band) + '" height="' + PH + '"><title>' + esc(d.long) + '</title></rect>').join("");
+    return '<svg class="chart" viewBox="0 0 ' + CW + ' ' + CH + '" role="img" aria-label="' + label + '">' + g + inner + hits + '</svg>';
+  }
+  function lineChart(data, keys){
+    const band = PW / data.length, X = i => PL + band * i + band / 2;
+    const series = !anaSplit ? [{color: "#F5F5F7", vals: data.map(d => d.total)}]
+      : keys.filter(k => !anaFocus || k === anaFocus).map(k => ({color: chartColor(k), vals: data.map(d => d.by[k] || 0)}));
+    const max = niceMax(Math.max(0, ...series.map(s => Math.max(0, ...s.vals))));
+    const Y = v => PT + PH - (v / max) * PH;
+    let inner = "";
+    if (anaPt >= 0 && anaPt < data.length) inner += '<line class="cguide" x1="' + f1(X(anaPt)) + '" x2="' + f1(X(anaPt)) + '" y1="' + PT + '" y2="' + (PT + PH) + '"/>';
+    const r = series.length > 3 ? 3 : 4;
+    for (const s of series){
+      let d = "", pen = false;
+      s.vals.forEach((v, i) => { if (data[i].empty){ pen = false; return; } d += (pen ? "L" : "M") + f1(X(i)) + " " + f1(Y(v)) + " "; pen = true; });
+      if (d.indexOf("L") >= 0) inner += '<path class="cline" stroke="' + s.color + '" d="' + d.trim() + '"/>';
+      inner += s.vals.map((v, i) => data[i].empty ? "" : '<circle class="cdot" cx="' + f1(X(i)) + '" cy="' + f1(Y(v)) + '" r="' + (i === anaPt ? r + 1.5 : r) + '" fill="' + s.color + '"/>').join("");
+    }
+    return chartSvg("Line chart of spending by " + (isWeekly() ? "week" : "month"), data, max, inner);
+  }
+  function barPath(x, y, w, h, round){
+    const r = round ? Math.min(4, h, w / 2) : 0;
+    return "M" + f1(x) + " " + f1(y + h) + "V" + f1(y + r) + (r ? "Q" + f1(x) + " " + f1(y) + " " + f1(x + r) + " " + f1(y) : "") +
+      "H" + f1(x + w - r) + (r ? "Q" + f1(x + w) + " " + f1(y) + " " + f1(x + w) + " " + f1(y + r) : "") + "V" + f1(y + h) + "Z";
+  }
+  function barChart(data, keys){
+    const band = PW / data.length, bw = Math.min(26, band * 0.62);
+    const stacks = data.map(d => !anaSplit ? [{c: "var(--check)", v: d.paid}, {c: "var(--plan)", v: Math.max(0, d.total - d.paid)}]
+      : keys.filter(k => !anaFocus || k === anaFocus).map(k => ({c: chartColor(k), v: d.by[k] || 0})));
+    const max = niceMax(Math.max(0, ...stacks.map(st => st.reduce((a, s) => a + s.v, 0))));
+    let inner = "";
+    stacks.forEach((st, i) => {
+      const x = PL + band * i + (band - bw) / 2, segs = st.filter(s => s.v > 0.004);
+      let y = PT + PH;
+      segs.forEach((s, j) => {
+        const h = s.v / max * PH, top = j === segs.length - 1, gap = top ? 0 : Math.min(1.5, h / 2);
+        inner += '<path fill="' + s.c + '" d="' + barPath(x, y - h + gap, bw, Math.max(0.5, h - gap), top) + '"' + (anaPt >= 0 && anaPt !== i ? ' opacity="0.4"' : "") + '/>';
+        y -= h;
+      });
+    });
+    return chartSvg("Bar chart of spending by " + (isWeekly() ? "week" : "month"), data, max, inner);
+  }
+  function chartReadout(data, keys){
+    if (anaPt < 0 || anaPt >= data.length) return '<p class="ana-read">Tap the chart to see a ' + (isWeekly() ? "week" : "month") + '.</p>';
+    const d = data[anaPt];
+    if (d.empty) return '<p class="ana-read"><strong>' + esc(d.long) + '</strong> No paychecks yet.</p>';
+    const status = d.paid >= d.total - 0.004 ? "all checked off" : d.paid > 0.004 ? money(d.paid) + " checked off" : "none checked off yet";
+    let h = '<p class="ana-read"><strong>' + esc(d.long) + '</strong> ' +
+      (anaSplit && anaFocus ? esc(catName(anaFocus)) + ", " + money(d.by[anaFocus] || 0) : money(d.total) + ", " + status) + '</p>';
+    if (anaSplit && !anaFocus){
+      const top = keys.filter(k => d.by[k] > 0.004).sort((a, b) => d.by[b] - d.by[a]).slice(0, 3);
+      if (top.length) h += '<p class="ana-read">' + top.map(k => '<span class="rd"><i style="background:' + chartColor(k) + '"></i>' + esc(catName(k)) + ' ' + money(d.by[k]) + '</span>').join("") + '</p>';
+    }
+    return h;
+  }
+  function chipsHtml(keys){
+    return '<div class="chips"><button class="chip" data-act="anaFocus" data-cat="" aria-pressed="' + !anaFocus + '">All</button>' +
+      keys.map(k => '<button class="chip" data-act="anaFocus" data-cat="' + k + '" aria-pressed="' + (anaFocus === k) + '"><i style="background:' + chartColor(k) + '"></i>' + esc(catName(k)) + '</button>').join("") + '</div>';
+  }
+  function pieChart(cur, keys){
+    const total = keys.reduce((a, k) => a + cur.by[k].total, 0);
+    if (total <= 0.004) return '<p class="ana-read">No spending in this period yet.</p>';
+    const R = 92, SW = 34, C = 2 * Math.PI * R;
+    let off = 0, arcs = "";
+    for (const k of keys){
+      const v = cur.by[k].total, len = v / total * C, gap = len > 6 ? 2 : 0, sel = anaSlice === k;
+      arcs += '<circle class="pslice" data-act="anaSlice" data-cat="' + k + '" cx="120" cy="120" r="' + R + '" stroke="' + chartColor(k) + '" stroke-width="' + (sel ? SW + 10 : SW) + '"' +
+        ' stroke-dasharray="' + Math.max(0.6, len - gap).toFixed(2) + ' ' + C.toFixed(2) + '" stroke-dashoffset="' + (-off).toFixed(2) + '"' + (anaSlice && !sel ? ' opacity="0.3"' : "") + '>' +
+        '<title>' + esc(catName(k)) + ': ' + money(v) + '</title></circle>';
+      off += len;
+    }
+    const s = anaSlice && cur.by[anaSlice] ? cur.by[anaSlice] : null;
+    const mid = s ? '<span class="k">' + esc(catName(anaSlice)) + '</span><span class="v num">' + money(s.total) + '</span><span class="s">' + Math.round(s.total / total * 100) + '% of spending</span>'
+      : '<span class="k">Spending</span><span class="v num">' + money(total) + '</span><span class="s">' + keys.length + (keys.length === 1 ? " category" : " categories") + '</span>';
+    return '<div class="pie-wrap"><svg viewBox="0 0 240 240" role="img" aria-label="Pie chart of spending by category"><g transform="rotate(-90 120 120)">' + arcs + '</g></svg><div class="pie-mid">' + mid + '</div></div>' +
+      '<div class="pie-legend">' + keys.map(k => '<button data-act="anaSlice" data-cat="' + k + '" aria-pressed="' + (anaSlice === k) + '"><i style="background:' + chartColor(k) + '"></i>' +
+        '<span class="n">' + esc(catName(k)) + '</span><span class="a num">' + money(cur.by[k].total) + '</span><span class="p">' + Math.round(cur.by[k].total / total * 100) + '%</span></button>').join("") + '</div>';
+  }
+  function anaDotsHtml(){ return [0, 1, 2].map(i => '<span class="d' + (i === anaSlide ? " on" : "") + '"></span>').join(""); }
+  function syncAnaRail(){
+    const rail = $("#anaRail"); if (!rail || !rail.offsetParent) return;
+    const sl = rail.children[anaSlide];
+    if (sl) rail.scrollLeft = sl.offsetLeft - (parseFloat(getComputedStyle(rail).paddingLeft) || 0);
+    fitAnaRail();
+  }
+  // the rail is as tall as the slide showing, so short charts don't leave a gap under them
+  function fitAnaRail(){
+    const rail = $("#anaRail"); if (!rail) return;
+    const sl = rail.children[anaSlide];
+    if (sl) rail.style.height = sl.offsetHeight + "px";
+  }
+  window.addEventListener("resize", () => { const rail = $("#anaRail"); if (rail){ rail.style.height = ""; fitAnaRail(); } });
+  let anaTimer = null;
+  document.addEventListener("scroll", e => {
+    const rail = e.target;
+    if (!rail || rail.id !== "anaRail") return;
+    clearTimeout(anaTimer);
+    anaTimer = setTimeout(() => {
+      const pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0;
+      let best = 0, bd = Infinity;
+      [...rail.children].forEach((c, i) => { const d = Math.abs(c.offsetLeft - pad - rail.scrollLeft); if (d < bd){ bd = d; best = i; } });
+      if (best === anaSlide) return;
+      anaSlide = best;
+      const dots = $("#anaDots"); if (dots) dots.innerHTML = anaDotsHtml();
+      fitAnaRail();
+    }, 90);
+  }, true);
+
+  function renderAnalysis(){
+    const rg = rangeFor(anaRange, 0), pv = rangeFor(anaRange, 1);
+    const cur = spendIn(rg), prev = spendIn(pv);
+    let h = '<h1 class="page-h">Spending analysis</h1>';
+    h += '<div class="rng" role="tablist" aria-label="Period">' + RANGES.map(([k, l]) =>
+      '<button role="tab" data-act="anaRange" data-r="' + k + '" aria-selected="' + (k === anaRange) + '">' + l + '</button>').join("") + '</div>';
+    if (!cur.checks) return h + '<p class="empty">No paychecks in ' + rg.label + ' yet.</p>';
+    const left = cur.income - cur.spent - cur.saved, still = cur.spent - cur.paid;
+    h += '<section class="summary ana-sum"><p style="margin:0">Spending, ' + rg.label + '</p><div class="big num">' + money(cur.spent) + '</div>' +
+      '<div class="ana-kv"><div><span class="k">Paychecks</span><span class="v num">' + money(cur.income) + '</span></div>' +
+      '<div><span class="k">Saved</span><span class="v num">' + money(cur.saved) + '</span></div>' +
+      '<div><span class="k">' + (left < -0.004 ? "Over by" : "Left over") + '</span><span class="v num' + (left < -0.004 ? " bad" : "") + '">' + money(Math.abs(left)) + '</span></div></div>' +
+      '<p>' + money(cur.paid) + ' checked off' + (still > 0.004 ? ", " + money(still) + " still planned" : "") + '.</p></section>';
+
+    if (cur.uncat.length){
+      const names = new Map();
+      for (const it of cur.uncat){ const k = normName(it.name); const e = names.get(k) || {name: it.name.trim(), n: 0, total: 0}; e.n++; e.total += it.amount; names.set(k, e); }
+      h += '<section class="pc need-cat"><h3>' + names.size + (names.size === 1 ? " item needs" : " items need") + ' a category</h3><ul class="items">' +
+        [...names.values()].map(e => '<li class="item"><button class="item-main" data-act="catName" data-name="' + esc(e.name) + '">' +
+          '<span class="item-name">' + esc(e.name) + '<span class="due">' + (e.n > 1 ? e.n + " times, " : "") + money(e.total) + '</span></span><span class="pick">Pick</span></button></li>').join("") +
+        '</ul></section>';
+    }
+
+    const keys = Object.keys(cur.by).filter(k => k !== "savings" && cur.by[k].total > 0.004).sort((a, b) => (a === "") - (b === "") || cur.by[b].total - cur.by[a].total);
+    if (anaFocus && !keys.includes(anaFocus)) anaFocus = "";
+    if (anaSlice && !keys.includes(anaSlice)) anaSlice = "";
+
+    // the charts, one per slide
+    const data = chartData(rg, keys), per = isWeekly() ? "week" : "month";
+    const seg = '<div class="mini-seg" role="group" aria-label="Show"><button data-act="anaSplit" data-v="0" aria-pressed="' + !anaSplit + '">Total</button>' +
+      '<button data-act="anaSplit" data-v="1" aria-pressed="' + anaSplit + '">Categories</button></div>';
+    h += '<div class="ana-rail" id="anaRail">' +
+      '<section class="ana-slide" aria-label="Pie chart"><div class="ana-slide-h"><h3>Where it went</h3></div>' + pieChart(cur, keys) + '</section>' +
+      '<section class="ana-slide" aria-label="Line chart"><div class="ana-slide-h"><h3>Trend by ' + per + '</h3>' + seg + '</div>' +
+        lineChart(data, keys) + chartReadout(data, keys) + (anaSplit ? chipsHtml(keys) : "") + '</section>' +
+      '<section class="ana-slide" aria-label="Bar chart"><div class="ana-slide-h"><h3>Spending by ' + per + '</h3>' + seg + '</div>' +
+        barChart(data, keys) + chartReadout(data, keys) +
+        (anaSplit ? chipsHtml(keys) : '<div class="legend"><span><i class="p"></i>Checked off</span><span><i class="u"></i>Still planned</span></div>') + '</section>' +
+      '</div><div class="dots ana-dots" id="anaDots">' + anaDotsHtml() + '</div>';
+
+    const max = Math.max(0, ...keys.map(k => cur.by[k].total), cur.by.savings ? cur.by.savings.total : 0);
+    const row = key => {
+      const c = CAT_MAP[key] || NO_CAT, e = cur.by[key];
+      const pd = prev.by[key] ? prev.by[key].total : 0, d = e.total - pd;
+      const sub = [];
+      if (key !== "savings" && cur.spent > 0) sub.push(Math.round(e.total / cur.spent * 100) + "% of spending");
+      if (pd > 0) sub.push(Math.abs(d) < 0.5 ? "same as " + pv.short : (d > 0 ? "▲ " : "▼ ") + money(Math.abs(d)) + " vs " + pv.short);
+      const items = e.items.slice().sort((a, b) => a.pc.date < b.pc.date ? 1 : a.pc.date > b.pc.date ? -1 : 0);
+      return '<details class="cat-row" data-cat="' + key + '"' + (anaOpen.has(key) ? " open" : "") + '><summary>' +
+        catIcon(key) + '<span class="cat-mid"><span class="cat-top"><span class="cat-n">' + c[1] + '</span>' +
+        '<span class="num cat-v">' + money(e.total) + '</span></span>' + hbar(e.paid, e.total, max) + '<span class="cat-sub">' + sub.join(" · ") + '</span></span></summary>' +
+        '<ul class="items">' + items.map(({pc, it}) => '<li class="item' + (it.paid ? " is-paid" : "") + '"><button class="item-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + it.id + '">' +
+          '<span class="item-name">' + esc(it.name) + '<span class="due">' + dayLabel(pc.date) + ' check' + (it.paid ? "" : ", not checked off yet") + '</span></span>' +
+          '<span class="num">' + money(it.amount) + '</span></button></li>').join("") + '</ul></details>';
+    };
+    h += '<div class="sub-head"><h3>By category</h3></div>' +
+      '<div class="legend"><span><i class="p"></i>Checked off</span><span><i class="u"></i>Still planned</span></div>' +
+      '<section class="pc cats">' + keys.map(row).join("") + '</section>';
+    if (cur.by.savings && cur.by.savings.total > 0.004) h += '<div class="sub-head"><h3>Saved</h3></div><section class="pc cats">' + row("savings") + '</section>';
+    return h;
+  }
+
   // ---------- render ----------
   function render(){
-    document.querySelectorAll('.seg button').forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+    document.querySelectorAll('.tabbar button').forEach(b => { if (b.dataset.tab === tab) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
     const bc = $("#expCount");
     if (ready){
       const a = alerts(), n = a.red.length || a.yellow.length;
       bc.hidden = !n; bc.textContent = n; bc.classList.toggle("red", a.red.length > 0);
     }
     document.body.dataset.tab = tab;
-    if (!ready){ $("#panePay").innerHTML = '<p class="empty">Loading your budget…</p>'; $("#paneExp").innerHTML = ""; return; }
-    // both panes are always rendered; CSS shows one (upright) or both side by side (sideways)
-    $("#panePay").innerHTML = '<h2 class="pane-title">Paychecks</h2>' + renderPay();
-    $("#paneExp").innerHTML = '<h2 class="pane-title">Expenses</h2>' + renderExpenses();
+    if (!ready){ $("#panePay").innerHTML = '<p class="empty">Loading your budget…</p>'; $("#paneExp").innerHTML = ""; $("#paneAna").innerHTML = ""; $("#paneSet").innerHTML = ""; return; }
+    // every page is drawn; CSS shows one (upright) or Paychecks plus one more (sideways)
+    $("#panePay").innerHTML = renderPay();
+    $("#paneExp").innerHTML = '<h1 class="page-h">Expenses</h1>' + renderExpenses();
+    $("#paneAna").innerHTML = renderAnalysis();
+    $("#paneSet").innerHTML = renderSettings();
+    syncRail(); syncAnaRail();
   }
 
-  function itemRow(i, pcId){
-    return '<li class="item' + (i.paid ? " is-paid" : "") + '">' +
-      '<button class="chk" data-act="toggle" data-pc="' + pcId + '" data-id="' + i.id + '" aria-pressed="' + i.paid + '" aria-label="' + (i.paid ? "Unmark " : "Mark ") + esc(i.name) + ' as paid">' +
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button>' +
-      '<button class="item-main" data-act="editItem" data-pc="' + pcId + '" data-id="' + i.id + '">' +
-      '<span class="item-name">' + esc(i.name) + (i.due ? '<span class="due">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
-      '<span class="num">' + money(i.amount) + '</span></button></li>';
+  const TICK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4 9-9.5"/></svg>';
+  const PLUS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  function itemRow(i, pc){
+    const showDue = i.due && i.due !== pc.date;
+    return '<li class="row' + (i.paid ? " is-paid" : "") + '">' +
+      '<button class="row-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
+        '<span class="row-name">' + esc(i.name) + (showDue ? '<span class="row-sub">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
+        '<span class="row-amt num">' + money(i.amount) + '</span></button>' +
+      '<button class="tick" data-act="toggle" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-pressed="' + i.paid + '" aria-label="' + (i.paid ? "Unmark " : "Mark ") + esc(i.name) + ' as paid">' + TICK + '</button></li>';
   }
 
-  function extraRow(left){
-    const over = left < -0.004;
-    return '<div class="extra' + (over ? " over" : "") + '">' +
-      '<span><span class="extra-k">' + (over ? "Over budget" : "Extra") + '</span>' +
-      '<span class="extra-sub">' + (over ? "Items add up to more than this check" : "What's left after everything above") + '</span></span>' +
-      '<span class="num extra-v">' + money(Math.abs(left)) + '</span></div>';
+  function pcSub(p){
+    if (!p.hours) return "";
+    if (state.settings.payType === "salary" || p.hoursSet) return esc(hoursLabel(p.hours));
+    return "Estimated: " + esc(hoursLabel(p.hours));
+  }
+  // Paid, Still to pay, Est. balance and Extra on one line, same size, then one bar for the whole check:
+  // paid | [still to pay | extra], with an outline around the part that should still be in the account
+  function pcSummary(amt, planned, paid){
+    const extra = amt - planned, left = amt - paid, toPay = Math.max(0, planned - paid);
+    const over = extra < -0.004, total = Math.max(amt, planned, 0.01);
+    const pct = v => Math.max(0, Math.min(100, v / total * 100)).toFixed(2) + "%";
+    const vals = [paid, toPay, left, Math.abs(extra)];
+    const small = vals.some(v => money(v).length >= 8);
+    const stat = (k, v, cls, dot) => '<div class="st"><span class="k">' + (dot ? '<i class="dot ' + dot + '"></i>' : "") + k + '</span>' +
+      '<span class="v num' + (cls ? " " + cls : "") + '">' + money(v) + '</span></div>';
+    let h = '<div class="pc-line' + (small ? " sm" : "") + '">' +
+      stat("Paid", paid, "", "p") +
+      stat("Still to pay", toPay, "", "u") +
+      stat("Est. balance", left, left < -0.004 ? "bad" : "", "eb") +
+      stat(over ? "Over by" : "Extra", Math.abs(extra), over ? "bad" : "good", over ? "" : "x") + '</div>';
+    const seg = (cls, v, grow) => v > 0.004 ? '<span class="' + cls + '" style="' + (grow ? "flex:" + v.toFixed(2) + " 1 0" : "width:" + pct(v)) + '"></span>' : "";
+    h += '<div class="pc-sum" aria-hidden="true"><div class="pc-bar">' + seg("p", paid);
+    if (left > 0.004 && amt > 0){
+      const inCheck = Math.min(toPay, left);   // still-to-pay that the check covers
+      h += '<span class="eb" style="width:' + pct(left) + '">' + seg("u", inCheck, true) + (!over ? seg("x", extra, true) : "") + '</span>';
+      if (over) h += seg("ovs", planned - amt);
+    } else {
+      h += seg("u", toPay) + (over && amt > 0 ? '<span class="ov" style="left:' + pct(amt) + '"></span>' : "");
+    }
+    return h + '</div></div>';
   }
 
-  function pcCard(p){
-    const amt = pcAmount(p);
-    const planned = sum(p.items), left = amt - planned, paid = sum(p.items.filter(i => i.paid));
-    const pct = planned ? Math.min(100, paid / planned * 100) : 0;
-    const leftCls = left < 0 ? "bad" : left > 0 ? "good" : "";
-    return '<section class="pc" aria-label="Paycheck ' + dayLabel(p.date) + '">' +
-      '<button class="pc-head" data-act="editPc" data-id="' + p.id + '"><span><span class="pc-date">' + dayLabel(p.date) + '</span>' +
-        '<span class="pc-sub">' + (p.hours ? esc(hoursLabel(p.hours)) + ', tap to change' : 'Tap to enter your hours') + '</span></span>' +
-        '<span class="pc-amt num">' + money(amt) + '</span></button>' +
-      '<div class="pc-stats">' +
-        '<div class="lead"><span class="k">' + (left < 0 ? "Over by" : "Extra") + '</span><span class="v num ' + leftCls + '">' + money(Math.abs(left)) + '</span></div>' +
-        '<div><span class="k">Planned</span><span class="v num">' + money(planned) + '</span></div>' +
-        '<div><span class="k">Paid</span><span class="v num">' + money(paid) + '</span></div>' +
-      '</div>' +
-      '<div class="bar" aria-hidden="true"><span style="width:' + pct.toFixed(1) + '%"></span></div>' +
-      '<ul class="items">' + p.items.map(i => itemRow(i, p.id)).join("") + '</ul>' +
-      extraRow(left) +
-      '<form class="add" data-form="addItem" data-id="' + p.id + '">' +
-        '<input name="name" placeholder="New item" aria-label="Item name" autocomplete="off" required>' +
-        '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
-        '<button type="submit">Add</button></form>' +
-    '</section>';
-  }
-
-  function renderPay(){
+  // ---------- paychecks page: swipe between checks, the last slide adds one ----------
+  let selPc = null;   // the check whose items show below the cards; "add" = the add-a-paycheck slide
+  const railList = () => [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+  function curSel(){
+    if (selPc === "add" || (selPc && findPc(selPc))) return selPc;
     const g = groups();
+    selPc = g.upcoming[0] ? g.upcoming[0].id : "add";
+    return selPc;
+  }
+  function nextPaydayAfterLast(){ const l = railList(); return l.length ? nextPayday(l[l.length - 1].date) : iso(today()); }
+  function pcCard(p){
+    const amt = pcAmount(p), planned = sum(p.items), paid = sum(p.items.filter(i => i.paid)), sub = pcSub(p);
+    return '<section class="pc-card" data-pc="' + p.id + '" aria-label="Paycheck ' + dayLabel(p.date) + '">' +
+      '<div class="pc-top"><div><span class="pc-date">' + dayLabel(p.date) + '</span><span class="pc-amt num">' + money(amt) + '</span></div>' +
+      '<button class="pc-adjust" data-act="editPc" data-id="' + p.id + '">Adjust check</button></div>' +
+      (sub ? '<span class="pc-sub">' + sub + '</span>' : "") +
+      pcSummary(amt, planned, paid) + '</section>';
+  }
+  function addCard(){
+    return '<button class="pc-card pc-add" data-pc="add" data-act="newPc"><span class="pc-plus">' + PLUS + '</span>' +
+      '<span class="pc-add-t">Add a paycheck</span><span class="pc-add-s">Next payday: ' + dayLabel(nextPaydayAfterLast()) + '</span></button>';
+  }
+  function dotsHtml(sel){
+    const ids = railList().map(p => p.id).concat("add"), n = ids.length, i = Math.max(0, ids.indexOf(sel));
+    const W = 9, start = Math.max(0, Math.min(i - 4, n - W)), end = Math.min(n, start + W);
     let h = "";
+    for (let k = start; k < end; k++){
+      h += ids[k] === "add" ? '<svg class="dot-plus' + (k === i ? " on" : "") + '" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5v7M1.5 5h7"/></svg>'
+        : '<span class="d' + (k === i ? " on" : "") + '"></span>';
+    }
+    return h;
+  }
+  function pcItems(pc){
+    if (!pc){
+      return '<div class="pc-empty"><strong>' + dayLabel(nextPaydayAfterLast()) + ' isn\'t planned yet</strong>' +
+        '<span>Add it to see what this check covers. Bills set to go on paychecks automatically fill in on their own.</span></div>';
+    }
+    const toPay = pc.items.filter(i => !i.paid), paid = pc.items.filter(i => i.paid);
+    let h = '<div class="grp-head"><span>To pay</span><span class="num">' + money(sum(toPay)) + '</span></div>';
+    h += toPay.length ? '<ul class="rows">' + toPay.map(i => itemRow(i, pc)).join("") + '</ul>'
+      : '<p class="rows-empty">' + (pc.items.length ? "Everything on this check is paid." : "Nothing on this check yet.") + '</p>';
+    h += '<button class="newitem" data-act="newItem" data-pc="' + pc.id + '">' + PLUS + 'New item</button>';
+    if (paid.length) h += '<div class="grp-head"><span>Paid</span><span class="num">' + money(sum(paid)) + '</span></div><ul class="rows">' + paid.map(i => itemRow(i, pc)).join("") + '</ul>';
+    return h;
+  }
+  function renderPay(){
+    let h = '<h1 class="page-h">Paychecks</h1>';
     if (!isStandalone() && isIOS() && !lsGet("install-dismissed")){
       h += '<div class="install"><span><strong>Make it an app:</strong> tap the Share button in Safari, then <strong>Add to Home Screen</strong>. It will open full screen from your home screen.</span>' +
         '<button data-act="installDismiss" aria-label="Dismiss">' + XSVG + '</button></div>';
@@ -577,22 +1433,64 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<button data-act="importData">Paste my data</button></section>';
     }
     h += renderBanners(true);
-    if (!g.upcoming.length && !g.earlier.length){
-      h += '<p class="empty">No paychecks yet. Add your next payday to start planning it.</p>';
-    }
-    h += g.upcoming.map(pcCard).join("");
-    h += '<button class="btn-wide" data-act="newPc">Add a paycheck</button>';
-    if (g.earlier.length){
-      h += '<h2 class="sect">Earlier, all paid</h2>';
-      h += g.earlier.map(p => {
-        const amt = pcAmount(p), left = amt - sum(p.items);
-        return '<details class="pc"><summary><span class="d">' + dayLabel(p.date) + '</span><span class="s num">' + money(amt) +
-          (left ? ' <span class="' + (left < 0 ? "bad" : "good") + '">(' + (left < 0 ? "over " : "extra ") + money(Math.abs(left)) + ')</span>' : "") +
-          '</span></summary><ul class="items">' + p.items.map(i => itemRow(i, p.id)).join("") +
-          '</ul>' + extraRow(left) + '<div class="old-foot"><button class="linkbtn" data-act="editPc" data-id="' + p.id + '">Edit paycheck</button></div></details>';
-      }).join("");
-    }
+    const sel = curSel();
+    h += '<div class="pc-rail" id="pcRail">' + railList().map(pcCard).join("") + addCard() + '</div>';
+    h += '<div class="dots" id="pcDots">' + dotsHtml(sel) + '</div>';
+    h += '<div id="pcItems">' + pcItems(sel === "add" ? null : findPc(sel)) + '</div>';
     return h;
+  }
+  // after a redraw, put the cards back where they were
+  function syncRail(){
+    const rail = $("#pcRail"); if (!rail || !rail.offsetParent) return;
+    const card = rail.querySelector('[data-pc="' + curSel() + '"]');
+    if (card) rail.scrollLeft = card.offsetLeft - (parseFloat(getComputedStyle(rail).paddingLeft) || 0);
+  }
+  // when a swipe settles, show that check's items
+  let railTimer = null;
+  document.addEventListener("scroll", e => {
+    const rail = e.target;
+    if (!rail || rail.id !== "pcRail") return;
+    clearTimeout(railTimer);
+    railTimer = setTimeout(() => {
+      const pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0;
+      let best = null, bd = Infinity;
+      for (const c of rail.children){ const d = Math.abs(c.offsetLeft - pad - rail.scrollLeft); if (d < bd){ bd = d; best = c; } }
+      if (!best || best.dataset.pc === curSel()) return;
+      selPc = best.dataset.pc;
+      const items = $("#pcItems"); if (items) items.innerHTML = pcItems(selPc === "add" ? null : findPc(selPc));
+      const dots = $("#pcDots"); if (dots) dots.innerHTML = dotsHtml(selPc);
+    }, 90);
+  }, true);
+
+  // adding an item: name and amount, suggestions as you type, then the category
+  function newItemSheet(pcId){
+    const pc = findPc(pcId); if (!pc) return;
+    openSheet({
+      title: "New item", saveText: "Next", focus: "name",
+      body: field("Name", '<input name="name" autocomplete="off" required>') +
+        field("Amount", '<input name="amount" inputmode="decimal" placeholder="$0" autocomplete="off">') +
+        '<div id="sheetSugg"></div>',
+      onInput: () => renderSheetSugg(pc),
+      onSave: fd => {
+        const name = String(fd.get("name") || "").trim(); if (!name) return false;
+        if (name.toLowerCase() === "extra"){ setStatus("Extra is calculated for you"); return false; }
+        const amt = toNum(fd.get("amount"));
+        askCategory(name, amt, catGuess(name), cat => {
+          pc.items.push({id: uid(), name, amount: amt, paid: false, due: "", cat});
+          commit(); setStatus("Added to " + dayLabel(pc.date));
+        });
+        return false;
+      }
+    });
+    sheetCfg.onInput();
+  }
+  function renderSheetSugg(pc){
+    const box = $("#sheetSugg"); if (!box) return;
+    if (!state.settings.sugg){ box.innerHTML = ""; return; }
+    const list = suggestionsFor(pc, $("#sheetForm").elements.name.value);
+    box.innerHTML = !list.length ? "" : '<div class="sugg"><p class="sugg-h">Suggestions</p>' + list.map(s =>
+      '<button type="button" data-act="sugg" data-pc="' + pc.id + '" data-kind="' + s.kind + '" data-id="' + esc(s.id) + '" data-amt="' + s.amount + '" data-cat="' + (s.cat || "") + '">' +
+      '<span><span class="s-name">' + esc(s.name) + '</span><span class="s-sub">' + esc(s.sub) + '</span></span><span class="num">' + money(s.amount) + '</span></button>').join("") + '</div>';
   }
 
   function renderBanners(link){
@@ -619,38 +1517,55 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
 
   function recRow(r, g){
-    const o = occ(r), cm = curMonth();
+    const o = openOcc(r), paid = isPaidNow(r), ls = linkedAll(r, o), days = daysUntil(o), nd = noDay(r);
     let sub = "", red = false;
-    if (o.paidThisMonth) sub = "Paid for " + monthName(cm) + (o.date ? ". Next due " + dayLabel(o.date) : "");
-    else if (!o.date) sub = "No set due day";
-    else { sub = dueText(o.days, o.date); red = o.days <= 7 && !o.planned; }
-    if (o.planned){
-      const ls = linkedAll(r, o.month);
-      sub += (o.paidThisMonth && !o.date ? ". Next one is" : ",") + " on the " + ls.map(l => dayLabel(l.pc.date)).join(" and ") + (ls.length > 1 ? " checks" : " check");
-    }
-    const showAssign = !o.planned && (o.date ? o.days <= 14 : !o.paidThisMonth);
-    return '<li class="item rec' + (o.paidThisMonth ? " is-paid" : "") + '">' +
-      '<button class="chk" data-act="recToggle" data-id="' + r.id + '" aria-pressed="' + o.paidThisMonth + '" aria-label="' + (o.paidThisMonth ? "Unmark " : "Mark ") + esc(r.name) + ' as paid for ' + monthName(cm) + '">' +
+    if (paid) sub = paidLabel(r) + (nd ? "" : ". Next due " + dayLabel(o));
+    else if (nd) sub = "No set due day";
+    else { sub = dueText(days, o); red = days <= redDays() && !ls.length; }
+    const onChecks = " on the " + ls.map(l => dayLabel(l.pc.date)).join(" and ") + (ls.length > 1 ? " checks" : " check");
+    if (ls.length && !paid && ls.length === 1 && ls[0].pc.date === o) sub = "On the" + onChecks.slice(7);
+    else if (ls.length) sub += (paid && nd ? ". Next one is" : ",") + onChecks;
+    const showAssign = !ls.length && (nd ? !paid : days <= warnDays());
+    return '<li class="item rec' + (paid ? " is-paid" : "") + '">' +
+      '<button class="chk" data-act="recToggle" data-id="' + r.id + '" aria-pressed="' + paid + '" aria-label="' + (paid ? "Unmark " : "Mark ") + esc(r.name) + ' as paid">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button>' +
-      '<button class="item-main" data-act="editRec" data-id="' + r.id + '"><span class="item-name">' + esc(r.name) +
+      '<button class="item-main" data-act="editRec" data-id="' + r.id + '">' + catIcon(r.cat, "sm") + '<span class="item-name">' + esc(r.name) + (r.auto ? '<span class="pill">Auto</span>' : "") +
       '<span class="due' + (red ? " bad" : "") + '">' + sub + '</span></span><span class="num">' + money(r.amount) + '</span></button>' +
-      (showAssign ? assignHtml(r.id, suggestPaycheck(o.date, g.upcoming), "recAssign", g) : "") + '</li>';
+      (showAssign ? assignHtml(r.id, suggestPaycheck(o, g.upcoming), "recAssign", g) : "") + '</li>';
+  }
+  const REC_EMPTY = {weekly: "Things you pay every week, like groceries or gas.", biweekly: "Bills that come every other week.",
+    monthly: "Rent, car, utilities and other monthly bills.", yearly: "Car tags, memberships and other once-a-year bills."};
+  const REC_PER = {weekly: " a week", biweekly: " every 2 weeks", monthly: " a month", yearly: " a year"};
+  function addRecForm(f, g){
+    const t = iso(today()), next = g.upcoming.find(p => p.date >= t);
+    if (f === "monthly") return '<form class="add" data-form="addRec" data-freq="monthly">' +
+      '<input name="name" placeholder="New bill" aria-label="Bill name" autocomplete="off" required>' +
+      '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
+      '<input name="day" inputmode="numeric" placeholder="Day" aria-label="Due day of the month" autocomplete="off">' +
+      '<button type="submit">Add</button></form>';
+    const dflt = f === "yearly" ? "" : (next ? next.date : t);
+    return '<form class="add add-wrap" data-form="addRec" data-freq="' + f + '">' +
+      '<input name="name" placeholder="New ' + (f === "weekly" ? "weekly expense" : "bill") + '" aria-label="Name" autocomplete="off" required style="flex-basis:100%">' +
+      '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
+      '<input name="due" type="date" aria-label="Next due date" value="' + dflt + '"' + (f === "yearly" ? " required" : "") + '>' +
+      '<button type="submit">Add</button></form>';
   }
 
   function renderExpenses(){
     const g = groups();
     let h = renderBanners(false);
 
-    // recurring bills
-    const recs = [...state.recurring].sort((a, b) => (a.day || 99) - (b.day || 99));
-    h += '<div class="sec-head"><h2>Recurring bills</h2><span class="num muted">' + money(sum(recs)) + ' a month</span></div>';
-    h += '<section class="pc"><ul class="items">' + recs.map(r => recRow(r, g)).join("") + '</ul>' +
-      (recs.length ? "" : '<p class="empty">Add the bills that come every month.</p>') +
-      '<form class="add" data-form="addRec">' +
-        '<input name="name" placeholder="New bill" aria-label="Bill name" autocomplete="off" required>' +
-        '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
-        '<input name="day" inputmode="numeric" placeholder="Day" aria-label="Due day of the month" autocomplete="off">' +
-        '<button type="submit">Add</button></form></section>';
+    // recurring bills, grouped by how often they come
+    const on = FREQS.filter(f => !(state.settings.groupsOff || []).includes(f));
+    const recsOn = state.recurring.filter(r => on.includes(r.freq));
+    h += '<div class="sec-head"><h2>Recurring bills</h2><span class="num muted">' + money(recsOn.reduce((a, r) => a + perMonth(r), 0)) + ' a month</span></div>';
+    if (!on.length) h += '<p class="muted" style="margin:0 2px 14px">All groups are turned off. Turn them back on in Settings.</p>';
+    for (const f of on){
+      const list = state.recurring.filter(r => r.freq === f).sort((a, b) => { const x = openOcc(a), y = openOcc(b); return x < y ? -1 : x > y ? 1 : 0; });
+      h += '<div class="sub-head"><h3>' + FREQ_LABEL[f] + '</h3><span class="num muted">' + money(sum(list)) + REC_PER[f] + '</span></div>';
+      h += '<section class="pc"><ul class="items">' + list.map(r => recRow(r, g)).join("") + '</ul>' +
+        (list.length ? "" : '<p class="empty small">' + REC_EMPTY[f] + '</p>') + addRecForm(f, g) + '</section>';
+    }
 
     // one-time expenses
     h += '<div class="sec-head"><h2>One-time expenses</h2></div>';
@@ -658,7 +1573,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const pays = [...state.payments].sort((a, b) => (a.due || "9999") < (b.due || "9999") ? -1 : 1);
     h += '<div class="sub-head"><h3>Things to pay</h3><span class="num muted">' + money(sum(pays)) + '</span></div>';
     h += pays.map(i => {
-      const days = i.due ? daysUntil(i.due) : null, red = days !== null && days <= 7;
+      const days = i.due ? daysUntil(i.due) : null, red = days !== null && days <= redDays();
       return '<div class="xcard' + (red ? " is-red" : "") + '">' +
         '<button class="xbtn" data-act="xPay" data-id="' + i.id + '" aria-label="Erase ' + esc(i.name) + '">' + XSVG + '</button>' +
         '<button class="item-main" data-act="editPay" data-id="' + i.id + '"><span class="item-name">' + esc(i.name) +
@@ -673,14 +1588,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<button type="submit">Add</button></form></div>';
 
     const buys = state.wishlist.filter(w => !w.done).sort((a, b) => (a.target || "9999") < (b.target || "9999") ? -1 : (a.target || "9999") > (b.target || "9999") ? 1 : 0);
-    const perWeek = buys.reduce((a, w) => a + wishPerWeek(w), 0), next = g.upcoming[0];
+    const perWeek = buys.reduce((a, w) => a + wishPerCheck(w), 0), next = g.upcoming[0];
     h += '<div class="sub-head"><h3>Things to buy</h3><span class="num muted">' + money(buys.reduce((a, w) => a + w.cost, 0)) + '</span></div>';
     if (perWeek > 0){
-      h += '<div class="buy-sum"><span>Set aside <strong class="num">' + money(perWeek) + '</strong> a week to buy the dated items on time.</span>' +
+      h += '<div class="buy-sum"><span>Set aside <strong class="num">' + money(perWeek) + '</strong> ' + (weeklyPay() ? "a week" : "each paycheck") + ' to buy the dated items on time.</span>' +
         (next ? '<button data-act="fundGoals">Add to ' + dayLabel(next.date) + '</button>' : "") + '</div>';
     }
     h += buys.map(w => {
-      const pw = wishPerWeek(w);
+      const pw = wishPerCheck(w);
       let sub = w.target ? "by " + monthLabel(w.target) : "";
       if (w.saved) sub += (sub ? ", " : "") + money(w.saved) + " saved";
       return '<div class="xcard">' +
@@ -688,7 +1603,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<button class="item-main" data-act="editWish" data-id="' + w.id + '"><span class="item-name">' + esc(w.name) +
         (sub ? '<span class="due">' + sub + '</span>' : "") + '</span>' +
         '<span class="amt-col"><span class="num">' + (w.cost ? money(w.cost) : "no price") + '</span>' +
-        (pw ? '<span class="pw num">' + money(pw) + '/wk</span>' : "") + '</span></button></div>';
+        (pw ? '<span class="pw num">' + money(pw) + (weeklyPay() ? '/wk' : '/check') + '</span>' : "") + '</span></button></div>';
     }).join("");
     h += '<div class="addcard"><form class="add" data-form="addWish"><input name="name" placeholder="Something to buy" aria-label="Item" autocomplete="off" required>' +
       '<input name="cost" inputmode="decimal" placeholder="$0" aria-label="Price" autocomplete="off"><button type="submit">Add</button></form></div>';
@@ -702,20 +1617,29 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function field(label, html){ return '<label class="field"><span>' + label + '</span>' + html + '</label>'; }
   function openSheet(cfg){
     sheetCfg = cfg; deleteArmed = false;
-    $("#sheetTitle").textContent = cfg.title;
+    const title = $("#sheetTitle");
+    title.textContent = cfg.title;
     $("#sheetBody").innerHTML = cfg.body;
     const del = $("#sheetDelete");
     del.hidden = !cfg.onDelete; del.textContent = "Delete";
-    if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", "");
+    $("#sheetSave").hidden = !!cfg.noSave; $("#sheetSave").textContent = cfg.saveText || "Save";
+    $("#sheetCancel").textContent = cfg.cancelText || (cfg.back ? "Back" : "Cancel");
+    if (!sheet.open){ if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", ""); }
+    sheet.scrollTop = 0;
+    // keep the keyboard and date pickers closed until a field is tapped
+    const a = document.activeElement;
+    if (a && a !== title && a.matches && a.matches("input,select,textarea")) a.blur();
+    const want = cfg.focus && $("#sheetForm").elements[cfg.focus];
+    if (want) want.focus(); else title.focus({preventScroll: true});
   }
-  function closeSheet(){ sheetCfg = null; if (sheet.open) sheet.close(); }
+  function closeSheet(){ sheetCfg = null; catPending = null; if (sheet.open) sheet.close(); }
   let toastTimer = null, undoFn = null;
   function toast(msg, undo){
     $("#toastMsg").textContent = msg; undoFn = undo; $("#toast").hidden = false;
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("#toast").hidden = true; undoFn = null; }, 5000);
   }
   $("#toastUndo").addEventListener("click", () => { if (undoFn){ undoFn(); undoFn = null; commit(); } $("#toast").hidden = true; });
-  $("#sheetCancel").addEventListener("click", closeSheet);
+  $("#sheetCancel").addEventListener("click", () => { if (sheetCfg && sheetCfg.back) sheetCfg.back(); else closeSheet(); });
   $("#sheetDelete").addEventListener("click", e => {
     if (!sheetCfg || !sheetCfg.onDelete) return;
     if (!deleteArmed){ deleteArmed = true; e.currentTarget.textContent = "Tap again to delete"; return; }
@@ -732,9 +1656,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   $("#sheetForm").addEventListener("submit", e => {
     e.preventDefault();
     if (!sheetCfg) return;
+    const back = sheetCfg.back;
     const ok = sheetCfg.onSave(new FormData(e.currentTarget));
     if (ok === false) return;
-    closeSheet(); commit();
+    if (back) back(); else closeSheet();
+    commit();
   });
 
   function moveOptions(currentPcId){
@@ -752,46 +1678,100 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     openSheet({
       title: "Edit item",
       body: field("Name", '<input name="name" required value="' + esc(it.name) + '">') +
-            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') +
+            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + catField(it.cat) +
             field("Due date (optional)", '<input name="due" type="date" value="' + esc(it.due) + '">') +
             field("Paid from", '<select name="move">' + moveOptions(pcId) + '</select>'),
       onSave: fd => {
         it.name = String(fd.get("name") || "").trim() || it.name;
         it.amount = toNum(fd.get("amount"));
+        it.cat = catFrom(fd, it.cat);
         it.due = String(fd.get("due") || "");
         const dest = fd.get("move");
         if (dest && dest !== pcId){
           pc.items = pc.items.filter(i => i !== it);
-          if (dest === "__none"){ if (it.recId) unlink(it); else { it.paid = false; state.payments.push(it); } }
+          if (dest === "__none"){ if (it.recId) skipOcc(it); else { it.paid = false; state.payments.push(it); } }
           else { const to = findPc(dest); if (to) to.items.push(it); }
         }
       },
-      onDelete: () => { unlink(it); pc.items = pc.items.filter(i => i.id !== id); }
+      onDelete: () => { skipOcc(it); pc.items = pc.items.filter(i => i.id !== id); }
     });
   }
   function editRec(id){
     const r = recById(id); if (!r) return;
+    const o = openOcc(r);
+    const opt = (v, l, cur) => '<option value="' + v + '"' + (v === cur ? " selected" : "") + '>' + l + '</option>';
     openSheet({
       title: "Edit recurring bill",
       body: field("Name", '<input name="name" required value="' + esc(r.name) + '">') +
-            field("Amount", '<input name="amount" inputmode="decimal" value="' + r.amount + '">') +
-            field("Due day of the month (blank if it changes)", '<input name="day" type="number" inputmode="numeric" min="1" max="31" value="' + (r.day || "") + '">'),
+            field("Amount", '<input name="amount" inputmode="decimal" value="' + r.amount + '">') + catField(r.cat) +
+            field("How often", '<select name="freq">' + FREQS.map(f => opt(f, FREQ_TEXT[f], r.freq)).join("") + '</select>') +
+            '<div id="rfDay">' + field("Due day of the month (blank if it changes)", '<input name="day" type="number" inputmode="numeric" min="1" max="31" value="' + (r.day || "") + '">') + '</div>' +
+            '<div id="rfDate">' + field("Next due date", '<input name="due" type="date" value="' + (r.freq === "monthly" ? "" : o) + '">') + '</div>' +
+            '<label class="check-field"><input type="checkbox" name="auto"' + (r.auto ? " checked" : "") + '> Add it to paychecks automatically</label>' +
+            '<div id="rfWeek">' + field("Which paycheck", '<select name="autoWeek">' + opt("", "The last one before it's due", r.autoWeek) +
+              whichOpts(r.autoWeek).map(o => opt(o[0], o[1], r.autoWeek)).join("") + '</select>') + '</div>' +
+            '<p class="hint" id="rfHint"></p>',
+      onInput: () => {
+        const f = $("#sheetForm").elements, fr = f.freq.value, au = f.auto.checked;
+        $("#rfDay").hidden = fr !== "monthly"; $("#rfDate").hidden = fr === "monthly";
+        $("#rfWeek").hidden = !(au && fr === "monthly");
+        if (fr !== "monthly" && !f.due.value) f.due.value = r.freq === "monthly" ? o : iso(today());
+        $("#rfHint").textContent = !au ? "You'll put it on a paycheck yourself, here or from the paycheck's suggestions." :
+          fr === "weekly" ? "It goes on every paycheck." :
+          fr === "biweekly" ? "It goes on every other paycheck: the last one before each due date." :
+          fr === "yearly" ? "It goes on the last paycheck before it's due." :
+          (f.autoWeek.value ? "It goes on the paycheck you pick, for the next due date after that payday." : "It goes on the last paycheck before each due date.");
+      },
       onSave: fd => {
+        const before = {freq: r.freq, day: r.day, anchor: r.anchor, amount: r.amount, name: r.name, cat: r.cat};
+        r.cat = catFrom(fd, r.cat);
+        if (r.cat !== before.cat) for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id && (!it.cat || it.cat === before.cat)) it.cat = r.cat;
         r.name = String(fd.get("name") || "").trim() || r.name;
         r.amount = toNum(fd.get("amount"));
-        r.day = Math.max(0, Math.min(31, Math.round(toNum(fd.get("day")))));
+        r.freq = FREQS.includes(fd.get("freq")) ? fd.get("freq") : r.freq;
+        if (r.freq === "monthly") r.day = Math.max(0, Math.min(31, Math.round(toNum(fd.get("day")))));
+        else r.anchor = String(fd.get("due") || "") || r.anchor || iso(today());
+        r.auto = !!fd.get("auto");
+        r.autoWeek = AUTO_WEEKS.includes(fd.get("autoWeek")) ? fd.get("autoWeek") : "";
+        if (before.freq !== r.freq || before.day !== r.day || before.anchor !== r.anchor) remapRec(r);
+        // keep unpaid items on paychecks in step with the bill
+        for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id && !it.paid){
+          if (it.amount === before.amount) it.amount = r.amount;
+          if (it.name === before.name) it.name = r.name;
+        }
+        autoFill();
       },
-      onDelete: () => { state.recurring = state.recurring.filter(x => x.id !== id); }
+      onDelete: () => {
+        state.recurring = state.recurring.filter(x => x.id !== id);
+        for (const p of state.paychecks) for (const it of p.items) if (it.recId === id){ delete it.recId; delete it.recFor; }
+      }
     });
+    sheetCfg.onInput();
+  }
+  function whichOpts(cur){
+    const pf = state.settings.payFreq;
+    const list = pf === "weekly" ? [["1", "1st paycheck of the month (1st–7th)"], ["2", "2nd paycheck (8th–14th)"], ["3", "3rd paycheck (15th–21st)"], ["4", "4th paycheck (22nd–28th)"], ["last", "Last paycheck of the month"]]
+      : pf === "biweekly" ? [["1", "1st paycheck of the month"], ["2", "2nd paycheck of the month"], ["last", "Last paycheck of the month"]]
+      : pf === "semimonthly" ? [["1", "1st paycheck of the month"], ["last", "2nd paycheck of the month"]]
+      : [["1", "The paycheck in the month it's due"]];
+    if (cur && !list.some(o => o[0] === cur)) list.push([cur, cur === "last" ? "Last paycheck of the month" : "Paycheck " + cur + " of the month"]);
+    return list;
+  }
+  // after a bill's schedule changes, move its links and "paid" marker to the matching new due dates
+  function remapRec(r){
+    const map = s => s ? nearestOcc(r, s) : s;
+    for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id){ it.recFor = map(it.recFor); if (it.due) it.due = noDay(r) ? "" : it.recFor; }
+    r.paidThrough = map(r.paidThrough);
+    r.skip = r.skip.map(map);
   }
   function editPay(id){
     const it = state.payments.find(i => i.id === id); if (!it) return;
     openSheet({
       title: "Edit payment",
       body: field("Name", '<input name="name" required value="' + esc(it.name) + '">') +
-            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') +
+            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + catField(it.cat) +
             field("Due date", '<input name="due" type="date" value="' + esc(it.due) + '">'),
-      onSave: fd => { it.name = String(fd.get("name") || "").trim() || it.name; it.amount = toNum(fd.get("amount")); it.due = String(fd.get("due") || ""); },
+      onSave: fd => { it.name = String(fd.get("name") || "").trim() || it.name; it.amount = toNum(fd.get("amount")); it.cat = catFrom(fd, it.cat); it.due = String(fd.get("due") || ""); },
       onDelete: () => { state.payments = state.payments.filter(i => i.id !== id); }
     });
   }
@@ -806,20 +1786,22 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   // shared body + live preview for adding/editing a paycheck
   function pcSheet(title, p, extra, onSave, onDelete){
-    const h = p.hours || {reg: 40, ot: 0, oncall: false, bonus: 0, bonusMethod: "flat"};
+    const S = state.settings, sal = S.payType === "salary";
+    const h = p.hours || {reg: stdHours(S), ot: 0, oncall: false, bonus: 0, bonusMethod: "flat"};
     const mode = p.hours || !p.amount ? "hours" : "amount";
-    const into = state.settings.budgetFrom === "net" ? "take-home" : state.settings.n1;
+    const into = S.budgetFrom === "net" ? "take-home" : S.n1;
+    const hid = on => on ? "" : " hidden";
     openSheet({
       title,
       body: field("Payday", '<input name="date" type="date" required value="' + esc(p.date) + '">') +
-        radios("mode", [["hours","Enter my hours"],["amount","Enter the amount"]], mode) +
+        radios("mode", [["hours", sal ? "Use my salary" : "Enter my hours"], ["amount", "Enter the amount"]], mode) +
         '<div id="mHours">' +
-          fieldDiv("Regular hours", stepper("reg", h.reg, 1, "regular hours")) +
-          fieldDiv("Overtime hours", stepper("ot", h.ot, 0.25, "overtime hours")) +
-          '<p class="hint" id="otHint"></p>' +
-          '<label class="check-field"><input type="checkbox" name="oncall"' + (h.oncall ? " checked" : "") + '> On call this week (' + money(state.settings.ocAmt) + ')</label>' +
-          field("Bonus or commission", '<input name="bonus" inputmode="decimal" placeholder="$0" value="' + (h.bonus || "") + '">') +
-          '<div id="bMethod"><p class="hint">How federal tax comes out of the bonus</p>' + radios("bonusMethod", [["flat","Flat 22%"],["agg","Like regular pay"]], h.bonusMethod) + '</div>' +
+          '<div' + hid(!sal) + '>' + fieldDiv("Regular hours", stepper("reg", h.reg, 1, "regular hours")) + '</div>' +
+          '<div' + hid(!sal && S.otOn) + '>' + fieldDiv("Overtime hours", stepper("ot", h.ot, 0.25, "overtime hours")) +
+          '<p class="hint" id="otHint"></p></div>' +
+          '<label class="check-field"' + hid(S.ocOn) + '><input type="checkbox" name="oncall"' + (h.oncall ? " checked" : "") + '> On call this period (' + money(S.ocAmt) + ')</label>' +
+          '<div' + hid(S.bonusOn) + '>' + field("Bonus or commission", '<input name="bonus" inputmode="decimal" placeholder="$0" value="' + (h.bonus || "") + '">') +
+          '<div id="bMethod"><p class="hint">How federal tax comes out of the bonus</p>' + radios("bonusMethod", [["flat","Flat 22%"],["agg","Like regular pay"]], h.bonusMethod) + '</div></div>' +
           '<div class="preview" id="pv"></div>' +
         '</div>' +
         '<div id="mAmount">' + field("Amount you'll budget", '<input name="amount" inputmode="decimal" placeholder="$0" value="' + (p.amount || "") + '">') + '</div>' +
@@ -835,7 +1817,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         $("#otHint").textContent = "Overtime pays " + moneyC(c.otRate) + "/hr.";
         $("#pv").innerHTML = '<div class="k">Lands in ' + into + '</div><div class="pv-big num">' + moneyC(budgetAmt(c)) + '</div>' +
           '<table class="num"><tr><td>Gross pay</td><td>' + moneyC(c.gross) + '</td></tr>' +
-          '<tr><td>Taxes, benefits, 401(k)</td><td>-' + moneyC(c.fed + c.ss + c.med + c.ben + c.k) + '</td></tr>' +
+          '<tr><td>Taxes, benefits, 401(k)</td><td>-' + moneyC(c.fed + c.ss + c.med + c.st + c.ben + c.k) + '</td></tr>' +
           '<tr class="sep"><td>Take home</td><td>' + moneyC(c.net) + '</td></tr>' +
           '<tr><td>' + esc(state.settings.n1) + '</td><td>' + moneyC(c.main) + '</td></tr>' +
           (pos(state.settings.p2) ? '<tr><td>' + esc(state.settings.n2) + '</td><td>' + moneyC(c.d2) + '</td></tr>' : "") +
@@ -856,69 +1838,249 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   function editPc(id){
     const p = findPc(id); if (!p) return;
-    pcSheet("Paycheck " + dayLabel(p.date), p, "", (fd, d, hours, amount) => { p.date = d; p.hours = hours; p.amount = amount; },
-      () => { p.items.forEach(unlink); state.paychecks = state.paychecks.filter(x => x.id !== id); });
+    pcSheet("Paycheck " + dayLabel(p.date), p, "", (fd, d, hours, amount) => { p.date = d; p.hours = hours; p.amount = amount; p.hoursSet = true; autoFill(); },
+      () => { p.items.forEach(unlink); state.paychecks = state.paychecks.filter(x => x.id !== id); if (selPc === id) selPc = null; });
   }
   function newPc(){
     const sorted = [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : 1);
     const last = sorted[sorted.length - 1];
     let date = iso(today());
-    if (last){ const d = parseISO(last.date); d.setDate(d.getDate() + 7); date = iso(d); }
+    if (last) date = nextPayday(last.date);
     const lh = last && last.hours;
-    const draft = {date, amount: 0, hours: {reg: 40, ot: lh ? lh.ot : 0, oncall: lh ? lh.oncall : false, bonus: 0, bonusMethod: "flat"}};
+    const draft = {date, amount: 0, hours: {reg: stdHours(state.settings), ot: lh ? lh.ot : 0, oncall: lh ? lh.oncall : false, bonus: 0, bonusMethod: "flat"}};
     pcSheet("Add a paycheck", draft,
       last && last.items.length ? '<label class="check-field"><input type="checkbox" name="copy"> Copy the items from ' + dayLabel(last.date) + ' (unchecked)</label>' : "",
       (fd, d, hours, amount) => {
-        const items = fd.get("copy") && last ? last.items.map(i => ({id: uid(), name: i.name, amount: i.amount, paid: false, due: ""})) : [];
-        state.paychecks.push({id: uid(), date: d, amount, hours, items});
-        tab = "pay";
+        const items = fd.get("copy") && last ? last.items.map(i => ({id: uid(), name: i.name, amount: i.amount, paid: false, due: "", cat: i.cat || ""})) : [];
+        const nid = uid();
+        state.paychecks.push({id: nid, date: d, amount, hours, hoursSet: true, items});
+        autoFill();
+        tab = "pay"; selPc = nid;
       });
   }
-  function editSettings(){
-    const s = state.settings;
-    const f2 = (label, name, v) => field(label, '<input name="' + name + '" inputmode="decimal" value="' + v + '">');
-    const ft = (label, name, v) => field(label, '<input name="' + name + '" autocomplete="off" value="' + esc(v) + '">');
-    openSheet({
-      title: "Settings",
-      body: '<p class="hint" style="margin:0 0 12px">Copy these from your paystub. Change them when your rate or deductions change.</p>' +
-        '<div class="two">' + f2("Hourly rate", "rate", s.rate) + f2("401(k) %", "k401", s.k401) +
-        f2("Benefits per check", "ben", s.ben) + f2("On-call pay", "ocAmt", s.ocAmt) + '</div>' +
-        ft("Where your pay lands", "n1", s.n1) +
-        '<div class="two">' + ft("Second account", "n2", s.n2) + f2("% sent there", "p2", s.p2) +
-        ft("Savings account", "n3", s.n3) + f2("% sent there", "p3", s.p3) + '</div>' +
-        '<div class="field"><span style="display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600">Money to budget</span>' +
-        radios("budgetFrom", [["main","Main checking only"],["net","All take-home"]], s.budgetFrom) + '</div>' +
-        '<p class="hint">Main checking only leaves out the automatic transfers to your other accounts.</p>' +
+  // ---------- settings: a menu with four sections ----------
+  const ICO = {
+    member: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
+    pay: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M16.5 7.5c-.8-1.3-2.5-2-4.5-2-2.5 0-4.3 1.3-4.3 3.2 0 4.3 9 2.3 9 6.5 0 2-1.9 3.3-4.7 3.3-2.2 0-4-.8-4.8-2.3"/></svg>',
+    bills: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>'
+  };
+  const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const grpH = t => '<p class="grp-h">' + t + '</p>';
+  const lbl = t => '<span class="lbl">' + t + '</span>';
+  const swRow = (name, t, sub, on) => '<label class="sw-row"><span><span class="t">' + t + '</span>' + (sub ? '<span class="s">' + sub + '</span>' : "") +
+    '</span><input type="checkbox" class="switch" role="switch" name="' + name + '"' + (on ? " checked" : "") + '></label>';
+  const selOpts = (list, cur) => list.map(([v, l]) => '<option value="' + v + '"' + (String(v) === String(cur) ? " selected" : "") + '>' + l + '</option>').join("");
+  const showIf = (sel, on) => { const el = $(sel); if (el) el.hidden = !on; };
+  const daysBefore = d => d === 7 ? "1 week before" : d === 14 ? "2 weeks before" : d === 21 ? "3 weeks before" : d + " days before";
+
+  function myPerson(){ return (currentUid && state.people[currentUid]) || {email: currentEmail, notify: normNotify(null)}; }
+  // adds the signed-in person to the budget's list of people; true if anything changed
+  function ensureMe(){
+    if (!currentUid) return false;
+    const me = state.people[currentUid];
+    if (me && me.email === currentEmail) return false;
+    state.people[currentUid] = Object.assign({notify: normNotify(null)}, me || {}, {email: currentEmail});
+    return true;
+  }
+  function paySummary(){
+    const s = state.settings, sal = s.payType === "salary";
+    return PAY_LABEL[s.payFreq] + ", " + (sal ? money(s.salary) + " a year" : moneyC(pos(s.rate)) + "/hr") + (!sal && s.otOn ? ", overtime" : "");
+  }
+
+  function renderSettings(){
+    const s = state.settings, me = myPerson(), sal = s.payType === "salary";
+    const groupsOn = FREQS.filter(f => !(s.groupsOff || []).includes(f)).length;
+    const keys = NOTIF_KEYS.filter(k => !(k === "hours" && sal));
+    const nOn = keys.filter(k => me.notify[k]).length;
+    const row = (act, t, sub, ico) => '<li><button type="button" class="set-row" data-act="' + act + '"><span class="set-ico">' + ico + '</span>' +
+      '<span><span class="t">' + t + '</span><span class="s">' + sub + '</span></span><span class="chev" aria-hidden="true">›</span></button></li>';
+    return '<h1 class="page-h">Settings</h1><ul class="set-list">' +
+          row("setMember", "Membership", "Family plan, free while testing", ICO.member) +
+          row("setPay", "Paychecks", esc(paySummary()), ICO.pay) +
+          row("setBills", "Bills", groupsOn + " of 4 groups on, suggestions " + (s.sugg ? "on" : "off"), ICO.bills) +
+          row("setNotif", "Notifications", nOn + " of " + keys.length + " on, just for you", ICO.bell) +
+        '</ul>' +
         '<div class="acct"><p class="who">Signed in as ' + esc(currentEmail) + '</p><div class="acct-btns">' +
         '<button type="button" data-act="backup">Back up</button><button type="button" data-act="importData">Restore</button>' +
-        '<button type="button" class="danger" data-act="signout">Sign out</button></div></div>',
+        '<button type="button" class="danger" data-act="signout">Sign out</button></div></div>';
+  }
+
+  // a sketch: no payments are connected yet
+  const PLANS = [["basic", "Basic", "Free", "One person. Paychecks, bills and one-time expenses."],
+    ["plus", "Plus", "$2.99/mo", "Adds the hours calculator, automatic bills and notifications."],
+    ["family", "Family", "$4.99/mo", "Everything in Plus, for two people sharing one budget."]];
+  function settingsMember(){
+    const people = Object.entries(state.people);
+    openSheet({
+      title: "Membership", noSave: true,
+      body: grpH("Your plan") +
+        '<div class="card-box"><div class="btn-line"><span><strong>Family</strong><span class="badge">Current</span>' +
+          '<span class="lbl" style="margin:2px 0 0;font-weight:500">Free while you\'re testing it</span></span></div></div>' +
+        grpH("Change plan") +
+        '<div class="plans" role="radiogroup">' + PLANS.map(([v, n, price, d]) => '<label><input type="radio" name="plan" value="' + v + '"' + (v === "family" ? " checked" : "") + '>' +
+          '<span class="pn"><span>' + n + '</span><span class="num">' + price + '</span></span><span class="pd">' + d + '</span></label>').join("") + '</div>' +
+        '<div class="btn-line"><span class="hint" style="margin:0">Sample prices for now.</span><button type="button" class="soft-btn" data-act="memberSoon">Switch plan</button></div>' +
+        grpH("Payment method") +
+        '<div class="card-box"><div class="btn-line"><span class="muted">No card on file</span><button type="button" class="soft-btn" data-act="memberSoon">Add a card</button></div></div>' +
+        grpH("People in this budget") +
+        '<div class="card-box"><ul class="people">' + (people.length ? people.map(([k, p]) => '<li>' + esc(p.email || "Someone") + (k === currentUid ? ' <span class="muted">(you)</span>' : "") + '</li>').join("") : '<li class="muted">Just you so far</li>') + '</ul>' +
+          '<div class="btn-line" style="border-top:1px solid var(--line)"><span class="muted">Share the budget with someone</span><button type="button" class="soft-btn" data-act="memberSoon">Invite</button></div></div>' +
+        grpH("Cancel") +
+        '<div class="card-box"><div class="btn-line"><span class="muted" style="font-size:14px">You keep the plan until the end of what you paid for.</span><button type="button" class="soft-btn danger" data-act="memberSoon">Cancel plan</button></div></div>'
+    });
+  }
+
+  function settingsPay(){
+    const s = state.settings;
+    const num = (label, name, v, ph) => field(label, '<input name="' + name + '" inputmode="decimal" autocomplete="off" value="' + (v ? v : "") + '" placeholder="' + (ph || "") + '">');
+    const txt = (label, name, v) => field(label, '<input name="' + name + '" autocomplete="off" value="' + esc(v) + '">');
+    openSheet({
+      title: "Paychecks",
+      body: '<p class="hint" style="margin:0 0 12px">Copy these from your paystub. Changes apply to paychecks from today on; past ones keep their amounts.</p>' +
+        grpH("How you're paid") +
+        radios("payType", [["hourly", "Hourly"], ["salary", "Salary"]], s.payType) +
+        '<div id="spHourly" class="two">' + num("Hourly rate", "rate", s.rate, "$0") + num("Usual hours per check", "stdHours", s.stdHours, "") + '</div>' +
+        '<div id="spSalary">' + num("Yearly salary, before taxes", "salary", s.salary, "$0") + '</div>' +
+        field("How often you get paid", '<select name="payFreq">' + selOpts(PAY_FREQS.map(f => [f, PAY_LABEL[f]]), s.payFreq) + '</select>') +
+        '<div id="spSemi">' + field("Paydays", '<select name="semiDays">' + selOpts([["1-15", "The 1st and the 15th"], ["15-last", "The 15th and the last day of the month"]], s.semiDays) + '</select>') + '</div>' +
+        '<div id="spMonthly">' + field("Payday (day of the month, blank for the last day)", '<input name="payDay" type="number" inputmode="numeric" min="1" max="31" value="' + (s.payDay || "") + '">') + '</div>' +
+        grpH("Extra pay") +
+        '<div class="card-box">' +
+          '<div id="spOt">' + swRow("otOn", "Overtime", "Adds overtime hours to each paycheck", s.otOn) +
+            '<div class="sub-opts" id="spOtOpts">' + field("Overtime pays", '<select name="otMult">' + selOpts([["1.5", "Time and a half (1.5×)"], ["2", "Double time (2×)"]], s.otMult) + '</select>') + '</div></div>' +
+          swRow("ocOn", "On-call pay", "A set amount for the periods you're on call", s.ocOn) +
+          '<div class="sub-opts" id="spOcOpts">' + num("On-call pay per paycheck", "ocAmt", s.ocAmt, "$0") + '</div>' +
+          swRow("bonusOn", "Bonus or commission", "Adds a bonus field to each paycheck", s.bonusOn) +
+        '</div>' +
+        grpH("Taxes and deductions") +
+        field("Filing status (from your W-4)", '<select name="filing">' + selOpts(Object.entries(FILING), s.filing) + '</select>') +
+        '<div class="two">' + num("401(k) %", "k401", s.k401, "0") + num("Benefits per check", "ben", s.ben, "$0") + '</div>' +
+        num("State income tax %", "stateTax", s.stateTax, "0") +
+        '<p class="hint">Florida, Texas and a few other states have none. Elsewhere, a rough percentage is close enough.</p>' +
+        grpH("Where your pay goes") +
+        txt("Main account", "n1", s.n1) +
+        '<div class="two">' + txt("Second account", "n2", s.n2) + num("% sent there", "p2", s.p2, "0") +
+          txt("Savings account", "n3", s.n3) + num("% sent there", "p3", s.p3, "0") + '</div>' +
+        '<p class="hint" id="spSplit"></p>' +
+        lbl("Money to budget") + radios("budgetFrom", [["main", "Main account only"], ["net", "All take-home"]], s.budgetFrom) +
+        '<p class="hint">Main account only leaves out the automatic transfers to your other accounts.</p>' +
+        '<p class="form-err" id="spErr" hidden></p>',
+      onInput: () => {
+        const f = $("#sheetForm").elements, sal = f.payType.value === "salary", fr = f.payFreq.value;
+        showIf("#spHourly", !sal); showIf("#spSalary", sal); showIf("#spOt", !sal);
+        showIf("#spOtOpts", f.otOn.checked); showIf("#spOcOpts", f.ocOn.checked);
+        showIf("#spSemi", fr === "semimonthly"); showIf("#spMonthly", fr === "monthly");
+        f.stdHours.placeholder = String(STD_HOURS[fr] || 40);
+        const left = 100 - pos(f.p2.value) - pos(f.p3.value);
+        $("#spSplit").textContent = left < 0 ? "" : fmtH(left) + "% stays in " + (f.n1.value.trim() || S0.n1) + ".";
+      },
       onSave: fd => {
-        for (const k of ["rate","k401","ben","ocAmt","p2","p3"]){ const v = String(fd.get(k) || "").trim(); s[k] = v === "" ? S0[k] : toNum(v); }
+        if (pos(fd.get("p2")) + pos(fd.get("p3")) > 100){ const e = $("#spErr"); e.hidden = false; e.textContent = "The two percentages add up to more than 100%."; return false; }
+        for (const k of ["rate","k401","ben","ocAmt","p2","p3","salary","stateTax","stdHours"]){ const v = String(fd.get(k) || "").trim(); s[k] = v === "" ? S0[k] : Math.max(0, toNum(v)); }
+        s.payType = fd.get("payType") === "salary" ? "salary" : "hourly";
+        if (PAY_FREQS.includes(fd.get("payFreq"))) s.payFreq = fd.get("payFreq");
+        s.semiDays = fd.get("semiDays") === "1-15" ? "1-15" : "15-last";
+        s.payDay = Math.max(0, Math.min(31, Math.round(toNum(fd.get("payDay")))));
+        s.otOn = !!fd.get("otOn"); s.otMult = Number(fd.get("otMult")) === 2 ? 2 : 1.5;
+        s.ocOn = !!fd.get("ocOn"); s.bonusOn = !!fd.get("bonusOn");
+        s.filing = FILING[fd.get("filing")] ? fd.get("filing") : "mfj";
         s.budgetFrom = fd.get("budgetFrom") === "net" ? "net" : "main";
         for (const k of ["n1","n2","n3"]){ const v = String(fd.get(k) || "").trim().slice(0, 40); s[k] = v || S0[k]; }
-        for (const p of state.paychecks) if (p.hours) p.amount = budgetAmt(payCalc(p.hours, s));
+        refreshAmounts(); autoFill();
       }
     });
+    sheetCfg.onInput();
+  }
+
+  function settingsBills(){
+    const s = state.settings;
+    openSheet({
+      title: "Bills",
+      body: grpH("Recurring bill groups") +
+        '<div class="card-box">' + FREQS.map(f => { const n = state.recurring.filter(r => r.freq === f).length;
+          return swRow("grp_" + f, FREQ_LABEL[f], n ? n + " bill" + (n === 1 ? "" : "s") : "None yet", !(s.groupsOff || []).includes(f)); }).join("") + '</div>' +
+        '<p class="hint">A group that\'s off is hidden. Its bills stop showing in alerts and stop going on paychecks.</p>' +
+        grpH("Adding to paychecks") +
+        '<div class="card-box">' + swRow("sugg", "Suggestions", "While you type a new item, shows bills, payments and things you usually add", s.sugg) + '</div>' +
+        field("New bills go on paychecks automatically", '<select name="autoNew">' +
+          selOpts([["short", "Weekly and every-2-weeks bills"], ["all", "All new bills"], ["none", "None, I'll add them myself"]], s.autoNew) + '</select>') +
+        '<p class="hint">You can still change it on each bill.</p>' +
+        grpH("Alerts") +
+        '<div class="two">' + field("Heads-up (yellow)", '<select name="warnDays">' + selOpts([7, 10, 14, 21, 30].map(d => [d, daysBefore(d)]), s.warnDays) + '</select>') +
+          field("Urgent (red)", '<select name="redDays">' + selOpts([3, 5, 7, 10].map(d => [d, daysBefore(d)]), s.redDays) + '</select>') + '</div>' +
+        '<p class="hint">For bills and payments that aren\'t on a paycheck yet.</p>',
+      onSave: fd => {
+        s.groupsOff = FREQS.filter(f => !fd.get("grp_" + f));
+        s.sugg = !!fd.get("sugg");
+        s.autoNew = ["short", "all", "none"].includes(fd.get("autoNew")) ? fd.get("autoNew") : "short";
+        s.warnDays = Number(fd.get("warnDays")) || 14; s.redDays = Number(fd.get("redDays")) || 7;
+        if (s.redDays > s.warnDays) s.warnDays = s.redDays;
+        autoFill();
+      }
+    });
+  }
+
+  function settingsNotif(){
+    if (!currentUid) return;
+    const s = state.settings, n = myPerson().notify, sal = s.payType === "salary";
+    const others = Object.keys(state.people).filter(k => k !== currentUid).length;
+    openSheet({
+      title: "Notifications",
+      body: '<p class="note">Notifications aren\'t connected yet. Your choices are saved now and start working once they are.</p>' +
+        '<p class="hint" style="margin:0 0 12px">These are just for you (' + esc(currentEmail) + '). ' +
+          (others ? "Everyone else in the budget picks their own." : "Anyone you share the budget with picks their own.") + '</p>' +
+        grpH("Bills and paychecks") +
+        '<div class="card-box">' +
+          swRow("due", "Bills due soon", "A bill or payment is coming up and isn't on a paycheck yet", n.due) +
+          '<div class="sub-opts" id="nDue">' + field("Start reminding me", '<select name="dueDays">' + selOpts([7, 10, 14, 21].map(d => [d, daysBefore(d)]), n.dueDays) + '</select>') + '</div>' +
+          swRow("payday", "Payday", "The morning of each payday, with what's planned", n.payday) +
+          swRow("leftover", "Unchecked items", "The day before payday, if the current check still has items not checked off", n.leftover) +
+          swRow("over", "Over budget", "When a paycheck's items add up to more than the check", n.over) +
+          '<div' + (sal ? " hidden" : "") + '>' + swRow("hours", "Enter your hours", "If the next paycheck still has estimated hours", n.hours) +
+            '<div class="sub-opts" id="nHours"><div class="two">' +
+              field("Remind me on", '<select name="hoursDay">' + selOpts(DAY_NAMES.map((d, i) => [i, d]), n.hoursDay) + '</select>') +
+              field("At", '<input name="hoursTime" type="time" value="' + n.hoursTime + '">') + '</div>' +
+              field("If they're still missing, again on", '<select name="hoursAgain">' + selOpts([[-1, "Don't remind me again"]].concat(DAY_NAMES.map((d, i) => [i, d])), n.hoursAgain) + '</select>') +
+            '</div></div>' +
+        '</div>' +
+        grpH("Sharing") +
+        '<div class="card-box">' + swRow("changes", "Changes by others", "When someone else adds, checks off or edits something", n.changes) + '</div>' +
+        grpH("Quiet hours") +
+        '<div class="card-box">' + swRow("quiet", "Hold notifications overnight", "They arrive when quiet hours end", n.quiet) +
+          '<div class="sub-opts" id="nQuiet"><div class="two">' + field("From", '<input name="quietFrom" type="time" value="' + n.quietFrom + '">') +
+          field("To", '<input name="quietTo" type="time" value="' + n.quietTo + '">') + '</div></div></div>',
+      onInput: () => { const f = $("#sheetForm").elements; showIf("#nDue", f.due.checked); showIf("#nHours", f.hours.checked); showIf("#nQuiet", f.quiet.checked); },
+      onSave: fd => {
+        ensureMe();
+        const o = {};
+        for (const k of NOTIF_KEYS.concat("quiet")) o[k] = !!fd.get(k);
+        o.dueDays = Number(fd.get("dueDays")); o.hoursDay = Number(fd.get("hoursDay")); o.hoursAgain = Number(fd.get("hoursAgain"));
+        o.hoursTime = String(fd.get("hoursTime") || ""); o.quietFrom = String(fd.get("quietFrom") || ""); o.quietTo = String(fd.get("quietTo") || "");
+        state.people[currentUid].notify = normNotify(o);
+      }
+    });
+    sheetCfg.onInput();
   }
   function editWish(id){
     const w = state.wishlist.find(x => x.id === id); if (!w) return;
     openSheet({
       title: "Edit item",
       body: field("Name", '<input name="name" required value="' + esc(w.name) + '">') +
-            field("Price", '<input name="cost" inputmode="decimal" value="' + (w.cost || "") + '">') +
+            field("Price", '<input name="cost" inputmode="decimal" value="' + (w.cost || "") + '">') + catField(w.cat) +
             field("Buy by (optional, sets a weekly amount)", '<input name="target" type="month" value="' + esc(w.target) + '">') +
             field("Already saved", '<input name="saved" inputmode="decimal" value="' + (w.saved || "") + '">') +
             (groups().upcoming.length ? field("Buying it now?", '<select name="move"><option value="">Not yet, keep it on the list</option>' +
               groups().upcoming.map(p => '<option value="' + p.id + '">Put it on the ' + dayLabel(p.date) + ' check</option>').join("") + '</select>') : ""),
       onSave: fd => {
         w.name = String(fd.get("name") || "").trim() || w.name;
-        w.cost = toNum(fd.get("cost")); w.saved = toNum(fd.get("saved"));
+        w.cost = toNum(fd.get("cost")); w.saved = toNum(fd.get("saved")); w.cat = catFrom(fd, w.cat);
         w.target = String(fd.get("target") || "");
         w.kind = w.target ? "big" : "small";
         const to = fd.get("move") && findPc(fd.get("move"));
         if (to){
           state.wishlist = state.wishlist.filter(x => x !== w);
-          to.items.push({id: uid(), name: w.name, amount: Math.max(0, w.cost - w.saved), paid: false, due: ""});
+          to.items.push({id: uid(), name: w.name, amount: Math.max(0, w.cost - w.saved), paid: false, due: "", cat: w.cat || ""});
           setTimeout(() => setStatus("Put on " + dayLabel(to.date)), 600);
         }
       },
@@ -966,20 +2128,39 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (act === "toggle"){ const pc = findPc(pcId); const it = pc && pc.items.find(i => i.id === id); if (it){ it.paid = !it.paid; syncRec(it); commit(); } }
     else if (act === "recToggle"){
       const r = recById(id); if (!r) return;
-      const cm = curMonth();
-      if (r.doneFor && r.doneFor >= cm){ r.doneFor = addMonth(cm, -1); linkedAll(r, cm).forEach(l => { l.it.paid = false; }); }
-      else { r.doneFor = cm; linkedAll(r, cm).forEach(l => { l.it.paid = true; }); }
-      commit();
+      if (isPaidNow(r)){
+        const k = r.paidThrough;
+        linkedAll(r, k).forEach(l => { l.it.paid = false; });
+        const pv = prevOcc(r, k); r.paidThrough = pv >= r.since ? pv : "";
+      } else {
+        const o = openOcc(r); r.paidThrough = o;
+        linkedAll(r, o).forEach(l => { l.it.paid = true; });
+      }
+      commit(); setStatus(r.paidThrough ? paidLabel(r) : "Marked unpaid");
     }
     else if (act === "editRec") editRec(id);
     else if (act === "recAssign"){
       const sel = document.querySelector('select[data-sel="' + id + '"]');
       const to = sel && findPc(sel.value), r = recById(id);
       if (to && r){
-        const o = occ(r);
-        to.items.push({id: uid(), name: r.name, amount: r.amount, paid: false, due: o.date, recId: r.id, recFor: o.month});
-        r.planFor = o.month; commit(); setStatus("Put on " + dayLabel(to.date));
+        const o = openOcc(r);
+        to.items.push({id: uid(), name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""});
+        commit(); setStatus("Put on " + dayLabel(to.date));
       }
+    }
+    else if (act === "sugg"){
+      const pc = findPc(pcId); if (!pc) return;
+      const kind = b.dataset.kind;
+      if (kind !== "usual" || CAT_MAP[b.dataset.cat]) closeSheet();
+      if (kind === "rec"){ const r = recById(id); if (r){ const o = openOcc(r); pc.items.push({id: uid(), name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""}); } }
+      else if (kind === "pay"){ const it = state.payments.find(i => i.id === id); if (it){ state.payments = state.payments.filter(i => i !== it); it.paid = false; pc.items.push(it); } }
+      else if (kind === "buy"){ const w = state.wishlist.find(x => x.id === id); if (w){ state.wishlist = state.wishlist.filter(x => x !== w); pc.items.push({id: uid(), name: w.name, amount: Math.max(0, w.cost - w.saved), paid: false, due: "", cat: w.cat || ""}); } }
+      else if (kind === "usual"){
+        const amt = toNum(b.dataset.amt), add = cat => { pc.items.push({id: uid(), name: id, amount: amt, paid: false, due: "", cat}); commit(); setStatus("Added to " + dayLabel(pc.date)); };
+        if (CAT_MAP[b.dataset.cat]) add(b.dataset.cat); else askCategory(id, amt, catGuess(id), add);
+        return;
+      }
+      commit(); setStatus("Added to " + dayLabel(pc.date));
     }
     else if (act === "xPay"){
       const idx = state.payments.findIndex(i => i.id === id); if (idx < 0) return;
@@ -996,14 +2177,30 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       const to = sel && findPc(sel.value), w = state.wishlist.find(x => x.id === id);
       if (to && w){
         state.wishlist = state.wishlist.filter(x => x !== w);
-        to.items.push({id: uid(), name: w.name, amount: Math.max(0, w.cost - w.saved), paid: false, due: ""});
+        to.items.push({id: uid(), name: w.name, amount: Math.max(0, w.cost - w.saved), paid: false, due: "", cat: w.cat || ""});
         commit(); setStatus("Put on " + dayLabel(to.date));
       }
     }
     else if (act === "editItem") editItem(pcId, id);
     else if (act === "editPc") editPc(id);
     else if (act === "newPc") newPc();
-    else if (act === "settings") editSettings();
+    else if (act === "pickCat"){ const fn = catPending; closeSheet(); if (fn) fn(b.dataset.cat); }
+    else if (act === "catName"){ const nm = b.dataset.name; askCategory(nm, 0, catGuess(nm), cat => { setCatForName(nm, cat); commit(); }); }
+    else if (act === "anaRange"){ anaRange = b.dataset.r; lsSet("ana-range", anaRange); anaPt = -1; anaSlice = ""; render(); }
+    else if (act === "anaPt"){ const i = Number(b.dataset.i); anaPt = anaPt === i ? -1 : i; render(); }
+    else if (act === "anaSplit"){ anaSplit = b.dataset.v === "1"; lsSet("ana-split", anaSplit ? "1" : "0"); anaFocus = ""; render(); }
+    else if (act === "anaFocus"){ anaFocus = b.dataset.cat === anaFocus ? "" : (b.dataset.cat || ""); render(); }
+    else if (act === "anaSlice"){ anaSlice = anaSlice === b.dataset.cat ? "" : (b.dataset.cat || ""); render(); }
+    else if (act === "settings"){ tab = "set"; render(); }
+    else if (act === "newItem") newItemSheet(pcId);
+    else if (act === "setMember") settingsMember();
+    else if (act === "setPay") settingsPay();
+    else if (act === "setBills") settingsBills();
+    else if (act === "setNotif") settingsNotif();
+    else if (act === "memberSoon"){
+      const line = b.closest(".btn-line");
+      if (line && !(line.nextElementSibling && line.nextElementSibling.classList.contains("soon"))) line.insertAdjacentHTML("afterend", '<p class="hint soon" style="margin:0 0 10px">Payments aren&#39;t connected yet, so this doesn&#39;t do anything for now.</p>');
+    }
     else if (act === "importData"){ closeSheet(); importSheet(); }
     else if (act === "backup") backup();
     else if (act === "signout"){ closeSheet(); signOut(auth).catch(() => {}); }
@@ -1018,14 +2215,25 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "editWish") editWish(id);
     else if (act === "fundGoals"){
       const next = groups().upcoming[0];
-      const amt = Math.ceil(state.wishlist.filter(w => !w.done).reduce((a, w) => a + wishPerWeek(w), 0));
+      const amt = Math.ceil(state.wishlist.filter(w => !w.done).reduce((a, w) => a + wishPerCheck(w), 0));
       if (next && amt > 0){
         const existing = next.items.find(i => i.name === "Save for big stuff");
-        if (existing) existing.amount = amt; else next.items.push({id: uid(), name: "Save for big stuff", amount: amt, paid: false, due: ""});
+        if (existing) existing.amount = amt; else next.items.push({id: uid(), name: "Save for big stuff", amount: amt, paid: false, due: "", cat: "savings"});
         tab = "pay"; commit(); window.scrollTo({top: 0});
       }
     }
   });
+  // remember which categories are open on the analysis page across redraws
+  document.addEventListener("toggle", e => { const d = e.target; if (d && d.classList && d.classList.contains("cat-row")){ if (d.open) anaOpen.add(d.dataset.cat); else anaOpen.delete(d.dataset.cat); } }, true);
+  const isAddName = el => el && el.matches && el.matches('form[data-form="addItem"] input[name="name"]');
+  document.addEventListener("focusin", e => { if (isAddName(e.target)) renderSugg(e.target.form); });
+  document.addEventListener("input", e => { if (isAddName(e.target)) renderSugg(e.target.form); });
+  document.addEventListener("focusout", e => {
+    if (!isAddName(e.target)) return;
+    const f = e.target.form;
+    setTimeout(() => { const box = f && f.nextElementSibling; if (box && box.classList.contains("sugg") && !f.contains(document.activeElement)) box.hidden = true; }, 250);
+  });
+  document.addEventListener("pointerdown", e => { if (e.target.closest && e.target.closest(".sugg button")) e.preventDefault(); });
   document.addEventListener("submit", e => {
     const f = e.target.closest("form[data-form]"); if (!f) return;
     e.preventDefault();
@@ -1033,17 +2241,30 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const name = String(fd.get("name") || "").trim(); if (!name) return;
     const kind = f.dataset.form;
     if (kind === "addItem" && name.toLowerCase() === "extra"){ f.reset(); setStatus("Extra is calculated for you"); return; }
-    if (kind === "addItem"){ const pc = findPc(f.dataset.id); if (!pc) return; pc.items.push({id: uid(), name, amount: toNum(fd.get("amount")), paid: false, due: ""}); }
-    else if (kind === "addPay"){ state.payments.push({id: uid(), name, amount: toNum(fd.get("amount")), paid: false, due: String(fd.get("due") || "")}); }
-    else if (kind === "addRec"){ state.recurring.push({id: uid(), name, amount: toNum(fd.get("amount")), day: Math.max(0, Math.min(31, Math.round(toNum(fd.get("day"))))), doneFor: "", planFor: ""}); }
-    else if (kind === "addWish"){ state.wishlist.push({id: uid(), name, cost: toNum(fd.get("cost")), kind: "small", target: "", saved: 0, done: false}); }
-    commit();
-    const again = document.querySelector('form[data-form="' + kind + '"]' + (f.dataset.id ? '[data-id="' + f.dataset.id + '"]' : "") + ' input[name="name"]');
-    if (again) again.focus({preventScroll: true});
+    let add = null, amt = 0;
+    if (kind === "addItem"){ const pc = findPc(f.dataset.id); if (!pc) return; amt = toNum(fd.get("amount")); add = cat => pc.items.push({id: uid(), name, amount: amt, paid: false, due: "", cat}); }
+    else if (kind === "addPay"){ amt = toNum(fd.get("amount")); const due = String(fd.get("due") || ""); add = cat => state.payments.push({id: uid(), name, amount: amt, paid: false, due, cat}); }
+    else if (kind === "addRec"){
+      const freq = FREQS.includes(f.dataset.freq) ? f.dataset.freq : "monthly", t = iso(today());
+      const r = {id: uid(), name, amount: toNum(fd.get("amount")), freq, day: 0, anchor: "", since: t, paidThrough: "",
+        auto: state.settings.autoNew === "all" || (state.settings.autoNew === "short" && (freq === "weekly" || freq === "biweekly")), autoWeek: "", skip: []};
+      if (freq === "monthly") r.day = Math.max(0, Math.min(31, Math.round(toNum(fd.get("day")))));
+      else r.anchor = String(fd.get("due") || "") || t;
+      amt = r.amount;
+      add = cat => { r.cat = cat; state.recurring.push(r); autoFill(); };
+    }
+    else if (kind === "addWish"){ amt = toNum(fd.get("cost")); add = cat => state.wishlist.push({id: uid(), name, cost: amt, kind: "small", target: "", saved: 0, done: false, cat}); }
+    if (!add) return;
+    const sel = 'form[data-form="' + kind + '"]' + (f.dataset.id ? '[data-id="' + f.dataset.id + '"]' : "") + (f.dataset.freq ? '[data-freq="' + f.dataset.freq + '"]' : "") + ' input[name="name"]';
+    askCategory(name, amt, catGuess(name), cat => {
+      add(cat); commit();
+      const again = document.querySelector(sel);
+      if (again) again.focus({preventScroll: true});
+    });
   });
 
   // ---------- startup: sign in, then follow the shared budget live ----------
-  let auth = null, currentEmail = "";
+  let auth = null, currentEmail = "", currentUid = "";
   render();
   if (!firebaseConfig || !firebaseConfig.apiKey){
     $("#panePay").innerHTML = '<p class="empty">Almost ready: the app isn\'t connected to Firebase yet.</p>';
@@ -1081,12 +2302,12 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (unsub){ unsub(); unsub = null; }
     clearTimeout(saveTimer); saveTimer = null;
     if (!user){
-      docRef = null; ready = false; currentEmail = "";
+      docRef = null; ready = false; currentEmail = ""; currentUid = "";
       state = normalize(null);
       login.hidden = false; render();
       return;
     }
-    login.hidden = true; currentEmail = user.email || "";
+    login.hidden = true; currentEmail = user.email || ""; currentUid = user.uid || "";
     readOnly = false;
     const ref = doc(fsdb, "budgets", "family");
     docRef = {set: body => setDoc(ref, body)};
@@ -1096,6 +2317,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       state = normalize(snap.exists() ? snap.data() : null);
       ready = true;
       render();
+      if (!readOnly){ const a = autoFill(), b = ensureMe(), c = fillCats(); if (a || b || c) commit(); }
     }, err => {
       if (err && err.code === "permission-denied"){
         ready = false; render();
