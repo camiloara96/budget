@@ -348,6 +348,16 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .rec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.01em;padding:0 0 8px}
 .rec-h.todo{color:var(--ink)}
 .items + .rec-h{padding-top:16px}
+.addchk{flex:none;display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 10px 0 8px;border:1px solid #545458;border-radius:14px;background:transparent;color:var(--ink);font-size:13px;font-weight:700}
+.addchk svg{width:12px;height:12px;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;fill:none}
+.addchk:active{background:var(--soft)}
+.amt-btn{flex:none;border:0;background:none;color:inherit;font:inherit;padding:11px 0 11px 6px}
+.xrow{display:flex;align-items:center;gap:6px;padding:12px 36px 0 0}
+.xcard .xrow .item-main{width:auto;flex:1;padding:0}
+.xrow .amt-btn{padding:0 0 0 6px}
+.sugg .pick-r{display:flex;align-items:center;gap:8px;flex:none;font-size:13px;color:var(--muted);text-align:right}
+.sugg .pick-r.bad{color:var(--bad)}
+.sugg .pick-r svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;fill:none}
 /* bottom tab bar: white when selected, dimmed when not */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
   height:calc(60px + env(safe-area-inset-bottom,0px));padding:6px max(12px, env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(12px, env(safe-area-inset-left,0px));
@@ -1535,13 +1545,38 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const onChecks = " on the " + ls.map(l => dayLabel(l.pc.date)).join(" and ") + (ls.length > 1 ? " checks" : " check");
     if (ls.length && !paid && ls.length === 1 && ls[0].pc.date === o) sub = "On the" + onChecks.slice(7);
     else if (ls.length) sub += (paid && nd ? ". Next one is" : ",") + onChecks;
-    const showAssign = !ls.length && (nd ? !paid : days <= warnDays());
+    const showAdd = !paid && !ls.length;
     return '<li class="item rec' + (paid ? " is-paid" : "") + '">' +
       '<button class="chk" data-act="recToggle" data-id="' + r.id + '" aria-pressed="' + paid + '" aria-label="' + (paid ? "Unmark " : "Mark ") + esc(r.name) + ' as paid">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button>' +
       '<button class="item-main" data-act="editRec" data-id="' + r.id + '">' + catIcon(r.cat, "sm") + '<span class="item-name">' + esc(r.name) + (r.auto ? '<span class="pill">Auto</span>' : "") +
-      '<span class="due' + (red ? " bad" : "") + '">' + sub + '</span></span><span class="num">' + money(r.amount) + '</span></button>' +
-      (showAssign ? assignHtml(r.id, suggestPaycheck(o, g.upcoming), "recAssign", g) : "") + '</li>';
+      '<span class="due' + (red ? " bad" : "") + '">' + sub + '</span></span>' + (showAdd ? "" : '<span class="num">' + money(r.amount) + '</span>') + '</button>' +
+      (showAdd ? addChkBtn("rec", r.id, r.name) + '<button class="amt-btn num" data-act="editRec" data-id="' + r.id + '">' + money(r.amount) + '</button>' : "") + '</li>';
+  }
+  function addChkBtn(kind, id, name){
+    return '<button class="addchk" data-act="addTo" data-kind="' + kind + '" data-id="' + id + '" aria-label="Add ' + esc(name) + ' to a check">' + PLUS + 'Add</button>';
+  }
+  // pick which check an expense goes on; each one shows what would be left after adding it
+  function addToCheckSheet(kind, id){
+    let name, amount, due;
+    if (kind === "rec"){ const r = recById(id); if (!r) return; const o = openOcc(r); name = r.name; amount = r.amount; due = noDay(r) ? "" : o; }
+    else { const it = state.payments.find(i => i.id === id); if (!it) return; name = it.name; amount = it.amount; due = it.due || ""; }
+    // the check you're living on now (the last one before today) plus every check still to come
+    const t = iso(today()), fut = railList().filter(p => p.date >= t), last = railList().filter(p => p.date < t).pop();
+    const list = (last ? [last] : []).concat(fut);
+    const sug = suggestPaycheck(due, list);
+    const rows = list.map(p => {
+      const after = pcAmount(p) - sum(p.items) - amount;
+      return '<button type="button" data-act="addPick" data-kind="' + kind + '" data-id="' + id + '" data-pc="' + p.id + '">' +
+        '<span><span class="s-name">' + dayLabel(p.date) + (p.id === sug ? '<span class="pill">Suggested</span>' : "") + '</span>' +
+        '<span class="s-sub">' + (p === last ? "Current check, " : "") + p.items.length + ' item' + (p.items.length === 1 ? "" : "s") + ' planned</span></span>' +
+        '<span class="pick-r' + (after < -0.004 ? " bad" : "") + '">' + (after < -0.004 ? "Goes " + money(-after) + " over" : "Leaves " + money(after) + " extra") + PLUS + '</span></button>';
+    }).join("");
+    openSheet({
+      title: "Add to a check", noSave: true,
+      body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + ", " + money(amount) + (due ? ", due " + dayLabel(due) : "") + '</p>' +
+        (rows ? '<div class="sugg pick">' + rows + '</div>' : '<p class="empty small">No upcoming paychecks yet. Add one on the Paychecks page first.</p>')
+    });
   }
   const REC_EMPTY = {weekly: "Things you pay every week, like groceries or gas.", biweekly: "Bills that come every other week.",
     monthly: "Rent, car, utilities and other monthly bills.", yearly: "Car tags, memberships and other once-a-year bills."};
@@ -1594,10 +1629,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       const days = i.due ? daysUntil(i.due) : null, red = days !== null && days <= redDays();
       return '<div class="xcard' + (red ? " is-red" : "") + '">' +
         '<button class="xbtn" data-act="xPay" data-id="' + i.id + '" aria-label="Erase ' + esc(i.name) + '">' + XSVG + '</button>' +
-        '<button class="item-main" data-act="editPay" data-id="' + i.id + '"><span class="item-name">' + esc(i.name) +
-        '<span class="due' + (red ? " bad" : "") + '">' + (i.due ? dueText(days, i.due) : "no due date") + '</span></span>' +
-        '<span class="num">' + money(i.amount) + '</span></button>' +
-        assignHtml(i.id, suggestPaycheck(i.due, g.upcoming), "assign", g) + '</div>';
+        '<div class="xrow"><button class="item-main" data-act="editPay" data-id="' + i.id + '"><span class="item-name">' + esc(i.name) +
+        '<span class="due' + (red ? " bad" : "") + '">' + (i.due ? dueText(days, i.due) : "no due date") + '</span></span></button>' +
+        addChkBtn("pay", i.id, i.name) + '<button class="amt-btn num" data-act="editPay" data-id="' + i.id + '">' + money(i.amount) + '</button></div></div>';
     }).join("");
     h += '<div class="addcard"><form class="add add-wrap" data-form="addPay">' +
       '<input name="name" placeholder="Something to pay" aria-label="Payment name" autocomplete="off" required style="flex-basis:100%">' +
@@ -2230,6 +2264,18 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "setPay") settingsPay();
     else if (act === "setBills") settingsBills();
     else if (act === "hideGrp") hideGroup(b.dataset.f);
+    else if (act === "addTo") addToCheckSheet(b.dataset.kind, id);
+    else if (act === "addPick"){
+      const to = findPc(pcId); if (!to) return;
+      if (b.dataset.kind === "rec"){
+        const r = recById(id); if (!r) return; const o = openOcc(r);
+        to.items.push({id: uid(), name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""});
+      } else {
+        const it = state.payments.find(i => i.id === id); if (!it) return;
+        state.payments = state.payments.filter(i => i !== it); it.paid = false; to.items.push(it);
+      }
+      closeSheet(); commit(); setStatus("Added to " + dayLabel(to.date));
+    }
     else if (act === "setNotif") settingsNotif();
     else if (act === "memberSoon"){
       const line = b.closest(".btn-line");
