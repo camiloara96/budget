@@ -335,7 +335,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .set-list{background:var(--surface);border:0;border-radius:20px}
 .radios input:checked+span,.rng button[aria-selected="true"]{background:var(--raise);box-shadow:none}
 .pc.need-cat{border:1px solid var(--xbar)}
-.page-h{margin:12px 4px 14px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
+.page-h{margin:calc(12px + min(18px, env(safe-area-inset-top, 0px))) 4px 14px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
 .sec-head h2{font-size:19px;font-weight:700}
 .sub-head h3{font-size:15px;font-weight:700;color:#A1A1A6}
 .sub-r{display:flex;align-items:center;gap:10px}
@@ -376,7 +376,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .pc-card{flex:0 0 calc(100% - 40px);max-width:460px;scroll-snap-align:start;box-sizing:border-box;background:var(--surface);border-radius:24px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:12px}
 .pc-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
 .pc-top > div{display:flex;flex-direction:column;gap:2px;min-width:0}
-.pc-card .pc-date{font-size:14px;font-weight:600;color:#A1A1A6;letter-spacing:0}
+.pc-card .pc-date{font-size:14px;font-weight:600;color:#A1A1A6;letter-spacing:0;white-space:nowrap}
 .pc-card .pc-amt{font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
 .pc-adjust{flex:none;border:1px solid #3A3A3C;border-radius:16px;background:none;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink)}
 .pc-card .pc-sub{margin:-6px 0 0;font-size:12.5px;color:var(--muted)}
@@ -392,6 +392,55 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .dots .d.on{width:18px;background:var(--ink)}
 .dot-plus{width:10px;height:10px;fill:none;stroke:#5A5A5E;stroke-width:1.8;stroke-linecap:round}
 .dot-plus.on{stroke:var(--ink)}
+.dot-tick{width:11px;height:11px;fill:none;stroke:#5A5A5E;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.dot-tick.on{stroke:var(--ink)}
+.pc-done{flex:0 0 calc(100% - 40px);max-width:460px;scroll-snap-align:start;box-sizing:border-box;border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:stretch;text-align:left;color:var(--ink)}
+.pc-done-main{position:relative;z-index:2;display:flex;flex-direction:column;gap:16px;background:var(--surface);border-radius:24px;padding:18px 16px}
+.fin-stack{position:relative;z-index:2;display:flex;flex-direction:column;gap:10px;overflow-x:hidden;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none;border-radius:24px;-webkit-overflow-scrolling:touch}
+.fin-stack::-webkit-scrollbar{display:none}
+.fin-stack > .pc-card, .fin-stack > .fin-sum{flex:none;width:100%;max-width:none;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always}
+.fin-sum{border:0;text-align:left;color:var(--ink);font:inherit;justify-content:space-between}
+.fin-hint{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:-4px;font-size:12.5px;font-weight:600;color:#8E8E93}
+.fin-hint svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.done-pill{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding:2px 7px 2px 5px;border-radius:10px;background:rgba(48,199,123,.16);color:var(--check);font-size:11px;font-weight:800;vertical-align:1px;white-space:nowrap}
+.done-pill svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.done-pill .of{color:#A1A1A6;font-weight:700;margin-left:2px}
+.done-pill.todo{background:rgba(255,214,10,.14);color:var(--xbar)}
+.done-pill.todo i{width:6px;height:6px;border-radius:3px;background:currentColor;margin:0 2px 0 1px}
+.fin-ico.todo{background:var(--xbar);color:#000;font-size:15px;font-weight:800}
+.fin-s .ta{color:var(--xbar);font-weight:700}
+.pc-done-stats .v.ta{color:var(--xbar)}
+.assign-card{display:flex;align-items:center;gap:12px;background:var(--banner);color:var(--banner-ink);border-radius:20px;padding:14px 14px 14px 16px;margin:0 0 14px}
+.assign-card div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:13.5px;line-height:1.35}
+.assign-card strong{font-size:16px;color:var(--xbar)}
+.assign-card button{flex:none;border:0;border-radius:12px;background:var(--xbar);color:#000;font-weight:800;font-size:15px;padding:10px 16px}
+.pc-done .stk1{position:relative;z-index:1;height:8px;margin:-1px 14px 0;background:#2A2A2C;border-radius:0 0 18px 18px}
+.pc-done .stk2{height:7px;margin:0 28px;background:#18181A;border-radius:0 0 14px 14px}
+.pc-done-top{display:flex;align-items:center;gap:12px}
+.pc-done-ico{flex:none;width:42px;height:42px;border-radius:21px;background:var(--check);display:grid;place-items:center}
+.pc-done-ico svg{width:22px;height:22px;fill:none;stroke:var(--check-ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pc-done-t{display:block;font-size:19px;font-weight:800}
+.pc-done-s{display:block;margin-top:2px;font-size:13.5px;font-weight:500;color:#A1A1A6}
+.pc-done-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pc-done-stats .k{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#A1A1A6}
+.pc-done-stats .v{display:block;margin-top:3px;font-size:19px;font-weight:700}
+.pc-done-stats .v.bad{color:var(--bad)}
+.pc-done-bar{display:flex;gap:2px;height:8px}
+.pc-done-bar span{min-width:4px;border-radius:4px}
+.pc-done-bar .p{background:var(--check)} .pc-done-bar .x{background:var(--xbar)}
+.fin-rows{background:var(--surface);border-radius:20px;padding:0 16px;margin:0 0 16px}
+.fin-row{width:100%;display:flex;align-items:center;gap:12px;padding:12px 0;border:0;border-top:1px solid var(--line);background:none;text-align:left;color:var(--ink)}
+.fin-row:first-child{border-top:0}
+.fin-ico{flex:none;width:28px;height:28px;border-radius:14px;background:var(--check);display:grid;place-items:center}
+.fin-ico svg{width:15px;height:15px;fill:none;stroke:var(--check-ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.fin-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.fin-d{font-size:16px;font-weight:700}
+.fin-s{font-size:13px;font-weight:500;color:#A1A1A6}
+.fin-amt{font-size:16px;font-weight:700}
+.fin-row .chev{flex:none;width:16px;height:16px;fill:none;stroke:#636366;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.fin-back{display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:var(--ink);font-size:15px;font-weight:700;padding:2px 10px 12px 0}
+.fin-back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pc-card.fin-open{max-width:none;margin:0 0 18px}
 /* items grouped: To pay, then Paid */
 .grp-head{display:flex;justify-content:space-between;padding:0 6px;margin:0 0 6px;font-size:14px;font-weight:700;color:#A1A1A6}
 .rows{list-style:none;margin:0 0 8px;padding:2px 16px;background:var(--surface);border-radius:24px}
@@ -1350,7 +1399,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     $("#paneExp").innerHTML = '<h1 class="page-h">Expenses</h1>' + renderExpenses();
     $("#paneAna").innerHTML = renderAnalysis();
     $("#paneSet").innerHTML = renderSettings();
-    syncRail(); syncAnaRail();
+    syncRail(); syncFinStack(); syncAnaRail();
   }
 
   const TICK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4 9-9.5"/></svg>';
@@ -1397,12 +1446,24 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
 
   // ---------- paychecks page: swipe between checks, the last slide adds one ----------
-  let selPc = null;   // the check whose items show below the cards; "add" = the add-a-paycheck slide
+  let selPc = null;   // the check whose items show below the cards; "add" = the add-a-paycheck slide, "done" = the Finished stack
+  let finView = null; // a finished check opened from the Finished stack
   const railList = () => [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+  // finished = its date has passed and everything on it is checked off (same rule as before)
+  const isFinished = p => parseISO(p.date) < today() && p.items.length > 0 && p.items.every(i => i.paid);
+  const activeList = () => railList().filter(p => !isFinished(p));
+  const finishedList = () => railList().filter(isFinished).reverse();   // newest first
   function curSel(){
-    if (selPc === "add" || (selPc && findPc(selPc))) return selPc;
-    const g = groups();
-    selPc = g.upcoming[0] ? g.upcoming[0].id : "add";
+    if (finView){ const f = findPc(finView); if (!f) finView = null; else if (!isFinished(f)){ selPc = f.id; finView = null; } }
+    if (selPc && selPc !== "add" && selPc !== "done"){
+      const p = findPc(selPc);
+      if (!p) selPc = null;
+      else if (isFinished(p)){ finView = p.id; selPc = "done"; }
+    }
+    if (selPc === "done" && !finishedList().length){ selPc = null; finView = null; }
+    if (selPc) return selPc;
+    const a = activeList();
+    selPc = a[0] ? a[0].id : "add";
     return selPc;
   }
   function nextPaydayAfterLast(){ const l = railList(); return l.length ? nextPayday(l[l.length - 1].date) : iso(today()); }
@@ -1419,15 +1480,133 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<span class="pc-add-t">Add a paycheck</span><span class="pc-add-s">Next payday: ' + dayLabel(nextPaydayAfterLast()) + '</span></button>';
   }
   function dotsHtml(sel){
-    const ids = railList().map(p => p.id).concat("add"), n = ids.length, i = Math.max(0, ids.indexOf(sel));
+    const ids = (finishedList().length ? ["done"] : []).concat(activeList().map(p => p.id), "add"), n = ids.length, i = Math.max(0, ids.indexOf(sel));
     const W = 9, start = Math.max(0, Math.min(i - 4, n - W)), end = Math.min(n, start + W);
     let h = "";
     for (let k = start; k < end; k++){
       h += ids[k] === "add" ? '<svg class="dot-plus' + (k === i ? " on" : "") + '" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5v7M1.5 5h7"/></svg>'
+        : ids[k] === "done" ? '<svg class="dot-tick' + (k === i ? " on" : "") + '" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4 9-9.5"/></svg>'
         : '<span class="d' + (k === i ? " on" : "") + '"></span>';
     }
     return h;
   }
+  // ---------- finished checks: a stacked card at the start of the swipe, the list below it ----------
+  const CHEV = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  const BACK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+  const shortDate = s => Number(s.slice(5, 7)) + "/" + Number(s.slice(8, 10));
+  function doneCard(){
+    const f = finishedList(); if (!f.length) return "";
+    const earned = f.reduce((a, p) => a + pcAmount(p), 0), spent = f.reduce((a, p) => a + sum(p.items), 0);
+    const left = f.reduce((a, p) => a + Math.max(0, unassigned(p)), 0), waiting = f.filter(p => unassigned(p) > 0.004).length;
+    const n = f.length;
+    const cards = f.map((p, k) => {
+      const todo = unassigned(p) > 0.004;
+      return pcCard(p).replace('class="pc-card"', 'class="pc-card fin-card"').replace('<span class="pc-date">' + dayLabel(p.date) + '</span>',
+        '<span class="pc-date">' + dayLabel(p.date) + (todo ? '<span class="done-pill todo"><i></i>To assign' : '<span class="done-pill">' + TICK + 'Done') +
+        '<span class="of">' + (k + 1) + '/' + n + '</span></span></span>').replace('<i class="dot x"></i>Extra</span>', '<i class="dot x"></i>To assign</span>');
+    }).join("");
+    return '<div class="pc-done" data-pc="done"><div class="fin-stack" id="finStack" aria-label="Finished checks, swipe up and down"><button type="button" class="pc-done-main fin-sum" data-act="finAll" aria-label="Show all finished checks">' +
+      '<span class="pc-done-top"><span class="pc-done-ico">' + TICK + '</span><span><span class="pc-done-t">Finished checks</span>' +
+      '<span class="pc-done-s">' + f.length + ' check' + (f.length === 1 ? "" : "s") + ' · ' + shortDate(f[f.length - 1].date) + (f.length > 1 ? ' to ' + shortDate(f[0].date) : "") + '</span></span></span>' +
+      '<span class="pc-done-stats"><span><span class="k">Earned</span><span class="v num">' + money(earned) + '</span></span>' +
+      '<span><span class="k"><i class="dot x"></i>' + (waiting ? "To assign" : "All assigned") + '</span><span class="v num' + (waiting ? " ta" : "") + '">' + money(left) + '</span></span></span>' +
+      '<span class="pc-done-bar" aria-hidden="true"><span class="p" style="flex:' + Math.max(spent, 0.01).toFixed(2) + ' 1 0"></span>' +
+      (left > 0.004 ? '<span class="x" style="flex:' + left.toFixed(2) + ' 1 0"></span>' : "") + '</span>' +
+      '<span class="fin-hint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>' + (waiting ? waiting + ' check' + (waiting === 1 ? " has" : "s have") + ' money to assign. Swipe up' : 'Swipe up to flip through them') + '</span>' +
+      '</button>' + cards + '</div><span class="stk1" aria-hidden="true"></span><span class="stk2" aria-hidden="true"></span></div>';
+  }
+  function finListHtml(){
+    const gs = [], thisYear = String(today().getFullYear());
+    for (const p of finishedList()){ const m = p.date.slice(0, 7); if (!gs.length || gs[gs.length - 1].m !== m) gs.push({m, list: []}); gs[gs.length - 1].list.push(p); }
+    return gs.map(g => '<div class="grp-head"><span>' + MONTHS_LONG[Number(g.m.slice(5, 7)) - 1] + (g.m.slice(0, 4) === thisYear ? "" : " " + g.m.slice(0, 4)) + '</span>' +
+      '<span class="num">' + money(g.list.reduce((a, p) => a + pcAmount(p), 0)) + '</span></div><div class="fin-rows">' +
+      g.list.map(p => {
+        const amt = pcAmount(p), left = unassigned(p), n = p.items.length, todo = left > 0.004;
+        return '<button type="button" class="fin-row" data-act="finOpen" data-id="' + p.id + '"><span class="fin-ico' + (todo ? " todo" : "") + '" aria-hidden="true">' + (todo ? "$" : TICK) + '</span>' +
+          '<span class="fin-mid"><span class="fin-d">' + dayLabel(p.date) + '</span><span class="fin-s">' + n + ' item' + (n === 1 ? "" : "s") + ' · ' +
+          (left < -0.004 ? money(-left) + ' over' : todo ? '<span class="ta">' + money(left) + ' to assign</span>' : 'every dollar assigned') + '</span></span><span class="fin-amt num">' + money(amt) + '</span>' + CHEV + '</button>';
+      }).join("") + '</div>').join("");
+  }
+  function itemsFor(sel){
+    if (sel === "add") return pcItems(null);
+    if (sel !== "done") return pcItems(findPc(sel));
+    const p = finView && findPc(finView);
+    if (!p) return finListHtml();
+    const left = unassigned(p);
+    return '<button type="button" class="fin-back" data-act="finAll">' + BACK + 'All finished checks</button>' +
+      (left > 0.004 ? '<div class="assign-card"><div><strong>' + money(left) + ' isn\'t assigned yet</strong><span>Give it a job so every dollar on this check is accounted for.</span></div>' +
+        '<button type="button" data-act="assignOpen" data-pc="' + p.id + '">Assign</button></div>' : "") + pcItems(p);
+  }
+  // what a check brought in that nothing was planned for
+  function unassigned(p){ return Math.round((pcAmount(p) - sum(p.items)) * 100) / 100; }
+  // give the rest of a finished check a job: savings, a goal, a cushion, or something that wasn't on the list
+  function assignSheet(pcId){
+    const p = findPc(pcId); if (!p) return;
+    const left = unassigned(p); if (left <= 0.004) return;
+    const goals = state.wishlist.filter(w => !w.done);
+    const opt = (kind, title, sub, extra) => '<button type="button" data-act="assignPick" data-pc="' + p.id + '" data-kind="' + kind + '"' + (extra || "") + '>' +
+      '<span><span class="s-name">' + title + '</span><span class="s-sub">' + sub + '</span></span><span class="pick-r">' + PLUS + '</span></button>';
+    openSheet({
+      title: "Assign " + money(left), noSave: true,
+      body: '<p class="hint" style="margin:-8px 0 12px">Left on the ' + dayLabel(p.date) + ' check. Use all of it, or part and come back for the rest.</p>' +
+        field("Amount", '<input name="amt" inputmode="decimal" value="' + left.toFixed(2) + '" autocomplete="off">') +
+        '<div class="sugg pick">' + opt("savings", "Savings", "Moved to savings or investments") +
+        opt("cushion", "Cushion", "Stays in checking as a buffer") +
+        opt("other", "Something else", "Spent on something that wasn't on the check") + '</div>' +
+        (goals.length ? '<div class="sugg pick"><p class="sugg-h">Toward something on your list</p>' +
+          goals.map(w => opt("goal", esc(w.name), w.cost ? money(w.saved) + " of " + money(w.cost) + " saved" : money(w.saved) + " saved so far", ' data-id="' + w.id + '"')).join("") + '</div>' : "")
+    });
+  }
+  function assignOtherSheet(p, amt){
+    openSheet({
+      title: "What was it?", saveText: "Next", focus: "name",
+      body: '<p class="hint" style="margin:-8px 0 12px">' + money(amt) + ' from the ' + dayLabel(p.date) + ' check</p>' + field("Name", '<input name="name" autocomplete="off" required>'),
+      onSave: fd => {
+        const name = String(fd.get("name") || "").trim(); if (!name) return false;
+        askCategory(name, amt, catGuess(name), cat => {
+          p.items.push({id: uid(), name, amount: amt, paid: true, due: "", cat});
+          commit(); setStatus("Assigned " + money(amt));
+        });
+        return false;
+      }
+    });
+  }
+  // every card in the stack is as tall as the tallest, so each swipe lands on exactly one
+  const FIN_GAP = 10;
+  function finStep(st){ return (st.firstElementChild ? st.firstElementChild.offsetHeight : 1) + FIN_GAP; }
+  function finIndex(){ const f = finishedList(), k = finView ? f.findIndex(p => p.id === finView) : -1; return k + 1; }
+  function syncFinStack(){
+    const st = $("#finStack"); if (!st || !st.offsetParent) return;
+    const cards = [...st.children];
+    cards.forEach(c => { c.style.height = ""; });
+    const h = Math.max(...cards.map(c => c.offsetHeight));
+    cards.forEach(c => { c.style.height = h + "px"; });
+    st.style.height = h + "px";
+    st.scrollTop = finIndex() * (h + FIN_GAP);
+  }
+  function finGo(k, smooth){
+    const st = $("#finStack"); if (!st) return;
+    st.scrollTo({top: k * finStep(st), behavior: smooth ? "smooth" : "auto"});
+  }
+  // which check the stack is showing right now (null = the summary card)
+  function stackView(){
+    const st = $("#finStack"); if (!st) return null;
+    const k = Math.round(st.scrollTop / finStep(st)), f = finishedList();
+    return k > 0 && f[k - 1] ? f[k - 1].id : null;
+  }
+  let finTimer = null;
+  document.addEventListener("scroll", e => {
+    const st = e.target;
+    if (!st || st.id !== "finStack") return;
+    clearTimeout(finTimer);
+    finTimer = setTimeout(() => {
+      const id = stackView();
+      if (id === finView) return;
+      finView = id;
+      if (selPc !== "done") return;
+      const items = $("#pcItems"); if (items) items.innerHTML = itemsFor("done");
+    }, 90);
+  }, true);
   function pcItems(pc){
     if (!pc){
       return '<div class="pc-empty"><strong>' + dayLabel(nextPaydayAfterLast()) + ' isn\'t planned yet</strong>' +
@@ -1454,9 +1633,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     h += renderBanners(true);
     const sel = curSel();
-    h += '<div class="pc-rail" id="pcRail">' + railList().map(pcCard).join("") + addCard() + '</div>';
+    h += '<div class="pc-rail" id="pcRail">' + doneCard() + activeList().map(pcCard).join("") + addCard() + '</div>';
     h += '<div class="dots" id="pcDots">' + dotsHtml(sel) + '</div>';
-    h += '<div id="pcItems">' + pcItems(sel === "add" ? null : findPc(sel)) + '</div>';
+    h += '<div id="pcItems">' + itemsFor(sel) + '</div>';
     return h;
   }
   // after a redraw, put the cards back where they were
@@ -1476,8 +1655,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       let best = null, bd = Infinity;
       for (const c of rail.children){ const d = Math.abs(c.offsetLeft - pad - rail.scrollLeft); if (d < bd){ bd = d; best = c; } }
       if (!best || best.dataset.pc === curSel()) return;
-      selPc = best.dataset.pc;
-      const items = $("#pcItems"); if (items) items.innerHTML = pcItems(selPc === "add" ? null : findPc(selPc));
+      selPc = best.dataset.pc; finView = selPc === "done" ? stackView() : null;
+      const items = $("#pcItems"); if (items) items.innerHTML = itemsFor(selPc);
       const dots = $("#pcDots"); if (dots) dots.innerHTML = dotsHtml(selPc);
     }, 90);
   }, true);
@@ -2264,6 +2443,36 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "setPay") settingsPay();
     else if (act === "setBills") settingsBills();
     else if (act === "hideGrp") hideGroup(b.dataset.f);
+    else if (act === "assignOpen") assignSheet(pcId);
+    else if (act === "assignPick"){
+      const p = findPc(pcId); if (!p) return;
+      const left = unassigned(p), inp = $("#sheetForm").elements.amt;
+      const amt = Math.min(toNum(inp && inp.value), left);
+      if (!(amt > 0)){ setStatus("Enter an amount"); return; }
+      const kind = b.dataset.kind;
+      if (kind === "other"){ assignOtherSheet(p, amt); return; }
+      const add = (name, cat) => p.items.push({id: uid(), name, amount: amt, paid: true, due: "", cat});
+      if (kind === "savings") add("Savings", "savings");
+      else if (kind === "cushion") add("Cushion", "savings");
+      else if (kind === "goal"){
+        const w = state.wishlist.find(x => x.id === id); if (!w) return;
+        w.saved = Math.round(((Number(w.saved) || 0) + amt) * 100) / 100;
+        add("Saved for " + w.name, "savings");
+      }
+      closeSheet(); commit(); setStatus("Assigned " + money(amt));
+    }
+    else if (act === "finAll"){
+      if (selPc !== "done"){ selPc = "done"; finView = null; render(); return; }
+      finView = null; finGo(0, true);
+      const items = $("#pcItems"); if (items) items.innerHTML = itemsFor("done");
+    }
+    else if (act === "finOpen"){
+      const k = finishedList().findIndex(p => p.id === id); if (k < 0) return;
+      selPc = "done"; finView = id;
+      const items = $("#pcItems"); if (items) items.innerHTML = itemsFor("done");
+      finGo(k + 1, true);
+      const rail = $("#pcRail"); if (rail){ const top = rail.getBoundingClientRect().top; if (top < 70) window.scrollBy({top: top - 80, behavior: "smooth"}); }
+    }
     else if (act === "addTo") addToCheckSheet(b.dataset.kind, id);
     else if (act === "addPick"){
       const to = findPc(pcId); if (!to) return;
