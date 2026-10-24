@@ -338,6 +338,16 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .page-h{margin:12px 4px 14px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
 .sec-head h2{font-size:19px;font-weight:700}
 .sub-head h3{font-size:15px;font-weight:700;color:#A1A1A6}
+.sub-r{display:flex;align-items:center;gap:10px}
+.grp-x{position:relative;flex:none;width:24px;height:24px;border:0;border-radius:50%;background:var(--soft);color:var(--muted);display:grid;place-items:center;padding:0;align-self:center}
+.grp-x::after{content:"";position:absolute;inset:-10px}
+.grp-x:active{background:var(--raise);color:var(--ink)}
+.grp-x svg{width:10px;height:10px;stroke:currentColor;stroke-width:3;stroke-linecap:round;fill:none}
+.grp-off{display:block;margin:2px auto 6px;border:0;background:none;color:var(--muted);font-size:13.5px;font-weight:600;padding:8px 12px}
+.grp-off b{color:var(--ink);font-weight:700}
+.rec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.01em;padding:0 0 8px}
+.rec-h.todo{color:var(--ink)}
+.items + .rec-h{padding-top:16px}
 /* bottom tab bar: white when selected, dimmed when not */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
   height:calc(60px + env(safe-area-inset-bottom,0px));padding:6px max(12px, env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(12px, env(safe-area-inset-left,0px));
@@ -1559,13 +1569,21 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const on = FREQS.filter(f => !(state.settings.groupsOff || []).includes(f));
     const recsOn = state.recurring.filter(r => on.includes(r.freq));
     h += '<div class="sec-head"><h2>Recurring bills</h2><span class="num muted">' + money(recsOn.reduce((a, r) => a + perMonth(r), 0)) + ' a month</span></div>';
-    if (!on.length) h += '<p class="muted" style="margin:0 2px 14px">All groups are turned off. Turn them back on in Settings.</p>';
+    if (!on.length) h += '<p class="muted" style="margin:0 2px 4px">All the bill sections are removed.</p>';
     for (const f of on){
       const list = state.recurring.filter(r => r.freq === f).sort((a, b) => { const x = openOcc(a), y = openOcc(b); return x < y ? -1 : x > y ? 1 : 0; });
-      h += '<div class="sub-head"><h3>' + FREQ_LABEL[f] + '</h3><span class="num muted">' + money(sum(list)) + REC_PER[f] + '</span></div>';
-      h += '<section class="pc"><ul class="items">' + list.map(r => recRow(r, g)).join("") + '</ul>' +
+      h += '<div class="sub-head"><h3>' + FREQ_LABEL[f] + '</h3><span class="sub-r"><span class="num muted">' + money(sum(list)) + REC_PER[f] + '</span>' +
+        '<button class="grp-x" data-act="hideGrp" data-f="' + f + '" aria-label="Remove the ' + FREQ_LABEL[f] + ' section">' + XSVG + '</button></span></div>';
+      // bills still needing a paycheck on top, the ones already on a check (or paid) below
+      const covered = r => isPaidNow(r) || linkedAll(r, openOcc(r)).length > 0;
+      const todo = list.filter(r => !covered(r)), done = list.filter(covered).sort((a, b) => isPaidNow(a) - isPaidNow(b));
+      const part = (cls, title, rs) => !rs.length ? "" : '<div class="rec-h' + cls + '"><span>' + title + '</span><span class="num">' + money(sum(rs)) + '</span></div>' +
+        '<ul class="items">' + rs.map(r => recRow(r, g)).join("") + '</ul>';
+      h += '<section class="pc">' + part(" todo", "Not on a check yet", todo) + part("", "On a check", done) +
         (list.length ? "" : '<p class="empty small">' + REC_EMPTY[f] + '</p>') + addRecForm(f, g) + '</section>';
     }
+    const off = FREQS.length - on.length;
+    if (off) h += '<button class="grp-off" data-act="setBills">' + off + ' section' + (off === 1 ? "" : "s") + ' removed · <b>Bring back</b></button>';
 
     // one-time expenses
     h += '<div class="sec-head"><h2>One-time expenses</h2></div>';
@@ -1993,6 +2011,21 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     sheetCfg.onInput();
   }
 
+  // the x on a bill section: same as turning the group off in Settings, so nothing is lost
+  function hideGroup(f){
+    if (!FREQS.includes(f)) return;
+    const s = state.settings, name = FREQ_LABEL[f], n = state.recurring.filter(r => r.freq === f).length;
+    const hide = () => { s.groupsOff = FREQS.filter(x => x === f || (s.groupsOff || []).includes(x)); };
+    const undo = () => { s.groupsOff = (s.groupsOff || []).filter(x => x !== f); };
+    if (!n){ hide(); commit(); toast("Removed " + name, undo); return; }
+    openSheet({
+      title: "Remove " + name + "?", saveText: "Remove",
+      body: '<p class="hint" style="margin:0 0 4px">Its ' + n + ' bill' + (n === 1 ? "" : "s") + ' stay' + (n === 1 ? "s" : "") + ' saved, but stop' + (n === 1 ? "s" : "") +
+        ' showing here, in alerts and on paychecks. You can bring the section back anytime from the bottom of this page or in Settings, Bills.</p>',
+      onSave: () => { hide(); toast("Removed " + name, undo); }
+    });
+  }
+
   function settingsBills(){
     const s = state.settings;
     openSheet({
@@ -2196,6 +2229,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "setMember") settingsMember();
     else if (act === "setPay") settingsPay();
     else if (act === "setBills") settingsBills();
+    else if (act === "hideGrp") hideGroup(b.dataset.f);
     else if (act === "setNotif") settingsNotif();
     else if (act === "memberSoon"){
       const line = b.closest(".btn-line");
