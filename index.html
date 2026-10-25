@@ -392,6 +392,18 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .dots .d.on{width:18px;background:var(--ink)}
 .dot-plus{width:10px;height:10px;fill:none;stroke:#5A5A5E;stroke-width:1.8;stroke-linecap:round}
 .dot-plus.on{stroke:var(--ink)}
+.pc-card.is-now{box-shadow:inset 0 0 0 1.5px rgba(245,245,247,.85)}
+.pc-card.is-past .pc-amt{color:#B4B4B9}
+.pc-card .pc-date .now-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:10px;background:var(--ink);color:#000;font-size:11px;font-weight:800;vertical-align:1px}
+.pc-card .pc-date .when{color:#8E8E93;font-weight:600}
+.dots{position:relative}
+.dots button.d{position:relative;border:0;padding:0}
+.dots button.d::after{content:"";position:absolute;inset:-12px -6px}
+.dots .d.now{outline:1.5px solid #8E8E93;outline-offset:2px}
+.dots .d.now.on{outline-color:var(--ink)}
+.now-btn{position:absolute;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:3px;height:30px;padding:0 10px;border:1px solid #48484A;border-radius:15px;background:#000;color:var(--ink);font-size:12.5px;font-weight:700}
+.now-btn.right{right:0;padding-right:7px} .now-btn.left{left:0;padding-left:7px}
+.now-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .dot-tick{width:11px;height:11px;fill:none;stroke:#5A5A5E;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .dot-tick.on{stroke:var(--ink)}
 .pc-done{flex:0 0 calc(100% - 40px);max-width:460px;scroll-snap-align:start;box-sizing:border-box;border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:stretch;text-align:left;color:var(--ink)}
@@ -413,6 +425,39 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .assign-card{display:flex;align-items:center;gap:12px;background:var(--banner);color:var(--banner-ink);border-radius:20px;padding:14px 14px 14px 16px;margin:0 0 14px}
 .assign-card div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:13.5px;line-height:1.35}
 .assign-card strong{font-size:16px;color:var(--xbar)}
+.exp-head{background:var(--surface);border-radius:24px;padding:18px 16px 16px;margin:0 0 16px;display:flex;flex-direction:column;gap:12px}
+.eh-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.eh-t{font-size:14px;font-weight:600;color:#A1A1A6}
+.eh-s{font-size:13px;font-weight:600;color:#8E8E93}
+.eh-amt{margin-top:-8px;font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
+.eh-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.eh-stats.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.eh-stats > div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.eh-stats .k{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#A1A1A6;white-space:nowrap}
+.eh-stats .v{font-size:16px;font-weight:700}
+.eh-stats .v.ta{color:var(--xbar)}
+.dot.n{background:#545458}
+.eh-bar{display:flex;gap:2px;height:10px}
+.eh-bar span{min-width:6px;border-radius:5px}
+.eh-bar .p{background:var(--check)} .eh-bar .u{background:var(--plan)} .eh-bar .x{background:var(--xbar)} .eh-bar .n{background:#3A3A3C}
+.eh-note{margin:0;font-size:13.5px;color:#A1A1A6;line-height:1.4}
+.eh-note strong{color:var(--ink)}
+.eh-btn{height:44px;border:0;border-radius:14px;background:var(--ink);color:#000;font-size:15px;font-weight:800}
+.eh-ok{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--check)}
+.eh-ok svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.sec-card{background:var(--surface);border-radius:20px;padding:14px 16px;margin:0 0 4px;display:flex;flex-direction:column;gap:10px}
+.sc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sc-amt{font-size:22px;font-weight:800;letter-spacing:-0.01em}
+.sc-amt small{margin-left:5px;font-size:13px;font-weight:600;color:#A1A1A6;letter-spacing:0}
+.sc-n{font-size:13px;font-weight:600;color:#8E8E93}
+.sec-card .eh-stats .v{font-size:15px}
+.set-aside{display:flex;align-items:center;gap:10px;border:1px solid #3A3A3C;border-radius:16px;padding:10px 10px 10px 14px;margin:0 0 8px;font-size:13.5px;color:#A1A1A6;line-height:1.35}
+.set-aside span{flex:1;min-width:0}
+.set-aside strong{color:var(--ink)}
+.set-aside button{flex:none;border:0;border-radius:12px;background:var(--ink);color:#000;font-weight:800;font-size:13.5px;padding:8px 12px}
+.plan-list{padding:0}
+.plan-list .pl-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 12px}
+.plan-list .pl-row:first-child{border-top:0}
 .assign-card button{flex:none;border:0;border-radius:12px;background:var(--xbar);color:#000;font-weight:800;font-size:15px;padding:10px 16px}
 .pc-done .stk1{position:relative;z-index:1;height:8px;margin:-1px 14px 0;background:#2A2A2C;border-radius:0 0 18px 18px}
 .pc-done .stk2{height:7px;margin:0 28px;background:#18181A;border-radius:0 0 14px 14px}
@@ -1450,7 +1495,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   let finView = null; // a finished check opened from the Finished stack
   const railList = () => [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
   // finished = its date has passed and everything on it is checked off (same rule as before)
-  const isFinished = p => parseISO(p.date) < today() && p.items.length > 0 && p.items.every(i => i.paid);
+  // the check you're living on now: the latest one dated today or earlier
+  function currentPc(){ const t = iso(today()); let c = null; for (const p of railList()) if (p.date <= t) c = p; return c; }
+  const isFinished = p => parseISO(p.date) < today() && p.items.length > 0 && p.items.every(i => i.paid) && p !== currentPc();
   const activeList = () => railList().filter(p => !isFinished(p));
   const finishedList = () => railList().filter(isFinished).reverse();   // newest first
   function curSel(){
@@ -1462,15 +1509,25 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     if (selPc === "done" && !finishedList().length){ selPc = null; finView = null; }
     if (selPc) return selPc;
-    const a = activeList();
-    selPc = a[0] ? a[0].id : "add";
+    // open on this week's check; older ones with unpaid items stay a swipe to the left
+    const a = activeList(), c = currentPc();
+    selPc = c && a.includes(c) ? c.id : a[0] ? a[0].id : "add";
     return selPc;
   }
   function nextPaydayAfterLast(){ const l = railList(); return l.length ? nextPayday(l[l.length - 1].date) : iso(today()); }
-  function pcCard(p){
-    const amt = pcAmount(p), planned = sum(p.items), paid = sum(p.items.filter(i => i.paid)), sub = pcSub(p);
-    return '<section class="pc-card" data-pc="' + p.id + '" aria-label="Paycheck ' + dayLabel(p.date) + '">' +
-      '<div class="pc-top"><div><span class="pc-date">' + dayLabel(p.date) + '</span><span class="pc-amt num">' + money(amt) + '</span></div>' +
+  const NOW_WORD = () => weeklyPay() ? "This week" : "Current check";
+  function whenLabel(p){
+    const c = currentPc();
+    if (c && p.id === c.id) return '<span class="now-pill">' + NOW_WORD() + '</span>';
+    const ref = c ? c.date : iso(today()), w = Math.round((parseISO(p.date) - parseISO(ref)) / 864e5 / 7);
+    const t = w === 0 ? (!c ? "This week" : p.date > ref ? "Later this week" : "Earlier this week") : w === 1 ? "Next week" : w === -1 ? "Last week" : w > 1 ? "In " + w + " weeks" : -w + " weeks ago";
+    return '<span class="when"> · ' + t + '</span>';
+  }
+  function pcCard(p, plain){
+    const amt = pcAmount(p), planned = sum(p.items), paid = sum(p.items.filter(i => i.paid)), sub = pcSub(p), c = plain ? null : currentPc();
+    const cls = !c ? "" : p.id === c.id ? " is-now" : p.date < c.date ? " is-past" : "";
+    return '<section class="pc-card' + cls + '" data-pc="' + p.id + '" aria-label="Paycheck ' + dayLabel(p.date) + '">' +
+      '<div class="pc-top"><div><span class="pc-date">' + dayLabel(p.date) + (plain ? "" : whenLabel(p)) + '</span><span class="pc-amt num">' + money(amt) + '</span></div>' +
       '<button class="pc-adjust" data-act="editPc" data-id="' + p.id + '">Adjust check</button></div>' +
       (sub ? '<span class="pc-sub">' + sub + '</span>' : "") +
       pcSummary(amt, planned, paid) + '</section>';
@@ -1480,13 +1537,21 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<span class="pc-add-t">Add a paycheck</span><span class="pc-add-s">Next payday: ' + dayLabel(nextPaydayAfterLast()) + '</span></button>';
   }
   function dotsHtml(sel){
-    const ids = (finishedList().length ? ["done"] : []).concat(activeList().map(p => p.id), "add"), n = ids.length, i = Math.max(0, ids.indexOf(sel));
+    const ids = (finishedList().length ? ["done"] : []).concat(activeList().map(p => p.id), "add"), n = ids.length, i = Math.max(0, ids.indexOf(sel)), c = currentPc();
     const W = 9, start = Math.max(0, Math.min(i - 4, n - W)), end = Math.min(n, start + W);
     let h = "";
     for (let k = start; k < end; k++){
       h += ids[k] === "add" ? '<svg class="dot-plus' + (k === i ? " on" : "") + '" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5v7M1.5 5h7"/></svg>'
         : ids[k] === "done" ? '<svg class="dot-tick' + (k === i ? " on" : "") + '" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4 9-9.5"/></svg>'
+        : c && ids[k] === c.id ? '<button type="button" class="d now' + (k === i ? " on" : "") + '" data-act="goNow" aria-label="Go to ' + (weeklyPay() ? "this week\'s" : "the current") + ' check"></button>'
         : '<span class="d' + (k === i ? " on" : "") + '"></span>';
+    }
+    const ci = c ? ids.indexOf(c.id) : -1;
+    if (ci >= 0 && ci !== i){
+      const right = ci > i;
+      h += '<button type="button" class="now-btn ' + (right ? "right" : "left") + '" data-act="goNow">' +
+        (right ? "" : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>') + NOW_WORD() +
+        (right ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>' : "") + '</button>';
     }
     return h;
   }
@@ -1501,7 +1566,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const n = f.length;
     const cards = f.map((p, k) => {
       const todo = unassigned(p) > 0.004;
-      return pcCard(p).replace('class="pc-card"', 'class="pc-card fin-card"').replace('<span class="pc-date">' + dayLabel(p.date) + '</span>',
+      return pcCard(p, true).replace('class="pc-card"', 'class="pc-card fin-card"').replace('<span class="pc-date">' + dayLabel(p.date) + '</span>',
         '<span class="pc-date">' + dayLabel(p.date) + (todo ? '<span class="done-pill todo"><i></i>To assign' : '<span class="done-pill">' + TICK + 'Done') +
         '<span class="of">' + (k + 1) + '/' + n + '</span></span></span>').replace('<i class="dot x"></i>Extra</span>', '<i class="dot x"></i>To assign</span>');
     }).join("");
@@ -1633,7 +1698,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     h += renderBanners(true);
     const sel = curSel();
-    h += '<div class="pc-rail" id="pcRail">' + doneCard() + activeList().map(pcCard).join("") + addCard() + '</div>';
+    h += '<div class="pc-rail" id="pcRail">' + doneCard() + activeList().map(p => pcCard(p)).join("") + addCard() + '</div>';
     h += '<div class="dots" id="pcDots">' + dotsHtml(sel) + '</div>';
     h += '<div id="pcItems">' + itemsFor(sel) + '</div>';
     return h;
@@ -1692,7 +1757,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<span><span class="s-name">' + esc(s.name) + '</span><span class="s-sub">' + esc(s.sub) + '</span></span><span class="num">' + money(s.amount) + '</span></button>').join("") + '</div>';
   }
 
-  function renderBanners(link){
+  function renderBanners(link, redOnly){
     const a = alerts(); let h = "";
     const open = cls => link ? '<button class="banner ' + cls + '" data-act="tab" data-tab="exp">' : '<div class="banner ' + cls + '">';
     const close = link ? '<span class="banner-cta">Plan it</span></button>' : '</div>';
@@ -1701,7 +1766,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         (a.red.length > 3 ? ", and " + (a.red.length - 3) + " more" : "");
       h += open("red") + '<span><strong class="num">' + money(sum(a.red)) + '</strong> due soon and not on a paycheck: ' + names + '.</span>' + close;
     }
-    if (a.yellow.length){
+    if (a.yellow.length && !redOnly){
       h += open("") + '<span><strong class="num">' + money(sum(a.yellow)) + '</strong> in upcoming payments isn\'t on a paycheck yet.</span>' + close;
     }
     return h;
@@ -1775,14 +1840,95 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<button type="submit">Add</button></form>';
   }
 
+  // checks you can still plan on: the one you're living on now plus every one still to come
+  function checkChoices(){
+    const t = iso(today()), fut = railList().filter(p => p.date >= t), last = railList().filter(p => p.date < t).pop();
+    return (last ? [last] : []).concat(fut);
+  }
+  const nextChk = () => railList().find(p => p.date >= iso(today())) || groups().upcoming[0];
+  // every bill due in the next 30 days, plus anything overdue that isn't paid: recurring ones (each time they
+  // come up) and dated one-time payments
+  const WINDOW_DAYS = 30;
+  function monthBills(){
+    const t = iso(today()), last = addDays(t, WINDOW_DAYS - 1);
+    const out = [];
+    for (const r of state.recurring){
+      if (groupOff(r)) continue;
+      const open = openOcc(r);
+      let o = open < t ? open : occOnOrAfter(r, r.since && r.since > t ? r.since : t), guard = 0;
+      while (o <= last && guard++ < 60){
+        const ls = linkedAll(r, o), paid = !!(r.paidThrough && r.paidThrough >= o) || (ls.length > 0 && ls.every(l => l.it.paid));
+        if (o >= t || !paid) out.push({kind: "rec", r, o, name: r.name, amount: r.amount, due: noDay(r) ? "" : o, status: paid ? "paid" : ls.length ? "check" : "todo"});
+        o = nextOcc(r, o);
+      }
+    }
+    for (const p of state.payments) if (p.due && p.due <= last) out.push({kind: "pay", it: p, name: p.name, amount: p.amount, due: p.due, status: "todo"});
+    for (const pc of state.paychecks) for (const it of pc.items)
+      if (!it.recId && it.due && it.due <= last && (it.due >= t || !it.paid)) out.push({kind: "item", name: it.name, amount: it.amount, due: it.due, status: it.paid ? "paid" : "check"});
+    return out;
+  }
+  function monthHead(){
+    const all = monthBills(), by = k => all.filter(x => x.status === k);
+    const paid = sum(by("paid")), chk = sum(by("check")), todo = sum(by("todo")), total = paid + chk + todo;
+    const end = addDays(iso(today()), WINDOW_DAYS - 1), endLabel = MONTHS_LONG[Number(end.slice(5, 7)) - 1].slice(0, 3) + " " + Number(end.slice(8, 10));
+    let h = '<section class="exp-head" aria-label="Bills in the next 30 days"><div class="eh-top"><span class="eh-t">Next 30 days, through ' + endLabel + '</span>' +
+      '<span class="eh-s">' + all.length + ' bill' + (all.length === 1 ? "" : "s") + '</span></div><span class="eh-amt num">' + money(total) + '</span>';
+    if (!all.length) return h + '<p class="eh-note">Nothing is due in the next 30 days.</p></section>';
+    const stat = (dot, k, v, cls) => '<div><span class="k"><i class="dot ' + dot + '"></i>' + k + '</span><span class="v num' + (cls ? " " + cls : "") + '">' + money(v) + '</span></div>';
+    const seg = (cls, v) => v > 0.004 ? '<span class="' + cls + '" style="flex:' + v.toFixed(2) + ' 1 0"></span>' : "";
+    h += '<div class="eh-stats">' + stat("p", "Paid", paid) + stat("u", "On a check", chk) + stat("x", "Not on a check", todo, todo > 0.004 ? "ta" : "") + '</div>';
+    h += '<div class="eh-bar" aria-hidden="true">' + seg("p", paid) + seg("u", chk) + seg("x", todo) + '</div>';
+    h += todo > 0.004 ? '<button type="button" class="eh-btn" data-act="planMonth">Put ' + money(todo) + ' on checks</button>'
+      : '<span class="eh-ok">' + TICK + 'Everything due in the next 30 days is covered</span>';
+    return h + '</section>';
+  }
+  // put every bill this month that isn't on a check onto the check before it's due
+  function planMonthSheet(){
+    const list = checkChoices();
+    if (!list.length){ setStatus("Add a paycheck first"); return; }
+    const todo = monthBills().filter(x => x.status === "todo").sort((a, b) => (a.due || "0") < (b.due || "0") ? -1 : 1);
+    if (!todo.length) return;
+    const plan = todo.map(x => ({x, pc: findPc(suggestPaycheck(x.due, list))}));
+    openSheet({
+      title: "Put " + money(sum(todo)) + " on checks", saveText: "Add all",
+      body: '<p class="hint" style="margin:-8px 0 12px">Each bill goes on the last check before it\'s due. You can move any of them later.</p>' +
+        '<div class="sugg plan-list">' + plan.map(({x, pc}) => '<div class="pl-row"><span><span class="s-name">' + esc(x.name) + '</span>' +
+          '<span class="s-sub">' + (x.due ? "Due " + dayLabel(x.due) : "No set day") + ', on the ' + dayLabel(pc.date) + ' check</span></span>' +
+          '<span class="num">' + money(x.amount) + '</span></div>').join("") + '</div>',
+      onSave: () => {
+        for (const {x, pc} of plan){
+          if (x.kind === "rec") pc.items.push({id: uid(), name: x.r.name, amount: x.r.amount, paid: false, due: noDay(x.r) ? "" : x.o, recId: x.r.id, recFor: x.o, cat: x.r.cat || ""});
+          else if (x.kind === "pay" && state.payments.includes(x.it)){ state.payments = state.payments.filter(i => i !== x.it); x.it.paid = false; pc.items.push(x.it); }
+        }
+        setStatus("Put " + plan.length + " bill" + (plan.length === 1 ? "" : "s") + " on checks");
+      }
+    });
+  }
+  const PER_CHECK = {weekly: 12 / 52, biweekly: 12 / 26, semimonthly: 1 / 2, monthly: 1};
+  const statHtml = (dot, k, v, cls) => '<div><span class="k">' + (dot ? '<i class="dot ' + dot + '"></i>' : "") + k + '</span><span class="v num' + (cls ? " " + cls : "") + '">' + money(v) + '</span></div>';
+  function recCard(recsOn){
+    const month = recsOn.reduce((a, r) => a + perMonth(r), 0), per = month * (PER_CHECK[state.settings.payFreq] || 12 / 52);
+    const win = monthBills().filter(x => x.kind === "rec");
+    const done = sum(win.filter(x => x.status !== "todo")), todo = sum(win.filter(x => x.status === "todo"));
+    return '<section class="sec-card" aria-label="Recurring bills summary"><div class="sc-top"><span class="sc-amt num">' + money(month) + '<small>a month</small></span>' +
+      '<span class="sc-n">' + recsOn.length + ' bill' + (recsOn.length === 1 ? "" : "s") + '</span></div><div class="eh-stats">' +
+      statHtml("", "Per check", per) + statHtml("p", "Covered", done) + statHtml("x", "Not on a check", todo, todo > 0.004 ? "ta" : "") + '</div></section>';
+  }
+  function oneCard(pays, buys){
+    const toPay = sum(pays), toBuy = buys.reduce((a, w) => a + (w.cost || 0), 0), saved = buys.reduce((a, w) => a + Math.min(w.saved || 0, w.cost || w.saved || 0), 0), n = pays.length + buys.length;
+    return '<section class="sec-card" aria-label="One-time expenses summary"><div class="sc-top"><span class="sc-amt num">' + money(toPay + toBuy) + '<small>to pay and buy</small></span>' +
+      '<span class="sc-n">' + n + ' item' + (n === 1 ? "" : "s") + '</span></div><div class="eh-stats">' +
+      statHtml("x", "To pay", toPay, toPay > 0.004 ? "ta" : "") + statHtml("n", "To buy", toBuy) + statHtml("p", "Saved", saved) + '</div></section>';
+  }
+
   function renderExpenses(){
     const g = groups();
-    let h = renderBanners(false);
+    let h = monthHead() + renderBanners(false, true);
 
     // recurring bills, grouped by how often they come
     const on = FREQS.filter(f => !(state.settings.groupsOff || []).includes(f));
     const recsOn = state.recurring.filter(r => on.includes(r.freq));
-    h += '<div class="sec-head"><h2>Recurring bills</h2><span class="num muted">' + money(recsOn.reduce((a, r) => a + perMonth(r), 0)) + ' a month</span></div>';
+    h += '<div class="sec-head"><h2>Recurring bills</h2></div>' + (on.length ? recCard(recsOn) : "");
     if (!on.length) h += '<p class="muted" style="margin:0 2px 4px">All the bill sections are removed.</p>';
     for (const f of on){
       const list = state.recurring.filter(r => r.freq === f).sort((a, b) => { const x = openOcc(a), y = openOcc(b); return x < y ? -1 : x > y ? 1 : 0; });
@@ -1800,9 +1946,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (off) h += '<button class="grp-off" data-act="setBills">' + off + ' section' + (off === 1 ? "" : "s") + ' removed · <b>Bring back</b></button>';
 
     // one-time expenses
-    h += '<div class="sec-head"><h2>One-time expenses</h2></div>';
-
     const pays = [...state.payments].sort((a, b) => (a.due || "9999") < (b.due || "9999") ? -1 : 1);
+    const buys = state.wishlist.filter(w => !w.done).sort((a, b) => (a.target || "9999") < (b.target || "9999") ? -1 : (a.target || "9999") > (b.target || "9999") ? 1 : 0);
+    h += '<div class="sec-head"><h2>One-time expenses</h2></div>' + oneCard(pays, buys);
     h += '<div class="sub-head"><h3>Things to pay</h3><span class="num muted">' + money(sum(pays)) + '</span></div>';
     h += pays.map(i => {
       const days = i.due ? daysUntil(i.due) : null, red = days !== null && days <= redDays();
@@ -1818,12 +1964,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<input name="due" type="date" aria-label="Due date">' +
       '<button type="submit">Add</button></form></div>';
 
-    const buys = state.wishlist.filter(w => !w.done).sort((a, b) => (a.target || "9999") < (b.target || "9999") ? -1 : (a.target || "9999") > (b.target || "9999") ? 1 : 0);
-    const perWeek = buys.reduce((a, w) => a + wishPerCheck(w), 0), next = g.upcoming[0];
-    h += '<div class="sub-head"><h3>Things to buy</h3><span class="num muted">' + money(buys.reduce((a, w) => a + w.cost, 0)) + '</span></div>';
+    const perWeek = buys.reduce((a, w) => a + wishPerCheck(w), 0), next = nextChk();
+    h += '<div class="sub-head"><h3>Things to buy</h3><span class="num muted">' + money(buys.reduce((a, w) => a + (w.cost || 0), 0)) + '</span></div>';
     if (perWeek > 0){
-      h += '<div class="buy-sum"><span>Set aside <strong class="num">' + money(perWeek) + '</strong> ' + (weeklyPay() ? "a week" : "each paycheck") + ' to buy the dated items on time.</span>' +
-        (next ? '<button data-act="fundGoals">Add to ' + dayLabel(next.date) + '</button>' : "") + '</div>';
+      h += '<div class="set-aside"><span>Set aside <strong class="num">' + money(perWeek) + '</strong> ' + (weeklyPay() ? "a week" : "each paycheck") + ' to buy the dated items on time.</span>' +
+        (next ? '<button type="button" data-act="fundGoals">Add to ' + dayLabel(next.date) + '</button>' : "") + '</div>';
     }
     h += buys.map(w => {
       const pw = wishPerCheck(w);
@@ -2443,6 +2588,12 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "setPay") settingsPay();
     else if (act === "setBills") settingsBills();
     else if (act === "hideGrp") hideGroup(b.dataset.f);
+    else if (act === "goNow"){
+      const c = currentPc(); if (!c) return;
+      const rail = $("#pcRail"), card = rail && rail.querySelector('[data-pc="' + c.id + '"]');
+      if (card) rail.scrollTo({left: card.offsetLeft - (parseFloat(getComputedStyle(rail).paddingLeft) || 0), behavior: "smooth"});
+      else { selPc = c.id; finView = null; render(); }
+    }
     else if (act === "assignOpen") assignSheet(pcId);
     else if (act === "assignPick"){
       const p = findPc(pcId); if (!p) return;
@@ -2502,13 +2653,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       if (to && it){ state.payments = state.payments.filter(i => i !== it); it.paid = false; to.items.push(it); commit(); setStatus("Moved to " + dayLabel(to.date)); }
     }
     else if (act === "editWish") editWish(id);
+    else if (act === "planMonth") planMonthSheet();
     else if (act === "fundGoals"){
-      const next = groups().upcoming[0];
+      const next = nextChk();
       const amt = Math.ceil(state.wishlist.filter(w => !w.done).reduce((a, w) => a + wishPerCheck(w), 0));
       if (next && amt > 0){
         const existing = next.items.find(i => i.name === "Save for big stuff");
         if (existing) existing.amount = amt; else next.items.push({id: uid(), name: "Save for big stuff", amount: amt, paid: false, due: "", cat: "savings"});
-        tab = "pay"; commit(); window.scrollTo({top: 0});
+        tab = "pay"; selPc = next.id; commit(); window.scrollTo({top: 0});
       }
     }
   });
