@@ -80,7 +80,7 @@ button{cursor:pointer}
 
 .add{display:flex;gap:8px;padding:10px 0 6px;border-top:1px dashed var(--line);margin-top:2px}
 .add input,.add select{min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 10px;font-size:16px}
-.add input[name="name"]{flex:1}
+.add input[name="what"]{flex:1}
 .add input[name="amount"],.add input[name="cost"]{width:84px}
 .add input[type="date"]{width:132px}
 .add button{flex:none;border:0;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:9px 14px;font-weight:700}
@@ -114,6 +114,7 @@ details.pc .items,details.pc .old-foot{padding:0 16px 8px}
 
 dialog{margin:auto auto 0;width:100%;max-width:560px;border:0;border-radius:22px 22px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));background:var(--surface);color:var(--ink);max-height:90vh;overflow:auto}
 dialog::backdrop{background:rgba(0,0,0,.4)}
+dialog.kb{padding-bottom:14px;border-radius:22px}
 dialog h2{margin:0 0 14px;font-size:20px;font-weight:800}
 .field{display:block;margin-bottom:12px}
 .field span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600}
@@ -279,6 +280,23 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .cat-grid.one{grid-template-columns:1fr}
 .cat-btn{display:flex;align-items:center;gap:9px;min-height:50px;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:8px 10px;text-align:left;font-weight:600;font-size:14.5px;line-height:1.2}
 .cat-btn.sug{border-color:var(--ink);background:var(--surface)}
+#sheetSave:disabled{opacity:.35}
+.pf{margin-bottom:12px}
+.pf-h{font-size:13px;color:var(--muted);margin:0 0 4px;font-weight:600}
+.pf-list{border:1px solid var(--line);border-radius:12px;background:var(--bg);overflow:hidden}
+.pf-row{position:relative;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-top:1px solid var(--line);cursor:pointer}
+.pf-row:first-child{border-top:0}
+.pf-row input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.pf-d{flex:1;min-width:0;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pf-d small{font-size:12px;font-weight:600;color:var(--muted);margin-left:7px}
+.pf-r{flex:none;font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.pf-r.bad{color:var(--bad)}
+.pf-tick{flex:none;width:18px;height:18px;display:grid;place-items:center}
+.pf-tick svg{width:16px;height:16px;fill:none;stroke:var(--check);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.pf-row:has(input:checked){background:var(--surface)}
+.pf-row input:checked ~ .pf-tick svg{opacity:1}
+.pf-row:has(input:focus-visible){outline:2px solid var(--check);outline-offset:-2px}
+.pf-off .pf-d{color:var(--muted)}
 .cat-e{flex:none;font-size:20px;line-height:1}
 .rng{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--soft);border-radius:12px;padding:3px;gap:3px;margin:0 0 12px}
 .rng button{border:0;background:transparent;border-radius:9px;padding:8px 2px;font-weight:600;font-size:13.5px;color:var(--muted);white-space:nowrap}
@@ -355,6 +373,12 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .addchk svg{width:12px;height:12px;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;fill:none}
 .addchk:active{background:var(--soft)}
 .amt-btn{flex:none;border:0;background:none;color:inherit;font:inherit;padding:11px 0 11px 6px}
+.mvchk{padding:0 8px 0 10px}
+.row .amt-btn{padding:10px 0 10px 4px}
+.gh-l{display:inline-flex;align-items:center;gap:8px}
+.gh-move{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 7px 0 9px;border:1px solid #545458;border-radius:12px;background:transparent;color:var(--ink);font-size:12.5px;font-weight:700}
+.gh-move svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;fill:none}
+.gh-move:active{background:var(--soft)}
 .xrow{display:flex;align-items:center;gap:6px;padding:12px 36px 0 0}
 .xcard .xrow .item-main{width:auto;flex:1;padding:0}
 .xrow .amt-btn{padding:0 0 0 6px}
@@ -473,6 +497,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .debt-bar span{min-width:3px;border-radius:3px}
 .debt-bar .p{background:var(--check)} .debt-bar .n{background:#3A3A3C}
 .debt-foot{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:#A1A1A6}
+.debt-foot > span:last-child{white-space:nowrap;text-align:right}
 .debt-foot .bad,.db-hint .bad,.db-goal .bad,.eh-stats .v.bad{color:var(--bad)} .debt-foot .good{color:var(--check)}
 .debt-tip{background:var(--surface);border-radius:20px;padding:14px 16px;margin:0 0 16px;font-size:14px;line-height:1.45;color:#A1A1A6}
 .debt-tip b{color:var(--ink)} .debt-tip .warn{color:var(--bad)}
@@ -489,6 +514,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .plan-card .soft-btn{padding:7px 12px;font-size:13px}
 .plan-card .eh-btn{margin-top:4px}
 .pill.focus{background:var(--ink);color:#000}
+.pill.own{background:rgba(255,214,10,.16);color:var(--xbar)}
+.ownl,.pl-line.ownl{color:var(--xbar)} .pl-line.ownl b{color:var(--xbar)}
+.db-plan{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px;font-size:14px;color:#A1A1A6}
+.db-plan b{color:var(--ink)} .db-plan .field{margin-top:10px} .db-out{margin:4px 0 0} .db-out .bad{color:var(--bad)}
 .debt.is-focus{box-shadow:inset 0 0 0 1.5px rgba(245,245,247,.85)}
 .dp-opts{display:flex;flex-direction:column;gap:8px;margin:2px 0 12px}
 .dp-opt{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer}
@@ -856,7 +885,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const debts = arr(d.debts).map(x => { x = x && typeof x === "object" ? x : {};
       const kind = ["card","mortgage","car","personal","student","medical","other"].includes(x.kind) ? x.kind : "other", bal = Math.max(0, num(x.balance));
       return {id: str(x.id) || uid(), name: str(x.name), kind, balance: bal, asOf: isoOr(x.asOf) || iso(t0), start: Math.max(bal, num(x.start)),
-        apr: Math.max(0, Math.min(99, num(x.apr))), min: Math.max(0, num(x.min)), target: Math.max(0, num(x.target)),
+        apr: Math.max(0, Math.min(99, num(x.apr))), min: Math.max(0, num(x.min)), target: Math.max(0, num(x.target)), override: Math.max(0, num(x.override)),
         day: Math.max(0, Math.min(31, Math.round(num(x.day)))), recId: recMap[str(x.recId)] ? str(x.recId) : "", inBills: x.inBills !== false}; });
     return Object.assign(out, {
       settings: s,
@@ -1138,7 +1167,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     let box = form.nextElementSibling;
     if (!state.settings.sugg){ if (box && box.classList.contains("sugg")) box.hidden = true; return; }
     if (!box || !box.classList.contains("sugg")){ box = document.createElement("div"); box.className = "sugg"; form.after(box); }
-    const list = suggestionsFor(pc, form.elements.name.value);
+    const list = suggestionsFor(pc, form.elements.what.value);
     if (!list.length){ box.hidden = true; box.innerHTML = ""; return; }
     box.hidden = false;
     box.innerHTML = '<p class="sugg-h">Suggestions</p>' + list.map(s =>
@@ -1238,12 +1267,15 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const btn = c => '<button type="button" class="cat-btn' + (c[0] === guess ? " sug" : "") + '" data-act="pickCat" data-cat="' + c[0] + '">' +
       catIcon(c[0]) + '<span>' + c[1] + '</span></button>';
     const g = guess && CAT_MAP[guess];
+    // tap a category to save it right away, or Save to take the highlighted suggestion
     openSheet({
-      title: "What kind of expense?", noSave: true,
+      title: "What kind of expense?", saveText: "Save",
       body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + (amount ? ", " + money(amount) : "") + '</p>' +
         (g ? '<p class="grp-h">Suggested</p><div class="cat-grid one">' + btn(g) + '</div><p class="grp-h">All categories</p>' : "") +
-        '<div class="cat-grid">' + CATS.map(btn).join("") + '</div>'
+        '<div class="cat-grid">' + CATS.map(btn).join("") + '</div>',
+      onSave: () => { if (!g) return false; const fn = catPending; closeSheet(); if (fn) fn(g[0]); return false; }
     });
+    $("#sheetSave").disabled = !g;
     catPending = onPick;
   }
 
@@ -1590,27 +1622,32 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   const openDebts = () => state.debts.map(d => ({d, bal: debtNow(d)})).filter(x => x.bal > 0.004);
   // this month's payment for every debt still owed
-  function planAlloc(){
+  const ownAmt = (d, ignoreId) => d.override > 0 && d.id !== ignoreId;
+  function planAlloc(ignoreId){
     const method = state.settings.debtMethod || "", rows = openDebts(), map = {};
     const mins = rows.reduce((a, x) => a + Math.min(x.d.min, x.bal), 0);
-    if (!method){ for (const x of rows) map[x.d.id] = debtPay(x.d); return {method, map, order: [], mins, budget: 0, short: false}; }
-    const budget = Math.max(0, state.settings.debtBudget || 0), order = debtOrderList(rows, method);
-    for (const x of rows) map[x.d.id] = Math.min(x.d.min, x.bal);
-    let extra = Math.max(0, budget - mins);
+    if (!method){ for (const x of rows) map[x.d.id] = debtPay(x.d); return {method, map, order: [], mins, budget: 0, short: false, over: 0, custom: []}; }
+    const budget = Math.max(0, state.settings.debtBudget || 0);
+    const sorted = debtOrderList(rows, method), order = sorted.filter(x => !ownAmt(x.d, ignoreId)).concat(sorted.filter(x => ownAmt(x.d, ignoreId)));
+    for (const x of rows) map[x.d.id] = Math.min(ownAmt(x.d, ignoreId) ? x.d.override : x.d.min, x.bal);
+    const needed = rows.reduce((a, x) => a + map[x.d.id], 0);
+    let extra = Math.max(0, budget - needed);
     for (const x of order){
       if (extra <= 0.004) break;
       const add = Math.min(Math.max(0, x.bal - map[x.d.id]), extra);
       map[x.d.id] += add; extra -= add;
     }
     for (const k of Object.keys(map)) map[k] = Math.round(map[k] * 100) / 100;
-    return {method, map, order: order.map(x => x.d.id), mins, budget, short: budget < mins - 0.004};
+    return {method, map, order: order.map(x => x.d.id), mins, budget, short: budget < mins - 0.004,
+      over: Math.max(0, needed - budget), custom: rows.filter(x => ownAmt(x.d, ignoreId)).map(x => x.d.id)};
   }
   const debtAmt = d => { const a = planAlloc(); return a.map[d.id] != null ? a.map[d.id] : debtPay(d); };
   // month by month: interest, then minimums, then the rest down the order; a paid-off debt's payment rolls to the next
   function simulate(method, budget, custom){
     const rows = openDebts();
     if (!rows.length) return {months: 0, interest: 0, first: 0, payoff: {}};
-    const ds = debtOrderList(rows, method, custom).map(x => ({id: x.d.id, b: x.bal, r: x.d.apr / 1200, min: x.d.min}));
+    const sorted = debtOrderList(rows, method, custom), own = x => x.d.override > 0;
+    const ds = sorted.filter(x => !own(x)).concat(sorted.filter(own)).map(x => ({id: x.d.id, b: x.bal, r: x.d.apr / 1200, min: own(x) ? x.d.override : x.d.min}));
     const payoff = {};
     let month = 0, interest = 0, first = 0;
     while (ds.some(x => x.b > 0.004) && month < 600){
@@ -1699,11 +1736,15 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     openSheet({
       title: d ? "Edit debt" : "Add a debt",
       body: field("Type", '<select name="kind">' + DEBT_KINDS.map(k => '<option value="' + k[0] + '"' + ((d ? d.kind : "card") === k[0] ? " selected" : "") + '>' + k[3] + '</option>').join("") + '</select>') +
-        field("Name", '<input name="name" required autocomplete="off" placeholder="Chase card, Toyota loan…" value="' + (d ? esc(d.name) : "") + '">') +
+        field("Debt", '<input name="what" required autocomplete="off" placeholder="Chase card, Toyota loan…" value="' + (d ? esc(d.name) : "") + '">') +
         field("Balance owed today", '<input name="balance" inputmode="decimal" placeholder="$0" autocomplete="off" value="' + val(cur) + '">') +
         '<div class="field-row">' + field("Interest rate (APR %)", '<input name="apr" inputmode="decimal" placeholder="0" autocomplete="off" value="' + val(d && d.apr) + '">') +
         field("Due day", '<input name="day" type="number" inputmode="numeric" min="1" max="31" placeholder="15" value="' + val(d && d.day) + '">') + '</div>' +
         field("Minimum payment", '<input name="min" inputmode="decimal" placeholder="$0" autocomplete="off" value="' + val(d && d.min) + '">') +
+        (state.settings.debtMethod
+          ? '<div class="db-plan"><span id="dbPlanAmt"></span><label class="check-field" style="margin:8px 0 0"><input type="checkbox" name="own"' + (d && d.override > 0 ? " checked" : "") + '> Use my own amount instead</label>' +
+            '<div id="dbOwn">' + field("My monthly payment", '<input name="ovr" inputmode="decimal" autocomplete="off" value="' + val(d && d.override) + '">') + '</div><p class="hint db-out" id="dbOut"></p></div>'
+          : field("What you pay each month", '<input name="target" inputmode="decimal" placeholder="The minimum" autocomplete="off" value="' + val(d && d.target) + '">')) +
         '<p class="hint db-hint" id="dbHint"></p>' +
         '<label class="check-field"><input type="checkbox" name="inBills"' + (!d || d.inBills ? " checked" : "") + '> Add the payment to my monthly bills</label>' +
         '<p class="hint">The balance goes down as you check off payments. Interest isn\'t added on its own, so update the balance from a statement now and then.</p>',
@@ -1715,21 +1756,31 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
           lines.push(m ? "Paying only the minimum, it's paid off by <b>" + inMonths(m.months) + "</b>" + (apr ? ", with about " + money(Math.round(m.interest)) + " in interest." : ".")
             : '<span class="bad">The minimum doesn\'t cover the interest, so on its own the balance won\'t go down.</span>');
         }
-        lines.push(state.settings.debtMethod ? "Your payoff plan decides how much extra goes here." : "Choose a payoff plan on the Debt page to send extra money to your debts.");
+        if (!state.settings.debtMethod) lines.push("Choose a payoff plan on the Debt page to have extra money sent where it saves the most.");
         $("#dbHint").innerHTML = lines.join("<br>");
+        if (state.settings.debtMethod){
+          const planAmt = d ? (planAlloc(d.id).map[d.id] || 0) : min, own = f.own.checked, ovr = toNum(f.ovr.value);
+          $("#dbPlanAmt").innerHTML = "Your " + METHOD[state.settings.debtMethod][1] + " plan: <b>" + money(planAmt) + "</b> this month.";
+          $("#dbOwn").hidden = !own;
+          if (own && !f.ovr.value) f.ovr.value = planAmt ? Math.round(planAmt * 100) / 100 : "";
+          $("#dbOut").innerHTML = !own ? "" : (min > 0 && ovr > 0 && ovr < min) ? '<span class="bad">That\'s under the ' + money(min) + ' minimum.</span>'
+            : ovr > 0 && Math.abs(ovr - planAmt) > 0.004 ? '<span class="ownl">This steps outside your plan. ' + esc(f.what.value || "This debt") + ' gets ' + money(ovr) + ' a month instead of ' + money(planAmt) + ', and the rest of the plan adjusts around it.</span>' : "";
+        }
       },
       onSave: fd => {
-        const name = String(fd.get("name") || "").trim(); if (!name) return false;
+        const name = String(fd.get("what") || "").trim(); if (!name) return false;
         const kind = DEBT_KIND[fd.get("kind")] ? fd.get("kind") : "other", bal = toNum(fd.get("balance")), t = iso(today());
         let x = d;
-        if (!x){ x = {id: uid(), name, kind, balance: bal, asOf: t, start: bal, apr: 0, min: 0, target: 0, day: 0, recId: "", inBills: true}; state.debts.push(x); }
+        if (!x){ x = {id: uid(), name, kind, balance: bal, asOf: t, start: bal, apr: 0, min: 0, target: 0, override: 0, day: 0, recId: "", inBills: true}; state.debts.push(x); }
         else if (Math.abs(bal - debtNow(x)) > 0.004){ x.balance = bal; x.asOf = t; x.start = Math.max(x.start, bal); }
         x.name = name; x.kind = kind;
         x.apr = Math.max(0, Math.min(99, toNum(fd.get("apr"))));
         x.min = Math.max(0, toNum(fd.get("min")));
         x.day = Math.max(0, Math.min(31, Math.round(toNum(fd.get("day")))));
         x.inBills = !!fd.get("inBills");
-        syncDebtBill(x);
+        if (state.settings.debtMethod) x.override = fd.get("own") ? Math.max(0, toNum(fd.get("ovr"))) : 0;
+        else x.target = Math.max(0, toNum(fd.get("target")));
+        syncAllDebts(); if (!x.inBills || debtNow(x) <= 0.004) syncDebtBill(x);
         setStatus(d ? "Saved " + name : "Added " + name + (x.inBills ? " to your bills" : ""));
       },
       onDelete: d ? () => { unlinkDebtBill(d); state.debts = state.debts.filter(z => z !== d); } : null
@@ -1740,11 +1791,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function debtCard(x, plan){
     const d = x.d, po = x.po, k = DEBT_KIND[d.kind], paidOff = Math.max(0, d.start - x.bal);
     const sub = (d.apr ? d.apr + "%" : "No interest") + (d.day ? " · due the " + ordinal(d.day) : "") + (d.recId ? "" : " · not in your bills");
-    let left = x.bal <= 0.004 ? "Nothing left to pay" : money(x.pay) + (plan ? " this month" : " a month");
-    if (x.bal > 0.004 && d.min > 0 && x.pay > d.min + 0.004) left += " (min " + money(d.min) + ")";
+    let left = x.bal <= 0.004 ? "Nothing left to pay" : money(x.pay) + (plan ? (d.override > 0 ? " a month, your amount" : " this month") : " a month");
+    if (x.bal > 0.004 && d.min > 0 && x.pay > d.min + 0.004 && !(plan && d.override > 0)) left += " (min " + money(d.min) + ")";
     const right = x.bal <= 0.004 ? '<span class="good">Paid off</span>' : !po ? '<span class="bad">Not at this payment</span>' : "Paid off by " + inMonths(po.months);
     return '<button type="button" class="debt' + (x.focus ? " is-focus" : "") + '" data-act="editDebt" data-id="' + d.id + '"><span class="debt-top">' + catIcon(k[2]) +
-      '<span class="debt-nm">' + esc(d.name) + (x.focus ? '<span class="pill focus">Focus</span>' : x.rank ? '<span class="pill">' + ordinal(x.rank) + '</span>' : "") +
+      '<span class="debt-nm">' + esc(d.name) + (plan && d.override > 0 && x.bal > 0.004 ? '<span class="pill own">Custom</span>' : x.focus ? '<span class="pill focus">Focus</span>' : x.rank ? '<span class="pill">' + ordinal(x.rank) + '</span>' : "") +
       '<small>' + sub + '</small></span><span class="debt-bal num">' + money(x.bal) + '</span></span>' +
       (d.start > 0.004 ? '<span class="debt-bar" aria-hidden="true">' + (paidOff > 0.004 ? '<span class="p" style="flex:' + paidOff.toFixed(2) + ' 1 0"></span>' : "") +
         (x.bal > 0.004 ? '<span class="n" style="flex:' + x.bal.toFixed(2) + ' 1 0"></span>' : "") + '</span>' : "") +
@@ -1758,11 +1809,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<button type="button" class="eh-btn" data-act="newDebt">Add a debt</button></section>';
     }
     const a = planAlloc(), plan = !!a.method, sim = plan ? simulate(a.method, Math.max(a.budget, a.mins)) : null;
-    const rank = {}; a.order.forEach((id, i) => { rank[id] = i + 1; });
+    const rank = {}; a.order.filter(id => !a.custom.includes(id)).forEach((id, i) => { rank[id] = i + 1; });
     const rows = state.debts.map(d => {
       const bal = debtNow(d), pay = a.map[d.id] != null ? a.map[d.id] : 0;
       const po = bal <= 0.004 ? {months: 0} : plan ? (sim && sim.payoff[d.id] ? {months: sim.payoff[d.id]} : null) : payoffInfo(bal, d.apr, debtPay(d));
-      return {d, bal, pay: plan ? pay : debtPay(d), po, rank: rank[d.id] || 0, focus: plan && rank[d.id] === 1 && a.budget > a.mins + 0.004};
+      return {d, bal, pay: plan ? pay : debtPay(d), po, rank: rank[d.id] || 0, focus: plan && rank[d.id] === 1 && pay > Math.min(d.min, bal) + 0.004};
     });
     const open = rows.filter(x => x.bal > 0.004), stuck = open.filter(x => !x.po);
     const owed = open.reduce((s, x) => s + x.bal, 0), monthly = open.reduce((s, x) => s + x.pay, 0), intr = open.reduce((s, x) => s + x.bal * x.d.apr / 1200, 0);
@@ -1788,7 +1839,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<p class="pl-line"><b>' + money(a.budget) + '</b> a month: ' + money(a.mins) + ' in minimums' + (a.budget > a.mins + 0.004 ? ' + ' + money(a.budget - a.mins) + ' extra' : '') + '.</p>' +
         (a.short ? '<p class="pl-line bad">That\'s under the minimums, so only minimums get paid. Raise it to at least ' + money(Math.ceil(a.mins)) + '.</p>'
           : focus ? '<p class="pl-line">Extra goes to <b>' + esc(focus.d.name) + '</b> this month. When it\'s paid off, its payment rolls to the next one.</p>'
+          : a.custom.length ? '<p class="pl-line">Your own amounts use up the extra right now, so nothing more goes down the plan.</p>'
           : '<p class="pl-line">Add something on top of the minimums and it goes to one debt at a time.</p>') +
+        (a.custom.length ? '<p class="pl-line ownl">Outside the plan: ' + a.custom.map(id => '<b>' + esc(debtById(id).name) + '</b>').join(", ") + (a.custom.length === 1 ? " is" : " are") + ' on your own amount. Open a debt to put it back on the plan.</p>' : "") +
+        (a.over > 0.004 ? '<p class="pl-line ownl">Your payments add up to ' + money(a.budget + a.over) + ', which is ' + money(a.over) + ' more than the plan\'s ' + money(a.budget) + ' a month.</p>' : "") +
         (plan && !sim ? '<p class="pl-line bad">At this amount the interest outgrows the payments, so the debt won\'t go away. Raise the monthly amount.</p>' : "") + '</section>';
     }
     if (!plan && stuck.length) h += '<div class="debt-tip">' + stuck.map(x => '<span class="warn">' + esc(x.d.name) + "'s payment doesn't cover its interest, so the balance won't go down. Raise it to at least " + money(Math.ceil(x.bal * x.d.apr / 1200) + 1) + ".</span>").join("<br><br>") + '</div>';
@@ -1822,12 +1876,16 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
 
   const TICK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4 4 9-9.5"/></svg>';
   const PLUS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
-  function itemRow(i, pc){
-    const showDue = i.due && i.due !== pc.date;
+  const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
+  // mv = the check to move leftovers to, when this check's week is over
+  function itemRow(i, pc, mv){
+    const showDue = i.due && i.due !== pc.date, move = mv && !i.paid;
     return '<li class="row' + (i.paid ? " is-paid" : "") + '">' +
       '<button class="row-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
         '<span class="row-name">' + esc(i.name) + (showDue ? '<span class="row-sub">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
-        '<span class="row-amt num">' + money(i.amount) + '</span></button>' +
+        (move ? "" : '<span class="row-amt num">' + money(i.amount) + '</span>') + '</button>' +
+      (move ? '<button class="addchk mvchk" data-act="moveLeft" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-label="Move ' + esc(i.name) + ' to the ' + dayLabel(mv.date) + ' check">Move' + ARROW + '</button>' +
+        '<button class="amt-btn row-amt num" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + money(i.amount) + '</button>' : "") +
       '<button class="tick" data-act="toggle" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-pressed="' + i.paid + '" aria-label="' + (i.paid ? "Unmark " : "Mark ") + esc(i.name) + ' as paid">' + TICK + '</button></li>';
   }
 
@@ -1997,10 +2055,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   function assignOtherSheet(p, amt){
     openSheet({
-      title: "What was it?", saveText: "Next", focus: "name",
-      body: '<p class="hint" style="margin:-8px 0 12px">' + money(amt) + ' from the ' + dayLabel(p.date) + ' check</p>' + field("Name", '<input name="name" autocomplete="off" required>'),
+      title: "What was it?", saveText: "Next", focus: "what",
+      body: '<p class="hint" style="margin:-8px 0 12px">' + money(amt) + ' from the ' + dayLabel(p.date) + ' check</p>' + field("Item", '<input name="what" autocomplete="off" required>'),
       onSave: fd => {
-        const name = String(fd.get("name") || "").trim(); if (!name) return false;
+        const name = String(fd.get("what") || "").trim(); if (!name) return false;
         askCategory(name, amt, catGuess(name), cat => {
           p.items.push({id: uid(), name, amount: amt, paid: true, due: "", cat});
           commit(); setStatus("Assigned " + money(amt));
@@ -2050,13 +2108,58 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       return '<div class="pc-empty"><strong>' + dayLabel(nextPaydayAfterLast()) + ' isn\'t planned yet</strong>' +
         '<span>Add it to see what this check covers. Bills set to go on paychecks automatically fill in on their own.</span></div>';
     }
-    const toPay = pc.items.filter(i => !i.paid), paid = pc.items.filter(i => i.paid);
-    let h = '<div class="grp-head"><span>To pay</span><span class="num">' + money(sum(toPay)) + '</span></div>';
-    h += toPay.length ? '<ul class="rows">' + toPay.map(i => itemRow(i, pc)).join("") + '</ul>'
+    const toPay = pc.items.filter(i => !i.paid), paid = pc.items.filter(i => i.paid), mv = moveTarget(pc);
+    let h = '<div class="grp-head"><span class="gh-l">To pay' + (mv && toPay.length > 1 ? '<button type="button" class="gh-move" data-act="moveAll" data-pc="' + pc.id + '">Move all' + ARROW + '</button>' : "") + '</span>' +
+      '<span class="num">' + money(sum(toPay)) + '</span></div>';
+    h += toPay.length ? '<ul class="rows">' + toPay.map(i => itemRow(i, pc, mv)).join("") + '</ul>'
       : '<p class="rows-empty">' + (pc.items.length ? "Everything on this check is paid." : "Nothing on this check yet.") + '</p>';
     h += '<button class="newitem" data-act="newItem" data-pc="' + pc.id + '">' + PLUS + 'New item</button>';
     if (paid.length) h += '<div class="grp-head"><span>Paid</span><span class="num">' + money(sum(paid)) + '</span></div><ul class="rows">' + paid.map(i => itemRow(i, pc)).join("") + '</ul>';
     return h;
+  }
+  // ---------- a new week started: what's still unpaid on an older check can move to the current one ----------
+  function moveTarget(pc){ const c = currentPc(); return c && pc && pc.date < c.date ? c : null; }
+  // the same bill already waiting on the check it would move to: the next due date of a repeating bill,
+  // or something with the same name (Groceries added by hand each week)
+  function twinOn(it, to){
+    const r = it.recId && recById(it.recId); if (r && r.debtId) return null;
+    const nm = it.name.trim().toLowerCase();
+    return to.items.find(i => i !== it && (r ? i.recId === it.recId && i.recFor !== it.recFor : !(i.recId && (recById(i.recId) || {}).debtId) && i.name.trim().toLowerCase() === nm)) || null;
+  }
+  let mvPending = null;
+  function moveLeftover(from, list){
+    const to = moveTarget(from); list = list.filter(i => !i.paid);
+    if (!to || !list.length) return;
+    const twins = list.filter(it => twinOn(it, to));
+    const go = mode => {
+      const fromItems = from.items.slice(), toItems = to.items.slice(), pts = [];
+      let moved = 0, dropped = 0;
+      for (const it of list){
+        from.items = from.items.filter(i => i !== it);
+        if (mode === "replace" && twinOn(it, to)){
+          // this week's covers it: the older due date counts as settled so it doesn't show up as overdue
+          const r = recById(it.recId);
+          if (r && it.recFor && openOcc(r) === it.recFor){ pts.push({r, pt: r.paidThrough}); r.paidThrough = it.recFor; }
+          skipOcc(it); dropped++;
+        } else { to.items.push(it); moved++; }
+      }
+      if (!from.items.some(i => !i.paid)) selPc = to.id;
+      commit();
+      const msg = moved && dropped ? "Moved " + moved + ", replaced " + dropped : dropped ? (dropped === 1 ? "Replaced with this week's" : "Replaced " + dropped) : moved === 1 ? "Moved to " + dayLabel(to.date) : "Moved " + moved + " to " + dayLabel(to.date);
+      toast(msg, () => { from.items = fromItems; to.items = toItems; for (const x of pts) x.r.paidThrough = x.pt; selPc = from.id; });
+    };
+    if (!twins.length){ go("keep"); return; }
+    mvPending = go;
+    const wk = weeklyPay() ? "this week" : "on the current check", one = twins.length === 1, tw = one ? twinOn(twins[0], to) : null;
+    const opt = (mode, title, sub) => '<button type="button" data-act="mvPick" data-mode="' + mode + '"><span><span class="s-name">' + title + '</span><span class="s-sub">' + sub + '</span></span><span class="pick-r">' + ARROW + '</span></button>';
+    openSheet({
+      title: one ? twins[0].name + " is already there" : twins.length + " are already there", noSave: true,
+      body: '<p class="hint" style="margin:-8px 0 14px">' + (weeklyPay() ? "This week" : "The current check") + ' already has ' +
+        (one ? esc(tw.name) + ' (' + money(tw.amount) + ')' : twins.map(t => esc(t.name)).join(", ")) + '.' +
+        (list.length > twins.length ? " Everything else moves over either way." : "") + '</p><div class="sugg pick">' +
+        opt("replace", "Replace", "Keep only " + (weeklyPay() ? "this week's" : "the current check's") + (one ? " " + esc(twins[0].name) : ", drop the old ones")) +
+        opt("keep", "Keep both", one ? "Pay both " + wk + ", " + money(tw.amount + twins[0].amount) + " total" : "Pay the old ones and the new ones") + '</div>'
+    });
   }
   function renderPay(){
     let h = '<h1 class="page-h">Paychecks</h1>';
@@ -2103,13 +2206,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function newItemSheet(pcId){
     const pc = findPc(pcId); if (!pc) return;
     openSheet({
-      title: "New item", saveText: "Next", focus: "name",
-      body: field("Name", '<input name="name" autocomplete="off" required>') +
+      title: "New item", saveText: "Next", focus: "what",
+      body: field("Item", '<input name="what" autocomplete="off" required>') +
         field("Amount", '<input name="amount" inputmode="decimal" placeholder="$0" autocomplete="off">') +
         '<div id="sheetSugg"></div>',
       onInput: () => renderSheetSugg(pc),
       onSave: fd => {
-        const name = String(fd.get("name") || "").trim(); if (!name) return false;
+        const name = String(fd.get("what") || "").trim(); if (!name) return false;
         if (name.toLowerCase() === "extra"){ setStatus("Extra is calculated for you"); return false; }
         const amt = toNum(fd.get("amount"));
         askCategory(name, amt, catGuess(name), cat => {
@@ -2124,7 +2227,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function renderSheetSugg(pc){
     const box = $("#sheetSugg"); if (!box) return;
     if (!state.settings.sugg){ box.innerHTML = ""; return; }
-    const list = suggestionsFor(pc, $("#sheetForm").elements.name.value);
+    const list = suggestionsFor(pc, $("#sheetForm").elements.what.value);
     box.innerHTML = !list.length ? "" : '<div class="sugg"><p class="sugg-h">Suggestions</p>' + list.map(s =>
       '<button type="button" data-act="sugg" data-pc="' + pc.id + '" data-kind="' + s.kind + '" data-id="' + esc(s.id) + '" data-amt="' + s.amount + '" data-cat="' + (s.cat || "") + '">' +
       '<span><span class="s-name">' + esc(s.name) + '</span><span class="s-sub">' + esc(s.sub) + '</span></span><span class="num">' + money(s.amount) + '</span></button>').join("") + '</div>';
@@ -2201,13 +2304,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function addRecForm(f, g){
     const t = iso(today()), next = g.upcoming.find(p => p.date >= t);
     if (f === "monthly") return '<form class="add" data-form="addRec" data-freq="monthly">' +
-      '<input name="name" placeholder="New bill" aria-label="Bill name" autocomplete="off" required>' +
+      '<input name="what" placeholder="New bill" aria-label="Bill" autocomplete="off" required>' +
       '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
       '<input name="day" inputmode="numeric" placeholder="Day" aria-label="Due day of the month" autocomplete="off">' +
       '<button type="submit">Add</button></form>';
     const dflt = f === "yearly" ? "" : (next ? next.date : t);
     return '<form class="add add-wrap" data-form="addRec" data-freq="' + f + '">' +
-      '<input name="name" placeholder="New ' + (f === "weekly" ? "weekly expense" : "bill") + '" aria-label="Name" autocomplete="off" required style="flex-basis:100%">' +
+      '<input name="what" placeholder="New ' + (f === "weekly" ? "weekly expense" : "bill") + '" aria-label="Bill" autocomplete="off" required style="flex-basis:100%">' +
       '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
       '<input name="due" type="date" aria-label="Next due date" value="' + dflt + '"' + (f === "yearly" ? " required" : "") + '>' +
       '<button type="submit">Add</button></form>';
@@ -2332,7 +2435,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         addChkBtn("pay", i.id, i.name) + '<button class="amt-btn num" data-act="editPay" data-id="' + i.id + '">' + money(i.amount) + '</button></div></div>';
     }).join("");
     h += '<div class="addcard"><form class="add add-wrap" data-form="addPay">' +
-      '<input name="name" placeholder="Something to pay" aria-label="Payment name" autocomplete="off" required style="flex-basis:100%">' +
+      '<input name="what" placeholder="Something to pay" aria-label="Payment" autocomplete="off" required style="flex-basis:100%">' +
       '<input name="amount" inputmode="decimal" placeholder="$0" aria-label="Amount" autocomplete="off" required>' +
       '<input name="due" type="date" aria-label="Due date">' +
       '<button type="submit">Add</button></form></div>';
@@ -2354,7 +2457,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<span class="amt-col"><span class="num">' + (w.cost ? money(w.cost) : "no price") + '</span>' +
         (pw ? '<span class="pw num">' + money(pw) + (weeklyPay() ? '/wk' : '/check') + '</span>' : "") + '</span></button></div>';
     }).join("");
-    h += '<div class="addcard"><form class="add" data-form="addWish"><input name="name" placeholder="Something to buy" aria-label="Item" autocomplete="off" required>' +
+    h += '<div class="addcard"><form class="add" data-form="addWish"><input name="what" placeholder="Something to buy" aria-label="Item" autocomplete="off" required>' +
       '<input name="cost" inputmode="decimal" placeholder="$0" aria-label="Price" autocomplete="off"><button type="submit">Add</button></form></div>';
     return h;
   }
@@ -2371,7 +2474,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     $("#sheetBody").innerHTML = cfg.body;
     const del = $("#sheetDelete");
     del.hidden = !cfg.onDelete; del.textContent = "Delete";
-    $("#sheetSave").hidden = !!cfg.noSave; $("#sheetSave").textContent = cfg.saveText || "Save";
+    $("#sheetSave").hidden = !!cfg.noSave; $("#sheetSave").textContent = cfg.saveText || "Save"; $("#sheetSave").disabled = false;
     $("#sheetCancel").textContent = cfg.cancelText || (cfg.back ? "Back" : "Cancel");
     if (!sheet.open){ if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", ""); }
     sheet.scrollTop = 0;
@@ -2380,8 +2483,19 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (a && a !== title && a.matches && a.matches("input,select,textarea")) a.blur();
     const want = cfg.focus && $("#sheetForm").elements[cfg.focus];
     if (want) want.focus(); else title.focus({preventScroll: true});
+    fitSheet();
   }
-  function closeSheet(){ sheetCfg = null; catPending = null; if (sheet.open) sheet.close(); }
+  function closeSheet(){ sheetCfg = null; catPending = null; mvPending = null; if (sheet.open) sheet.close(); fitSheet(); }
+  // iPhone: the keyboard covers the page instead of shrinking it, so a sheet that gets shorter while you type
+  // (fewer suggestions) would slide down behind it. Sit the sheet right on top of the keyboard instead.
+  const vv = window.visualViewport;
+  function fitSheet(){
+    const kb = vv && sheet.open ? Math.round(document.documentElement.clientHeight - vv.height - vv.offsetTop) : 0, on = kb > 80;
+    sheet.classList.toggle("kb", on);
+    sheet.style.marginBottom = on ? kb + "px" : "";
+    sheet.style.maxHeight = on ? Math.max(180, Math.floor(vv.height) - 8) + "px" : "";
+  }
+  if (vv){ vv.addEventListener("resize", fitSheet); vv.addEventListener("scroll", fitSheet); }
   let toastTimer = null, undoFn = null;
   function toast(msg, undo){
     $("#toastMsg").textContent = msg; undoFn = undo; $("#toast").hidden = false;
@@ -2412,26 +2526,43 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     commit();
   });
 
-  function moveOptions(currentPcId){
-    const g = groups();
-    const list = [...g.upcoming];
-    const cur = findPc(currentPcId);
-    if (cur && !list.includes(cur)) list.unshift(cur);
-    return list.map(p => '<option value="' + p.id + '"' + (p.id === currentPcId ? " selected" : "") + '>' + dayLabel(p.date) + ' check</option>').join("") +
-      '<option value="__none"' + (!currentPcId ? " selected" : "") + '>Take it off the paycheck</option>';
+  // "Paid from": every check still in play, each showing what it would have left with this item on it
+  function paidFromHtml(pc){
+    const list = [...groups().upcoming]; if (!list.includes(pc)) list.push(pc);
+    list.sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+    const c = currentPc();
+    const row = (val, label, right, on, cls) => '<label class="pf-row' + (cls || "") + '"><input type="radio" name="move" value="' + val + '"' + (on ? " checked" : "") + '>' +
+      '<span class="pf-d">' + label + '</span>' + right + '<span class="pf-tick">' + TICK + '</span></label>';
+    return '<div class="pf"><p class="pf-h" id="pfH">Paid from</p><div class="pf-list" role="radiogroup" aria-labelledby="pfH">' +
+      list.map(p => row(p.id, dayLabel(p.date) + (c && p.id === c.id ? '<small>' + NOW_WORD() + '</small>' : ""), '<span class="pf-r" data-pf="' + p.id + '"></span>', p.id === pc.id)).join("") +
+      row("__none", "Take it off the paycheck", "", false, " pf-off") + '</div></div>';
+  }
+  function paidFromAmounts(pc, it, v){
+    for (const el of document.querySelectorAll("#sheetBody [data-pf]")){
+      const p = findPc(el.dataset.pf); if (!p) continue;
+      const after = pcAmount(p) - sum(p.items) + (p === pc ? it.amount : 0) - v;
+      el.className = "pf-r" + (after < -0.004 ? " bad" : "");
+      el.textContent = after < -0.004 ? "Goes " + money(-after) + " over" : "Leaves " + money(after) + " extra";
+    }
   }
 
   function editItem(pcId, id){
     const pc = findPc(pcId); if (!pc) return;
     const it = pc.items.find(i => i.id === id); if (!it) return;
+    const ir = it.recId && recById(it.recId), idebt = ir && ir.debtId && state.settings.debtMethod ? debtById(ir.debtId) : null;
     openSheet({
       title: "Edit item",
-      body: field("Name", '<input name="name" required value="' + esc(it.name) + '">') +
-            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + catField(it.cat) +
+      onInput: () => {
+        const v = toNum($("#sheetForm").elements.amount.value);
+        paidFromAmounts(pc, it, v);
+        if (idebt) $("#itPlan").innerHTML = Math.abs(v - ir.amount) > 0.004 ? '<span class="ownl">Your plan has ' + money(ir.amount) + ' for this payment. Paying ' + money(v) + ' is fine; only this payment changes, and the plan adjusts to what you actually pay.</span>' : "Part of your payoff plan.";
+      },
+      body: field("Item", '<input name="what" required autocomplete="off" value="' + esc(it.name) + '">') +
+            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + (idebt ? '<p class="hint" id="itPlan" style="margin-top:-4px"></p>' : "") + catField(it.cat) +
             field("Due date (optional)", '<input name="due" type="date" value="' + esc(it.due) + '">') +
-            field("Paid from", '<select name="move">' + moveOptions(pcId) + '</select>'),
+            paidFromHtml(pc),
       onSave: fd => {
-        it.name = String(fd.get("name") || "").trim() || it.name;
+        it.name = String(fd.get("what") || "").trim() || it.name;
         it.amount = toNum(fd.get("amount"));
         it.cat = catFrom(fd, it.cat);
         it.due = String(fd.get("due") || "");
@@ -2444,6 +2575,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       },
       onDelete: () => { skipOcc(it); pc.items = pc.items.filter(i => i.id !== id); }
     });
+    sheetCfg.onInput();
   }
   function editRec(id){
     const r = recById(id); if (!r) return;
@@ -2451,7 +2583,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const opt = (v, l, cur) => '<option value="' + v + '"' + (v === cur ? " selected" : "") + '>' + l + '</option>';
     openSheet({
       title: "Edit recurring bill",
-      body: (r.debtId && debtById(r.debtId) ? '<p class="hint" style="margin:-8px 0 12px">' + (state.settings.debtMethod ? "This is the monthly payment for a debt on the Debt page. Its amount comes from your payoff plan; change the plan there." : "This is the monthly payment for a debt on the Debt page. Changing the amount here changes the payment there.") + '</p>' : "") + field("Name", '<input name="name" required value="' + esc(r.name) + '">') +
+      body: (r.debtId && debtById(r.debtId) ? '<p class="hint" style="margin:-8px 0 12px">' + (state.settings.debtMethod ? "This is the monthly payment for a debt in your payoff plan. You can change it; it then stays at your amount instead of following the plan." : "This is the monthly payment for a debt on the Debt page. Changing the amount here changes the payment there.") + '</p>' : "") + field("Bill", '<input name="what" required autocomplete="off" value="' + esc(r.name) + '">') +
             field("Amount", '<input name="amount" inputmode="decimal" value="' + r.amount + '">') + catField(r.cat) +
             field("How often", '<select name="freq">' + FREQS.map(f => opt(f, FREQ_TEXT[f], r.freq)).join("") + '</select>') +
             '<div id="rfDay">' + field("Due day of the month (blank if it changes)", '<input name="day" type="number" inputmode="numeric" min="1" max="31" value="' + (r.day || "") + '">') + '</div>' +
@@ -2459,9 +2591,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
             '<label class="check-field"><input type="checkbox" name="auto"' + (r.auto ? " checked" : "") + '> Add it to paychecks automatically</label>' +
             '<div id="rfWeek">' + field("Which paycheck", '<select name="autoWeek">' + opt("", "The last one before it's due", r.autoWeek) +
               whichOpts(r.autoWeek).map(o => opt(o[0], o[1], r.autoWeek)).join("") + '</select>') + '</div>' +
-            '<p class="hint" id="rfHint"></p>',
+            '<p class="hint" id="rfHint"></p><p class="hint" id="rfPlan"></p>',
       onInput: () => {
         const f = $("#sheetForm").elements, fr = f.freq.value, au = f.auto.checked;
+        const dd = r.debtId && debtById(r.debtId);
+        if (dd && state.settings.debtMethod){
+          const planAmt = planAlloc(dd.id).map[dd.id] || 0, v = toNum(f.amount.value);
+          $("#rfPlan").innerHTML = Math.abs(v - planAmt) > 0.004 ? '<span class="ownl">Your plan says ' + money(planAmt) + '. Saving ' + money(v) + ' steps outside the plan; the rest of it adjusts around this.</span>' : "This matches your plan.";
+        }
         $("#rfDay").hidden = fr !== "monthly"; $("#rfDate").hidden = fr === "monthly";
         $("#rfWeek").hidden = !(au && fr === "monthly");
         if (fr !== "monthly" && !f.due.value) f.due.value = r.freq === "monthly" ? o : iso(today());
@@ -2475,7 +2612,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         const before = {freq: r.freq, day: r.day, anchor: r.anchor, amount: r.amount, name: r.name, cat: r.cat};
         r.cat = catFrom(fd, r.cat);
         if (r.cat !== before.cat) for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id && (!it.cat || it.cat === before.cat)) it.cat = r.cat;
-        r.name = String(fd.get("name") || "").trim() || r.name;
+        r.name = String(fd.get("what") || "").trim() || r.name;
         r.amount = toNum(fd.get("amount"));
         r.freq = FREQS.includes(fd.get("freq")) ? fd.get("freq") : r.freq;
         if (r.freq === "monthly") r.day = Math.max(0, Math.min(31, Math.round(toNum(fd.get("day")))));
@@ -2489,7 +2626,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
           if (it.name === before.name) it.name = r.name;
         }
         const dd = r.debtId && debtById(r.debtId);
-        if (dd){ dd.name = r.name; dd.target = r.amount === dd.min ? 0 : r.amount; if (r.freq === "monthly") dd.day = r.day; }
+        if (dd){
+          dd.name = r.name; if (r.freq === "monthly") dd.day = r.day;
+          if (state.settings.debtMethod){ const planAmt = planAlloc(dd.id).map[dd.id] || 0; dd.override = Math.abs(r.amount - planAmt) > 0.004 ? r.amount : 0; }
+          else dd.target = r.amount === dd.min ? 0 : r.amount;
+        }
         autoFill();
       },
       onDelete: () => {
@@ -2521,10 +2662,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const it = state.payments.find(i => i.id === id); if (!it) return;
     openSheet({
       title: "Edit payment",
-      body: field("Name", '<input name="name" required value="' + esc(it.name) + '">') +
+      body: field("Item", '<input name="what" required autocomplete="off" value="' + esc(it.name) + '">') +
             field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + catField(it.cat) +
             field("Due date", '<input name="due" type="date" value="' + esc(it.due) + '">'),
-      onSave: fd => { it.name = String(fd.get("name") || "").trim() || it.name; it.amount = toNum(fd.get("amount")); it.cat = catFrom(fd, it.cat); it.due = String(fd.get("due") || ""); },
+      onSave: fd => { it.name = String(fd.get("what") || "").trim() || it.name; it.amount = toNum(fd.get("amount")); it.cat = catFrom(fd, it.cat); it.due = String(fd.get("due") || ""); },
       onDelete: () => { state.payments = state.payments.filter(i => i.id !== id); }
     });
   }
@@ -2834,14 +2975,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const w = state.wishlist.find(x => x.id === id); if (!w) return;
     openSheet({
       title: "Edit item",
-      body: field("Name", '<input name="name" required value="' + esc(w.name) + '">') +
+      body: field("Item", '<input name="what" required autocomplete="off" value="' + esc(w.name) + '">') +
             field("Price", '<input name="cost" inputmode="decimal" value="' + (w.cost || "") + '">') + catField(w.cat) +
             field("Buy by (optional, sets a weekly amount)", '<input name="target" type="month" value="' + esc(w.target) + '">') +
             field("Already saved", '<input name="saved" inputmode="decimal" value="' + (w.saved || "") + '">') +
             (groups().upcoming.length ? field("Buying it now?", '<select name="move"><option value="">Not yet, keep it on the list</option>' +
               groups().upcoming.map(p => '<option value="' + p.id + '">Put it on the ' + dayLabel(p.date) + ' check</option>').join("") + '</select>') : ""),
       onSave: fd => {
-        w.name = String(fd.get("name") || "").trim() || w.name;
+        w.name = String(fd.get("what") || "").trim() || w.name;
         w.cost = toNum(fd.get("cost")); w.saved = toNum(fd.get("saved")); w.cat = catFrom(fd, w.cat);
         w.target = String(fd.get("target") || "");
         w.kind = w.target ? "big" : "small";
@@ -3008,6 +3149,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       finGo(k + 1, true);
       const rail = $("#pcRail"); if (rail){ const top = rail.getBoundingClientRect().top; if (top < 70) window.scrollBy({top: top - 80, behavior: "smooth"}); }
     }
+    else if (act === "moveLeft"){ const from = findPc(pcId), it = from && from.items.find(i => i.id === id); if (it) moveLeftover(from, [it]); }
+    else if (act === "moveAll"){ const from = findPc(pcId); if (from) moveLeftover(from, from.items); }
+    else if (act === "mvPick"){ const fn = mvPending; mvPending = null; closeSheet(); if (fn) fn(b.dataset.mode); }
     else if (act === "addTo") addToCheckSheet(b.dataset.kind, id);
     else if (act === "addPick"){
       const to = findPc(pcId); if (!to) return;
@@ -3050,7 +3194,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   });
   // remember which categories are open on the analysis page across redraws
   document.addEventListener("toggle", e => { const d = e.target; if (d && d.classList && d.classList.contains("cat-row")){ if (d.open) anaOpen.add(d.dataset.cat); else anaOpen.delete(d.dataset.cat); } }, true);
-  const isAddName = el => el && el.matches && el.matches('form[data-form="addItem"] input[name="name"]');
+  const isAddName = el => el && el.matches && el.matches('form[data-form="addItem"] input[name="what"]');
   document.addEventListener("focusin", e => { if (isAddName(e.target)) renderSugg(e.target.form); });
   document.addEventListener("input", e => { if (isAddName(e.target)) renderSugg(e.target.form); });
   document.addEventListener("focusout", e => {
@@ -3063,7 +3207,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const f = e.target.closest("form[data-form]"); if (!f) return;
     e.preventDefault();
     const fd = new FormData(f);
-    const name = String(fd.get("name") || "").trim(); if (!name) return;
+    const name = String(fd.get("what") || "").trim(); if (!name) return;
     const kind = f.dataset.form;
     if (kind === "addItem" && name.toLowerCase() === "extra"){ f.reset(); setStatus("Extra is calculated for you"); return; }
     let add = null, amt = 0;
@@ -3080,7 +3224,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     else if (kind === "addWish"){ amt = toNum(fd.get("cost")); add = cat => state.wishlist.push({id: uid(), name, cost: amt, kind: "small", target: "", saved: 0, done: false, cat}); }
     if (!add) return;
-    const sel = 'form[data-form="' + kind + '"]' + (f.dataset.id ? '[data-id="' + f.dataset.id + '"]' : "") + (f.dataset.freq ? '[data-freq="' + f.dataset.freq + '"]' : "") + ' input[name="name"]';
+    const sel = 'form[data-form="' + kind + '"]' + (f.dataset.id ? '[data-id="' + f.dataset.id + '"]' : "") + (f.dataset.freq ? '[data-freq="' + f.dataset.freq + '"]' : "") + ' input[name="what"]';
     askCategory(name, amt, catGuess(name), cat => {
       add(cat); commit();
       const again = document.querySelector(sel);
