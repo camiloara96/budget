@@ -379,6 +379,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .gh-move{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 7px 0 9px;border:1px solid #545458;border-radius:12px;background:transparent;color:var(--ink);font-size:12.5px;font-weight:700}
 .gh-move svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;fill:none}
 .gh-move:active{background:var(--soft)}
+.pc-carry{display:inline-block;margin:2px 0 0;padding:3px 10px;line-height:18px;border:0;border-radius:12px;background:#2C2C2E;color:#AEAEB2;font-size:12.5px;font-weight:600;text-align:left}
+.pc-carry b{font-weight:700}
+.pc-carry b.in{color:#5BE39A}
+.pc-carry b.out{color:#F5F5F7}
+.row.is-carry .row-name,.row.is-carry .row-amt{color:var(--muted)}
+.row.is-carry .tick::before{display:none}
+.pc-carry:active{opacity:.75}
+.row.is-carry .tick{pointer-events:none}
 .xrow{display:flex;align-items:center;gap:6px;padding:12px 36px 0 0}
 .xcard .xrow .item-main{width:auto;flex:1;padding:0}
 .xrow .amt-btn{padding:0 0 0 6px}
@@ -777,6 +785,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const budgetAmt = c => state.settings.budgetFrom === "net" ? c.net : c.main;
   // checks from today on follow the current pay settings; past checks keep the amount they had
   const pcAmount = p => p.hours && (p.date >= iso(today()) || !p.amount) ? budgetAmt(payCalc(p.hours, state.settings)) : p.amount;
+  // money carried in from earlier checks; it isn't income, so Analysis keeps using pcAmount
+  const carryIn = p => (p.carry || []).reduce((a, c) => a + c.amount, 0);
+  const carryOut = p => p.items.reduce((a, i) => a + (i.carryTo ? i.amount : 0), 0);
+  const pcFunds = p => pcAmount(p) + carryIn(p) - carryOut(p);
+  const realItems = p => p.items.filter(i => !i.carryTo);
   function refreshAmounts(){ const t = iso(today()); for (const p of state.paychecks) if (p.hours && p.date >= t) p.amount = budgetAmt(payCalc(p.hours, state.settings)); }
   const fmtH = n => String(Math.round(n * 100) / 100);
   function hoursLabel(h){
@@ -821,7 +834,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const isoOr = v => (typeof v === "string" && isoRe.test(v)) ? v : "";
     const cat = v => CAT_MAP[v] ? v : "";
     const item = it => { const o = {id: str(it && it.id) || uid(), name: str(it && it.name), amount: num(it && it.amount), paid: !!(it && it.paid), due: str(it && it.due), cat: cat(it && it.cat)};
-      if (it && it.recId){ o.recId = str(it.recId); o.recFor = str(it.recFor); } return o; };
+      if (it && it.recId){ o.recId = str(it.recId); o.recFor = str(it.recFor); const al = arr(it.also).filter(x => typeof x === "string" && isoRe.test(x)).slice(0, 12); if (al.length) o.also = al; }
+      if (it && it.carryTo){ o.carryTo = str(it.carryTo); o.cid = str(it.cid); o.why = str(it.why); o.paid = true; }
+      if (it && it.debtX){ o.debtX = str(it.debtX); o.on = isoOr(it.on); }
+      return o; };
     const hrs = h => h && typeof h === "object" ? {reg: num(h.reg), ot: num(h.ot), oncall: !!h.oncall, bonus: num(h.bonus), bonusMethod: h.bonusMethod === "agg" ? "agg" : "flat"} : null;
     const s = Object.assign({}, S0, {groupsOff: []}), ds = d.settings && typeof d.settings === "object" ? d.settings : null;
     if (ds){
@@ -868,11 +884,16 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     });
     const recMap = {}; for (const r of recurring) recMap[r.id] = r;
     const paychecks = arr(d.paychecks).map(p => ({id: str(p && p.id) || uid(), date: str(p && p.date), amount: num(p && p.amount), hours: hrs(p && p.hours), hoursSet: !!(p && p.hoursSet),
-      items: arr(p && p.items).map(item).filter(i => i.name.trim().toLowerCase() !== "extra")}));
+      items: arr(p && p.items).map(item).filter(i => i.name.trim().toLowerCase() !== "extra"),
+      carry: arr(p && p.carry).map(c => ({id: str(c && c.id), from: str(c && c.from), amount: Math.round(num(c && c.amount) * 100) / 100})).filter(c => c.id && c.amount > 0)}));
+    // money carried between checks is two halves (a row on the check it left, an amount on the one it went to): drop a half whose other half is gone
+    { const byId = {}; for (const p of paychecks) byId[p.id] = p;
+      for (const p of paychecks) p.items = p.items.filter(it => !it.carryTo || (byId[it.carryTo] && byId[it.carryTo].carry.some(c => c.id === it.cid && c.from === p.id)));
+      for (const p of paychecks) p.carry = p.carry.filter(c => byId[c.from] && byId[c.from].items.some(it => it.cid === c.id && it.carryTo === p.id)); }
     for (const p of paychecks) for (const it of p.items){
       if (!it.recId) continue;
       const r = recMap[it.recId];
-      if (!r){ delete it.recId; delete it.recFor; continue; }
+      if (!r){ delete it.recId; delete it.recFor; delete it.also; continue; }
       if (monRe.test(it.recFor)){ const q = it.recFor.split("-").map(Number); it.recFor = monthlyDate(r, q[0], q[1] - 1); }
     }
     const people = {};
@@ -1033,7 +1054,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const nearestOcc = (r, s) => occOnOrAfter(r, addDays(s, -(HALF[r.freq] || 14)));
   function linkedAll(r, o){
     const out = [];
-    for (const pc of state.paychecks) for (const it of pc.items) if (it.recId === r.id && it.recFor === o) out.push({pc, it});
+    for (const pc of state.paychecks) for (const it of pc.items) if (it.recId === r.id && (it.recFor === o || (it.also && it.also.includes(o)))) out.push({pc, it});
     return out;
   }
   function findLinked(r, o){ return linkedAll(r, o)[0] || null; }
@@ -1046,12 +1067,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   function unlink(it){}
   // remember that an automatic bill was taken off a paycheck on purpose, so it isn't added back
-  function skipOcc(it){ const r = it && it.recId && recById(it.recId); if (r && r.auto && it.recFor && !r.skip.includes(it.recFor)) r.skip.push(it.recFor); }
+  function skipOcc(it){ const r = it && it.recId && recById(it.recId); if (r && r.auto) for (const o of occsOf(it)) if (!r.skip.includes(o)) r.skip.push(o); }
+  const occsOf = it => [it.recFor].concat(it.also || []).filter(Boolean).sort();
   function syncRec(it){
     const r = it.recId && recById(it.recId); if (!r) return;
-    const all = linkedAll(r, it.recFor);
-    if (all.length && all.every(l => l.it.paid)){ if (!r.paidThrough || r.paidThrough < it.recFor) r.paidThrough = it.recFor; }
-    else if (r.paidThrough && r.paidThrough >= it.recFor){ const pv = prevOcc(r, it.recFor); r.paidThrough = pv >= r.since ? pv : ""; }
+    const os = occsOf(it), first = os[0], last = os[os.length - 1]; if (!first) return;
+    if (os.every(o => { const all = linkedAll(r, o); return all.length && all.every(l => l.it.paid); })){ if (!r.paidThrough || r.paidThrough < last) r.paidThrough = last; }
+    else if (r.paidThrough && r.paidThrough >= first){ const pv = prevOcc(r, first); r.paidThrough = pv >= r.since ? pv : ""; }
   }
   // red = due soon (or overdue) and not on a paycheck; yellow = due a bit later, or one-time payments not on one. Windows come from Settings > Bills.
   const warnDays = () => state.settings.warnDays || 14, redDays = () => state.settings.redDays || 7;
@@ -1154,7 +1176,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const taken = new Set(out.map(s => s.name.trim().toLowerCase()));
     const seen = new Map();
     for (const p of [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : 1)) for (const it of p.items){
-      const k = it.name.trim().toLowerCase(); if (!k || it.recId) continue;
+      const k = it.name.trim().toLowerCase(); if (!k || it.recId || it.carryTo || it.debtX) continue;
       const e = seen.get(k) || {name: it.name.trim(), amount: it.amount, n: 0, cat: ""}; e.n++; e.amount = it.amount; if (it.cat) e.cat = it.cat; seen.set(k, e);
     }
     const usual = [...seen.entries()].filter(([k, e]) => e.n >= (q ? 1 : 2) && !onPc.has(k) && !taken.has(k) && has(e.name))
@@ -1245,7 +1267,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const fix = o => { if (o.cat) return; const g = catGuess(o.name); if (g){ o.cat = g; changed = true; } };
     state.recurring.forEach(fix);
     for (const p of state.paychecks) for (const it of p.items){
-      if (it.cat) continue;
+      if (it.cat || it.carryTo) continue;
       const r = it.recId && recById(it.recId);
       if (r && r.cat){ it.cat = r.cat; changed = true; } else fix(it);
     }
@@ -1299,6 +1321,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       if (p.date < rg.from || p.date > rg.to) continue;
       out.checks++; out.income += pcAmount(p);
       for (const it of p.items){
+        if (it.carryTo) continue;
         const c = it.cat || "";
         const e = by[c] || (by[c] = {total: 0, paid: 0, items: []});
         e.total += it.amount; if (it.paid) e.paid += it.amount; e.items.push({pc: p, it});
@@ -1553,6 +1576,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         o = nextOcc(r, o);
       }
     }
+    // extra payments given from a check's leftover
+    for (const p of state.paychecks) for (const it of p.items) if (it.debtX === d.id && it.paid && (it.on || p.date) >= d.asOf) paid += it.amount;
     return Math.max(0, Math.round((d.balance - paid) * 100) / 100);
   }
   // months to pay off and interest along the way; null when the payment doesn't cover the interest
@@ -1575,7 +1600,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     d.balance = debtNow(d); d.asOf = iso(today());   // keep payments already made
     if (r){
       state.recurring = state.recurring.filter(x => x !== r);
-      for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id){ delete it.recId; delete it.recFor; }
+      for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id){ delete it.recId; delete it.recFor; delete it.also; }
     }
     d.recId = "";
   }
@@ -1878,7 +1903,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const PLUS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
   const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
   // mv = the check to move leftovers to, when this check's week is over
+  const CARRY_ICO = '<span class="cat-ico" style="background:#3A3A3C;color:#F5F5F7" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>';
   function itemRow(i, pc, mv){
+    if (i.carryTo){
+      const to = findPc(i.carryTo);
+      return '<li class="row is-paid is-carry"><button class="row-main" data-act="carryOpen" data-id="' + i.cid + '">' + CARRY_ICO +
+        '<span class="row-name">Carried to ' + (to ? dayLabel(to.date) : "another check") + '<span class="row-sub">' + esc(carryWhy(i)) + '</span></span>' +
+        '<span class="row-amt num">' + money(i.amount) + '</span></button><span class="tick" aria-hidden="true"></span></li>';
+    }
     const showDue = i.due && i.due !== pc.date, move = mv && !i.paid;
     return '<li class="row' + (i.paid ? " is-paid" : "") + '">' +
       '<button class="row-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
@@ -1954,13 +1986,22 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const t = w === 0 ? (!c ? "This week" : p.date > ref ? "Later this week" : "Earlier this week") : w === 1 ? "Next week" : w === -1 ? "Last week" : w > 1 ? "In " + w + " weeks" : -w + " weeks ago";
     return '<span class="when"> · ' + t + '</span>';
   }
+  // how carried money changed a check's total: "$1,519.11 check · −$775 to Wed 10/28"
+  function carryLine(p){
+    const cin = carryIn(p), outs = p.items.filter(i => i.carryTo), cout = sum(outs);
+    if (cin <= 0.004 && cout <= 0.004) return "";
+    const both = cin > 0.004 && cout > 0.004, f1 = cin > 0.004 && p.carry.length === 1 && findPc(p.carry[0].from), t1 = outs.length === 1 && findPc(outs[0].carryTo);
+    const inTxt = cin <= 0.004 ? "" : '<b class="in">+' + money(cin) + (both ? " in" : " from " + (f1 ? dayLabel(f1.date) : "earlier checks")) + '</b>';
+    const outTxt = cout <= 0.004 ? "" : '<b class="out">−' + money(cout) + (both ? " out" : " to " + (t1 ? dayLabel(t1.date) : "other checks")) + '</b>';
+    return '<button type="button" class="pc-carry" data-act="carryIn" data-id="' + p.id + '" aria-label="Money moved between checks">' + money(pcAmount(p)) + ' check · ' + inTxt + (both ? " · " : "") + outTxt + '</button>';
+  }
   function pcCard(p, plain){
-    const amt = pcAmount(p), planned = sum(p.items), paid = sum(p.items.filter(i => i.paid)), sub = pcSub(p), c = plain ? null : currentPc();
+    const real = realItems(p), amt = pcFunds(p), planned = sum(real), paid = sum(real.filter(i => i.paid)), sub = pcSub(p), c = plain ? null : currentPc();
     const cls = !c ? "" : p.id === c.id ? " is-now" : p.date < c.date ? " is-past" : "";
     return '<section class="pc-card' + cls + '" data-pc="' + p.id + '" aria-label="Paycheck ' + dayLabel(p.date) + '">' +
       '<div class="pc-top"><div><span class="pc-date">' + dayLabel(p.date) + (plain ? "" : whenLabel(p)) + '</span><span class="pc-amt num">' + money(amt) + '</span></div>' +
       '<button class="pc-adjust" data-act="editPc" data-id="' + p.id + '">Adjust check</button></div>' +
-      (sub ? '<span class="pc-sub">' + sub + '</span>' : "") +
+      (sub ? '<span class="pc-sub">' + sub + '</span>' : "") + carryLine(p) +
       pcSummary(amt, planned, paid) + '</section>';
   }
   function addCard(){
@@ -1992,7 +2033,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const shortDate = s => Number(s.slice(5, 7)) + "/" + Number(s.slice(8, 10));
   function doneCard(){
     const f = finishedList(); if (!f.length) return "";
-    const earned = f.reduce((a, p) => a + pcAmount(p), 0), spent = f.reduce((a, p) => a + sum(p.items), 0);
+    const earned = f.reduce((a, p) => a + pcAmount(p), 0), spent = f.reduce((a, p) => a + sum(realItems(p)), 0);
     const left = f.reduce((a, p) => a + Math.max(0, unassigned(p)), 0), waiting = f.filter(p => unassigned(p) > 0.004).length;
     const n = f.length;
     const cards = f.map((p, k) => {
@@ -2015,9 +2056,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const gs = [], thisYear = String(today().getFullYear());
     for (const p of finishedList()){ const m = p.date.slice(0, 7); if (!gs.length || gs[gs.length - 1].m !== m) gs.push({m, list: []}); gs[gs.length - 1].list.push(p); }
     return gs.map(g => '<div class="grp-head"><span>' + MONTHS_LONG[Number(g.m.slice(5, 7)) - 1] + (g.m.slice(0, 4) === thisYear ? "" : " " + g.m.slice(0, 4)) + '</span>' +
-      '<span class="num">' + money(g.list.reduce((a, p) => a + pcAmount(p), 0)) + '</span></div><div class="fin-rows">' +
+      '<span class="num">' + money(g.list.reduce((a, p) => a + pcFunds(p), 0)) + '</span></div><div class="fin-rows">' +
       g.list.map(p => {
-        const amt = pcAmount(p), left = unassigned(p), n = p.items.length, todo = left > 0.004;
+        const amt = pcFunds(p), left = unassigned(p), n = realItems(p).length, todo = left > 0.004;
         return '<button type="button" class="fin-row" data-act="finOpen" data-id="' + p.id + '"><span class="fin-ico' + (todo ? " todo" : "") + '" aria-hidden="true">' + (todo ? "$" : TICK) + '</span>' +
           '<span class="fin-mid"><span class="fin-d">' + dayLabel(p.date) + '</span><span class="fin-s">' + n + ' item' + (n === 1 ? "" : "s") + ' · ' +
           (left < -0.004 ? money(-left) + ' over' : todo ? '<span class="ta">' + money(left) + ' to assign</span>' : 'every dollar assigned') + '</span></span><span class="fin-amt num">' + money(amt) + '</span>' + CHEV + '</button>';
@@ -2034,21 +2075,29 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<button type="button" data-act="assignOpen" data-pc="' + p.id + '">Assign</button></div>' : "") + pcItems(p);
   }
   // what a check brought in that nothing was planned for
-  function unassigned(p){ return Math.round((pcAmount(p) - sum(p.items)) * 100) / 100; }
+  function unassigned(p){ return Math.round((pcFunds(p) - sum(realItems(p))) * 100) / 100; }
   // give the rest of a finished check a job: savings, a goal, a cushion, or something that wasn't on the list
-  function assignSheet(pcId){
+  // closing = asked right after the last thing on the check got paid
+  function assignSheet(pcId, closing){
     const p = findPc(pcId); if (!p) return;
     const left = unassigned(p); if (left <= 0.004) return;
-    const goals = state.wishlist.filter(w => !w.done);
-    const opt = (kind, title, sub, extra) => '<button type="button" data-act="assignPick" data-pc="' + p.id + '" data-kind="' + kind + '"' + (extra || "") + '>' +
+    const goals = state.wishlist.filter(w => !w.done), debts = openDebts(), c = currentPc();
+    // carry to the check you're on now; from the current check, to the next one
+    const nx = c && c.date > p.date ? c : railList().find(q => q.date > p.date);
+    const opt = (kind, title, sub, extra) => '<button type="button" data-act="assignPick" data-pc="' + p.id + '" data-kind="' + kind + '"' + (closing ? ' data-close="1"' : "") + (extra || "") + '>' +
       '<span><span class="s-name">' + title + '</span><span class="s-sub">' + sub + '</span></span><span class="pick-r">' + PLUS + '</span></button>';
     openSheet({
-      title: "Assign " + money(left), noSave: true,
-      body: '<p class="hint" style="margin:-8px 0 12px">Left on the ' + dayLabel(p.date) + ' check. Use all of it, or part and come back for the rest.</p>' +
+      title: closing ? dayLabel(p.date) + " is all paid" : "Assign " + money(left), noSave: true, cancelText: closing ? "Not now" : "",
+      body: '<p class="hint" style="margin:-8px 0 12px">' + (closing ? money(left) + ' is left over. Give it a job, or carry it to the next check. To split it, change the amount, pick one, then pick again for the rest.'
+          : 'Left on the ' + dayLabel(p.date) + ' check. Use all of it, or part and then pick again for the rest.') + '</p>' +
         field("Amount", '<input name="amt" inputmode="decimal" value="' + left.toFixed(2) + '" autocomplete="off">') +
-        '<div class="sugg pick">' + opt("savings", "Savings", "Moved to savings or investments") +
+        '<div class="sugg pick">' + (nx ? opt("carry", "Carry over to " + dayLabel(nx.date), "Adds it to that check's money", ' data-to="' + nx.id + '"') : "") +
+        opt("savings", "Savings", "Moved to savings") +
+        opt("invest", "Investments", "Moved to an investment account") +
         opt("cushion", "Cushion", "Stays in checking as a buffer") +
         opt("other", "Something else", "Spent on something that wasn't on the check") + '</div>' +
+        (debts.length ? '<div class="sugg pick"><p class="sugg-h">Pay down a debt</p>' +
+          debts.map(x => opt("debt", esc(x.d.name), money(x.bal) + " owed", ' data-id="' + x.d.id + '"')).join("") + '</div>' : "") +
         (goals.length ? '<div class="sugg pick"><p class="sugg-h">Toward something on your list</p>' +
           goals.map(w => opt("goal", esc(w.name), w.cost ? money(w.saved) + " of " + money(w.cost) + " saved" : money(w.saved) + " saved so far", ' data-id="' + w.id + '"')).join("") + '</div>' : "")
     });
@@ -2108,58 +2157,166 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       return '<div class="pc-empty"><strong>' + dayLabel(nextPaydayAfterLast()) + ' isn\'t planned yet</strong>' +
         '<span>Add it to see what this check covers. Bills set to go on paychecks automatically fill in on their own.</span></div>';
     }
-    const toPay = pc.items.filter(i => !i.paid), paid = pc.items.filter(i => i.paid), mv = moveTarget(pc);
+    const real = realItems(pc), toPay = real.filter(i => !i.paid), paid = real.filter(i => i.paid), moved = pc.items.filter(i => i.carryTo), mv = moveTarget(pc);
     let h = '<div class="grp-head"><span class="gh-l">To pay' + (mv && toPay.length > 1 ? '<button type="button" class="gh-move" data-act="moveAll" data-pc="' + pc.id + '">Move all' + ARROW + '</button>' : "") + '</span>' +
       '<span class="num">' + money(sum(toPay)) + '</span></div>';
     h += toPay.length ? '<ul class="rows">' + toPay.map(i => itemRow(i, pc, mv)).join("") + '</ul>'
-      : '<p class="rows-empty">' + (pc.items.length ? "Everything on this check is paid." : "Nothing on this check yet.") + '</p>';
+      : '<p class="rows-empty">' + (real.length ? "Everything on this check is paid." : moved.length ? "Everything moved to other checks." : "Nothing on this check yet.") + '</p>';
     h += '<button class="newitem" data-act="newItem" data-pc="' + pc.id + '">' + PLUS + 'New item</button>';
     if (paid.length) h += '<div class="grp-head"><span>Paid</span><span class="num">' + money(sum(paid)) + '</span></div><ul class="rows">' + paid.map(i => itemRow(i, pc)).join("") + '</ul>';
+    if (moved.length) h += '<div class="grp-head"><span>Moved to other checks</span><span class="num">' + money(sum(moved)) + '</span></div><ul class="rows">' + moved.map(i => itemRow(i, pc)).join("") + '</ul>';
     return h;
   }
   // ---------- a new week started: what's still unpaid on an older check can move to the current one ----------
   function moveTarget(pc){ const c = currentPc(); return c && pc && pc.date < c.date ? c : null; }
-  // the same bill already waiting on the check it would move to: the next due date of a repeating bill,
-  // or something with the same name (Groceries added by hand each week)
+  // a row already waiting (unpaid) on the check this one would move to:
+  //  same = the same payment split across checks (Rent split over two checks), which always combines;
+  //  otherwise the next due date of a repeating bill, or a row with the same name, where you pick combine or replace
   function twinOn(it, to){
     const r = it.recId && recById(it.recId); if (r && r.debtId) return null;
     const nm = it.name.trim().toLowerCase();
-    return to.items.find(i => i !== it && (r ? i.recId === it.recId && i.recFor !== it.recFor : !(i.recId && (recById(i.recId) || {}).debtId) && i.name.trim().toLowerCase() === nm)) || null;
+    for (const i of to.items){
+      if (i === it || i.paid || i.carryTo) continue;
+      const ir = i.recId && recById(i.recId); if (ir && ir.debtId) continue;
+      if (r && i.recId === it.recId) return {t: i, same: occsOf(i).includes(it.recFor)};
+      if ((!r || !i.recId) && i.name.trim().toLowerCase() === nm) return {t: i, same: false};
+    }
+    return null;
   }
-  let mvPending = null;
+  // one row from two: amounts add up, and a repeating bill's row covers both due dates; returns an undo
+  function combineInto(t, it){
+    const was = {amount: t.amount, cat: t.cat, due: t.due, recId: t.recId, recFor: t.recFor, also: t.also};
+    t.amount = Math.round((t.amount + it.amount) * 100) / 100;
+    if (!t.cat && it.cat) t.cat = it.cat;
+    if (!t.due && it.due) t.due = it.due;
+    if (it.recId){
+      if (!t.recId){ t.recId = it.recId; t.recFor = it.recFor; if (it.also) t.also = it.also.slice(); }
+      else if (t.recId === it.recId){ const al = [...new Set((t.also || []).concat(occsOf(it)))].filter(o => o !== t.recFor); if (al.length) t.also = al; }
+    }
+    return () => { for (const k of Object.keys(was)){ if (was[k] === undefined) delete t[k]; else t[k] = was[k]; } };
+  }
+  // ---------- money carried from one check to another ----------
+  // the check it leaves gets a checked-off row; the check it goes to gets the amount added to its money
+  function addCarry(from, to, amount, why){
+    const id = uid(); amount = Math.round(amount * 100) / 100;
+    if (!(amount > 0.004) || !from || !to || from === to) return null;
+    from.items.push({id: "c-" + id, name: "Carried over: " + why, amount, paid: true, due: "", cat: "", carryTo: to.id, cid: id, why});
+    (to.carry = to.carry || []).push({id, from: from.id, amount});
+    return id;
+  }
+  function findCarry(cid){
+    for (const p of state.paychecks){ const it = p.items.find(i => i.carryTo && i.cid === cid); if (it) return {src: p, it, dst: findPc(it.carryTo)}; }
+    return null;
+  }
+  // take it back: the money returns to the check it came from; returns an undo
+  function removeCarry(cid){
+    const c = findCarry(cid); if (!c) return null;
+    const srcItems = c.src.items.slice(), dstCarry = c.dst ? (c.dst.carry || []).slice() : null;
+    c.src.items = c.src.items.filter(i => i !== c.it);
+    if (c.dst) c.dst.carry = (c.dst.carry || []).filter(x => x.id !== cid);
+    return () => { c.src.items = srcItems; if (c.dst) c.dst.carry = dstCarry; };
+  }
+  function dropCarries(pcId){
+    const p = findPc(pcId); if (!p) return;
+    for (const it of p.items.filter(i => i.carryTo)) removeCarry(it.cid);
+    for (const c of (p.carry || []).slice()) removeCarry(c.id);
+  }
+  const carryWhy = it => it.why === "Leftover" ? "Leftover money" : "Money for " + it.why;
+  function carrySheet(cids){
+    const rows = cids.map(findCarry).filter(Boolean); if (!rows.length) return;
+    openSheet({
+      title: "Carried over", noSave: true, cancelText: "Close",
+      body: '<p class="hint" style="margin:-8px 0 14px">Take it back and the money returns to the check it came from.</p><div class="sugg pick">' +
+        rows.map(c => '<button type="button" data-act="carryBack" data-id="' + c.it.cid + '"><span><span class="s-name">' + money(c.it.amount) + ' from ' + dayLabel(c.src.date) + ' to ' + (c.dst ? dayLabel(c.dst.date) : "another check") + '</span>' +
+          '<span class="s-sub">' + esc(carryWhy(c.it)) + '</span></span><span class="pick-r">Take back</span></button>').join("") + '</div>'
+    });
+  }
+  // the last thing on a check got paid: ask what the leftover should do (once per check per visit)
+  const closeAsked = new Set();
+  function maybeClose(pc){
+    if (!pc || !findPc(pc.id) || closeAsked.has(pc.id) || pc.date > iso(today()) || sheet.open) return;
+    if (!pc.items.length || pc.items.some(i => !i.paid) || unassigned(pc) <= 0.004) return;
+    closeAsked.add(pc.id);
+    assignSheet(pc.id, true);
+  }
+
+  let mvPending = null;   // what each choice in the move sheet does
   function moveLeftover(from, list){
     const to = moveTarget(from); list = list.filter(i => !i.paid);
     if (!to || !list.length) return;
-    const twins = list.filter(it => twinOn(it, to));
-    const go = mode => {
-      const fromItems = from.items.slice(), toItems = to.items.slice(), pts = [];
-      let moved = 0, dropped = 0;
-      for (const it of list){
-        from.items = from.items.filter(i => i !== it);
-        if (mode === "replace" && twinOn(it, to)){
-          // this week's covers it: the older due date counts as settled so it doesn't show up as overdue
-          const r = recById(it.recId);
-          if (r && it.recFor && openOcc(r) === it.recFor){ pts.push({r, pt: r.paidThrough}); r.paidThrough = it.recFor; }
-          skipOcc(it); dropped++;
-        } else { to.items.push(it); moved++; }
+    const tw = new Map(list.map(it => [it, twinOn(it, to)]));
+    const asks = list.filter(it => tw.get(it) && !tw.get(it).same);   // repeats and same names: combine or replace?
+    const one = list.length === 1;
+    const Wk = weeklyPay() ? "This week" : "The current check", wk = weeklyPay() ? "this week" : "the current check";
+    // money on the old check that nothing left on it still needs
+    const free = Math.max(0, pcFunds(from) - (sum(realItems(from)) - sum(list)));
+    const movingFor = replace => list.filter(it => !(replace && asks.includes(it)));
+    const canCarry = replace => Math.round(Math.min(sum(movingFor(replace)), free) * 100) / 100;
+    const effect = (replace, carry) => {
+      const v = pcFunds(to) + carry - sum(realItems(to)) - sum(movingFor(replace));
+      return v < -0.004 ? '<span class="bad">' + Wk + ' goes ' + money(-v) + ' over</span>' : Wk + ' leaves ' + money(v) + ' extra';
+    };
+    const done = (replace, withMoney) => {
+      const fromItems = from.items.slice(), toItems = to.items.slice(), toCarry = (to.carry || []).slice(), pts = [], undos = [];
+      const moving = movingFor(replace), dropped = list.filter(it => !moving.includes(it)), carry = withMoney ? canCarry(replace) : 0;
+      from.items = from.items.filter(i => !list.includes(i));
+      for (const it of dropped){
+        // this week's covers it: the older due date counts as settled so it doesn't show up as overdue
+        const r = it.recId && recById(it.recId);
+        if (r && it.recFor && openOcc(r) === it.recFor){ pts.push({r, pt: r.paidThrough}); r.paidThrough = it.recFor; }
+        skipOcc(it);
       }
+      let joined = null;
+      for (const it of moving){
+        const x = tw.get(it);
+        if (x && to.items.includes(x.t)){ undos.push(combineInto(x.t, it)); joined = x.t; } else to.items.push(it);
+      }
+      if (carry > 0.004) addCarry(from, to, carry, moving.length === 1 ? moving[0].name : moving.length + " items");
       if (!from.items.some(i => !i.paid)) selPc = to.id;
       commit();
-      const msg = moved && dropped ? "Moved " + moved + ", replaced " + dropped : dropped ? (dropped === 1 ? "Replaced with this week's" : "Replaced " + dropped) : moved === 1 ? "Moved to " + dayLabel(to.date) : "Moved " + moved + " to " + dayLabel(to.date);
-      toast(msg, () => { from.items = fromItems; to.items = toItems; for (const x of pts) x.r.paidThrough = x.pt; selPc = from.id; });
+      const n = moving.length, what = n === 1 ? moving[0].name : n + " items", withM = carry > 0.004 ? ", brought " + money(carry) : "";
+      const msg = !n ? (dropped.length === 1 ? "Replaced with " + wk + "'s" : "Replaced " + dropped.length)
+        : n === 1 && joined ? joined.name + " is now " + money(joined.amount) + withM
+        : (dropped.length ? "Moved " + n + ", replaced " + dropped.length : "Moved " + what) + withM;
+      toast(msg, () => { for (const u of undos) u(); from.items = fromItems; to.items = toItems; to.carry = toCarry; for (const x of pts) x.r.paidThrough = x.pt; selPc = from.id; });
+      maybeClose(from);
     };
-    if (!twins.length){ go("keep"); return; }
-    mvPending = go;
-    const wk = weeklyPay() ? "this week" : "on the current check", one = twins.length === 1, tw = one ? twinOn(twins[0], to) : null;
     const opt = (mode, title, sub) => '<button type="button" data-act="mvPick" data-mode="' + mode + '"><span><span class="s-name">' + title + '</span><span class="s-sub">' + sub + '</span></span><span class="pick-r">' + ARROW + '</span></button>';
-    openSheet({
-      title: one ? twins[0].name + " is already there" : twins.length + " are already there", noSave: true,
-      body: '<p class="hint" style="margin:-8px 0 14px">' + (weeklyPay() ? "This week" : "The current check") + ' already has ' +
-        (one ? esc(tw.name) + ' (' + money(tw.amount) + ')' : twins.map(t => esc(t.name)).join(", ")) + '.' +
-        (list.length > twins.length ? " Everything else moves over either way." : "") + '</p><div class="sugg pick">' +
-        opt("replace", "Replace", "Keep only " + (weeklyPay() ? "this week's" : "the current check's") + (one ? " " + esc(twins[0].name) : ", drop the old ones")) +
-        opt("keep", "Keep both", one ? "Pay both " + wk + ", " + money(tw.amount + twins[0].amount) + " total" : "Pay the old ones and the new ones") + '</div>'
-    });
+    const ask = (title, hint, opts) => {
+      mvPending = {}; for (const o of opts) mvPending[o[0]] = o[3];
+      openSheet({title, noSave: true, body: '<p class="hint" style="margin:-8px 0 14px">' + hint + '</p><div class="sugg pick">' + opts.map(o => opt(o[0], o[1], o[2])).join("") + '</div>'});
+    };
+    // "Bring its $700 too", or less when the old check doesn't have all of it
+    const bring = (replace, its) => {
+      const c = canCarry(replace), all = c >= sum(movingFor(replace)) - 0.004;
+      return [(all ? "Bring " + its + " " : "Bring ") + money(c) + " too", (all ? "" : "All that's left on " + dayLabel(from.date) + ". ") + effect(replace, c)];
+    };
+    // what combining does, in words: "One Rent row, $1,525."
+    const joinNote = mv => { const js = mv.filter(it => tw.get(it)); return js.length === 1 ? "One " + esc(js[0].name) + " row, " + money(tw.get(js[0]).t.amount + js[0].amount) + "." : js.length ? js.length + " rows join the ones already there." : ""; };
+    const moneyQ = replace => {
+      const mv = movingFor(replace);
+      if (!mv.length || canCarry(replace) <= 0.004){ done(replace, false); return; }
+      const single = mv.length === 1, b = bring(replace, single ? "its" : "their"), jn = joinNote(mv);
+      ask("Move " + (single ? mv[0].name : mv.length + " items") + " to " + wk,
+        (single ? "The " + dayLabel(from.date) + " check still has money set aside for it." : "The " + dayLabel(from.date) + " check still has money set aside for them.") + " Bring it along, or let " + wk + " pay for " + (single ? "it" : "them") + "?" +
+        (jn ? " " + (single ? "It joins the " + money(tw.get(mv[0]).t.amount) + " " + esc(mv[0].name) + " already there, making it " + money(tw.get(mv[0]).t.amount + mv[0].amount) + "." : jn) : ""),
+        [["money", b[0], b[1], () => done(replace, true)], ["bill", single ? "Just the bill" : "Just the bills", effect(replace, 0), () => done(replace, false)]]);
+    };
+    if (!asks.length){ moneyQ(false); return; }
+    const t0 = tw.get(asks[0]).t, already = Wk + " already has " + (asks.length === 1 ? esc(t0.name) + " (" + money(t0.amount) + ")" : asks.map(t => esc(t.name)).join(", ")) + ".";
+    const replaceOpt = ["replace", "Replace", "Keep only " + wk + "'s" + (one ? " " + esc(asks[0].name) : ", drop the old ones"), () => done(true, false)];
+    if (one){
+      // one question: replace it, or combine the two rows with or without its money
+      const c = canCarry(false), jn = joinNote(list);
+      if (c <= 0.004){ ask(asks[0].name + " is already there", already, [["bill", "Combine", jn + " " + effect(false, 0), () => done(false, false)], replaceOpt]); return; }
+      const b = bring(false, "its");
+      ask(asks[0].name + " is already there", already + " Combining makes it " + money(t0.amount + asks[0].amount) + ".",
+        [["money", "Combine, b" + b[0].slice(1), b[1], () => done(false, true)], ["bill", "Combine, just the bill", effect(false, 0), () => done(false, false)], replaceOpt]);
+      return;
+    }
+    // several: first combine or replace, then the money
+    ask(asks.length + " are already there", already + (list.length > asks.length ? " Everything else moves over either way." : ""),
+      [["keep", "Combine", "Add them to the rows already there", () => moneyQ(false)], ["replace", "Replace", "Keep only " + wk + "'s, drop the old ones", () => moneyQ(true)]]);
   }
   function renderPay(){
     let h = '<h1 class="page-h">Paychecks</h1>';
@@ -2286,7 +2443,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const list = (last ? [last] : []).concat(fut);
     const sug = suggestPaycheck(due, list);
     const rows = list.map(p => {
-      const after = pcAmount(p) - sum(p.items) - amount;
+      const after = pcFunds(p) - sum(realItems(p)) - amount;
       return '<button type="button" data-act="addPick" data-kind="' + kind + '" data-id="' + id + '" data-pc="' + p.id + '">' +
         '<span><span class="s-name">' + dayLabel(p.date) + (p.id === sug ? '<span class="pill">Suggested</span>' : "") + '</span>' +
         '<span class="s-sub">' + (p === last ? "Current check, " : "") + p.items.length + ' item' + (p.items.length === 1 ? "" : "s") + ' planned</span></span>' +
@@ -2540,7 +2697,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function paidFromAmounts(pc, it, v){
     for (const el of document.querySelectorAll("#sheetBody [data-pf]")){
       const p = findPc(el.dataset.pf); if (!p) continue;
-      const after = pcAmount(p) - sum(p.items) + (p === pc ? it.amount : 0) - v;
+      const after = pcFunds(p) - sum(realItems(p)) + (p === pc ? it.amount : 0) - v;
       el.className = "pf-r" + (after < -0.004 ? " bad" : "");
       el.textContent = after < -0.004 ? "Goes " + money(-after) + " over" : "Leaves " + money(after) + " extra";
     }
@@ -2572,8 +2729,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
           if (dest === "__none"){ if (it.recId) skipOcc(it); else { it.paid = false; state.payments.push(it); } }
           else { const to = findPc(dest); if (to) to.items.push(it); }
         }
+        setTimeout(() => maybeClose(pc), 0);
       },
-      onDelete: () => { skipOcc(it); pc.items = pc.items.filter(i => i.id !== id); }
+      onDelete: () => { skipOcc(it); pc.items = pc.items.filter(i => i.id !== id); setTimeout(() => maybeClose(pc), 0); }
     });
     sheetCfg.onInput();
   }
@@ -2637,7 +2795,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         const dd = r.debtId && debtById(r.debtId);
         if (dd){ dd.balance = debtNow(dd); dd.asOf = iso(today()); dd.recId = ""; dd.inBills = false; }
         state.recurring = state.recurring.filter(x => x.id !== id);
-        for (const p of state.paychecks) for (const it of p.items) if (it.recId === id){ delete it.recId; delete it.recFor; }
+        for (const p of state.paychecks) for (const it of p.items) if (it.recId === id){ delete it.recId; delete it.recFor; delete it.also; }
       }
     });
     sheetCfg.onInput();
@@ -2654,7 +2812,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   // after a bill's schedule changes, move its links and "paid" marker to the matching new due dates
   function remapRec(r){
     const map = s => s ? nearestOcc(r, s) : s;
-    for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id){ it.recFor = map(it.recFor); if (it.due) it.due = noDay(r) ? "" : it.recFor; }
+    for (const p of state.paychecks) for (const it of p.items) if (it.recId === r.id){ it.recFor = map(it.recFor); if (it.also) it.also = it.also.map(map); if (it.due) it.due = noDay(r) ? "" : it.recFor; }
     r.paidThrough = map(r.paidThrough);
     r.skip = r.skip.map(map);
   }
@@ -2733,7 +2891,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function editPc(id){
     const p = findPc(id); if (!p) return;
     pcSheet("Paycheck " + dayLabel(p.date), p, "", (fd, d, hours, amount) => { p.date = d; p.hours = hours; p.amount = amount; p.hoursSet = true; autoFill(); },
-      () => { p.items.forEach(unlink); state.paychecks = state.paychecks.filter(x => x.id !== id); if (selPc === id) selPc = null; });
+      () => { p.items.forEach(unlink); dropCarries(id); state.paychecks = state.paychecks.filter(x => x.id !== id); if (selPc === id) selPc = null; });
   }
   function newPc(){
     const sorted = [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : 1);
@@ -2745,7 +2903,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     pcSheet("Add a paycheck", draft,
       last && last.items.length ? '<label class="check-field"><input type="checkbox" name="copy"> Copy the items from ' + dayLabel(last.date) + ' (unchecked)</label>' : "",
       (fd, d, hours, amount) => {
-        const items = fd.get("copy") && last ? last.items.map(i => ({id: uid(), name: i.name, amount: i.amount, paid: false, due: "", cat: i.cat || ""})) : [];
+        const items = fd.get("copy") && last ? last.items.filter(i => !i.carryTo && !i.debtX).map(i => ({id: uid(), name: i.name, amount: i.amount, paid: false, due: "", cat: i.cat || ""})) : [];
         const nid = uid();
         state.paychecks.push({id: nid, date: d, amount, hours, hoursSet: true, items});
         autoFill();
@@ -3034,7 +3192,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const act = b.dataset.act, id = b.dataset.id, pcId = b.dataset.pc;
     if (act === "tab"){ tab = b.dataset.tab; render(); window.scrollTo({top: 0}); return; }
     if (readOnly && act !== "tab") { setStatus("View only"); }
-    if (act === "toggle"){ const pc = findPc(pcId); const it = pc && pc.items.find(i => i.id === id); if (it){ it.paid = !it.paid; syncRec(it); commit(); } }
+    if (act === "toggle"){ const pc = findPc(pcId); const it = pc && pc.items.find(i => i.id === id); if (it && !it.carryTo){ it.paid = !it.paid; syncRec(it); commit(); if (it.paid) maybeClose(pc); } }
     else if (act === "recToggle"){
       const r = recById(id); if (!r) return;
       if (isPaidNow(r)){
@@ -3125,17 +3283,29 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       const left = unassigned(p), inp = $("#sheetForm").elements.amt;
       const amt = Math.min(toNum(inp && inp.value), left);
       if (!(amt > 0)){ setStatus("Enter an amount"); return; }
-      const kind = b.dataset.kind;
+      const kind = b.dataset.kind, closing = b.dataset.close === "1";
       if (kind === "other"){ assignOtherSheet(p, amt); return; }
-      const add = (name, cat) => p.items.push({id: uid(), name, amount: amt, paid: true, due: "", cat});
+      const add = (name, cat, extra) => p.items.push(Object.assign({id: uid(), name, amount: amt, paid: true, due: "", cat}, extra || {}));
+      let msg = "Assigned " + money(amt);
       if (kind === "savings") add("Savings", "savings");
+      else if (kind === "invest") add("Investments", "savings");
       else if (kind === "cushion") add("Cushion", "savings");
+      else if (kind === "carry"){
+        const to = findPc(b.dataset.to); if (!to) return;
+        addCarry(p, to, amt, "Leftover"); msg = "Carried " + money(amt) + " to " + dayLabel(to.date);
+      }
+      else if (kind === "debt"){
+        const d = debtById(id); if (!d) return;
+        add("Extra to " + d.name, (DEBT_KIND[d.kind] || DEBT_KIND.other)[2], {debtX: d.id, on: iso(today())}); msg = money(amt) + " extra to " + d.name;
+      }
       else if (kind === "goal"){
         const w = state.wishlist.find(x => x.id === id); if (!w) return;
         w.saved = Math.round(((Number(w.saved) || 0) + amt) * 100) / 100;
         add("Saved for " + w.name, "savings");
       }
-      closeSheet(); commit(); setStatus("Assigned " + money(amt));
+      closeSheet(); commit(); setStatus(msg);
+      // split it: pick again for whatever is still left
+      if (unassigned(p) > 0.004) assignSheet(p.id, closing);
     }
     else if (act === "finAll"){
       if (selPc !== "done"){ selPc = "done"; finView = null; render(); return; }
@@ -3151,7 +3321,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     else if (act === "moveLeft"){ const from = findPc(pcId), it = from && from.items.find(i => i.id === id); if (it) moveLeftover(from, [it]); }
     else if (act === "moveAll"){ const from = findPc(pcId); if (from) moveLeftover(from, from.items); }
-    else if (act === "mvPick"){ const fn = mvPending; mvPending = null; closeSheet(); if (fn) fn(b.dataset.mode); }
+    else if (act === "mvPick"){ const fn = mvPending && mvPending[b.dataset.mode]; mvPending = null; closeSheet(); if (fn) fn(); }
+    else if (act === "carryOpen") carrySheet([id]);
+    else if (act === "carryIn"){ const p = findPc(id); if (p) carrySheet((p.carry || []).map(c => c.id).concat(p.items.filter(i => i.carryTo).map(i => i.cid))); }
+    else if (act === "carryBack"){
+      const c = findCarry(id), undo = removeCarry(id); if (!undo) return;
+      closeSheet(); commit(); toast("Took back " + money(c.it.amount) + " to " + dayLabel(c.src.date), undo);
+    }
     else if (act === "addTo") addToCheckSheet(b.dataset.kind, id);
     else if (act === "addPick"){
       const to = findPc(pcId); if (!to) return;
