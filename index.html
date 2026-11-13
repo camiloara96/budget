@@ -20,6 +20,9 @@
   --bg:#000000; --surface:#1C1C1E; --ink:#F5F5F7; --muted:#8E8E93; --line:#2C2C2E; --dim:#636366; --raise:#3A3A3C;
   --soft:#2C2C2E; --check:#30C77B; --check-ink:#000000; --good:#30D158; --bad:#FF453A;
   --accent:#F5F5F7; --accent-ink:#000000; --banner:#2B2508; --banner-ink:#FFE27A; --red-bg:#3B1411; --red-ink:#FF9C8F; --extra-bg:#2B2508; --extra-ink:#FFD60A; --plan:#22533C; --xbar:#FFD60A;
+  --sub:#A1A1A6; --sub2:#AEAEB2; --sub3:#B4B4B9; --edge:#3A3A3C; --e5a:#5A5A5E; --e54:#545458; --e48:#48484A;
+  --auto-bg:rgba(10,132,255,.12); --auto-edge:rgba(100,170,255,.55); --auto-ink:#8EC5FF;
+  --on-ink:#000000; --in-ink:#5BE39A; --stk1:#2A2A2C; --stk2:#18181A; --focus-ring:rgba(245,245,247,.85);
   color-scheme:dark;
 }
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
@@ -164,11 +167,11 @@ details.pc .extra{margin:4px 16px 10px}
 .status{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;background:var(--soft);color:var(--muted);font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none}
 .status.show{opacity:1}
 /* status-bar strip when opened from the home screen (status bar text is white) */
-body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#000000;z-index:40}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:40}
 .login{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:auto;
   padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px))}
 .login-card{width:100%;max-width:380px}
-.login-icon{width:64px;height:64px;border-radius:16px;background:#1C1C1E;display:grid;place-items:center;margin-bottom:18px}
+.login-icon{width:64px;height:64px;border-radius:16px;background:var(--surface);display:grid;place-items:center;margin-bottom:18px}
 .login-icon span{width:34px;height:34px;border-radius:50%;background:var(--check);display:grid;place-items:center}
 .login-icon svg{width:20px;height:20px;fill:none;stroke:var(--check-ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .login h2{margin:0 0 4px;font-size:28px;font-weight:800;letter-spacing:-0.02em}
@@ -352,13 +355,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 /* ===== Midnight design: black, emerald for what's paid, white chrome ===== */
 .pc{background:var(--surface);border:0;border-radius:22px}
 .xcard{border:0;border-radius:20px}
-.addcard{border-color:#3A3A3C;border-radius:20px}
+.addcard{border-color:var(--edge);border-radius:20px}
 .set-list{background:var(--surface);border:0;border-radius:20px}
 .radios input:checked+span,.rng button[aria-selected="true"]{background:var(--raise);box-shadow:none}
 .pc.need-cat{border:1px solid var(--xbar)}
 .page-h{margin:calc(12px + min(18px, env(safe-area-inset-top, 0px))) 4px 14px;font-size:20px;font-weight:700;letter-spacing:-0.01em}
 .sec-head h2{font-size:19px;font-weight:700}
-.sub-head h3{font-size:15px;font-weight:700;color:#A1A1A6}
+.sub-head h3{font-size:15px;font-weight:700;color:var(--sub)}
 .sub-r{display:flex;align-items:center;gap:10px}
 .grp-x{position:relative;flex:none;width:24px;height:24px;border:0;border-radius:50%;background:var(--soft);color:var(--muted);display:grid;place-items:center;padding:0;align-self:center}
 .grp-x::after{content:"";position:absolute;inset:-10px}
@@ -369,20 +372,20 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .rec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.01em;padding:0 0 8px}
 .rec-h.todo{color:var(--ink)}
 .items + .rec-h{padding-top:16px}
-.addchk{flex:none;display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 10px 0 8px;border:1px solid #545458;border-radius:14px;background:transparent;color:var(--ink);font-size:13px;font-weight:700}
+.addchk{flex:none;display:inline-flex;align-items:center;gap:4px;height:28px;padding:0 10px 0 8px;border:1px solid var(--e54);border-radius:14px;background:transparent;color:var(--ink);font-size:13px;font-weight:700}
 .addchk svg{width:12px;height:12px;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;fill:none}
 .addchk:active{background:var(--soft)}
 .amt-btn{flex:none;border:0;background:none;color:inherit;font:inherit;padding:11px 0 11px 6px}
 .mvchk{padding:0 8px 0 10px}
 .row .amt-btn{padding:10px 0 10px 4px}
 .gh-l{display:inline-flex;align-items:center;gap:8px}
-.gh-move{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 7px 0 9px;border:1px solid #545458;border-radius:12px;background:transparent;color:var(--ink);font-size:12.5px;font-weight:700}
+.gh-move{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 7px 0 9px;border:1px solid var(--e54);border-radius:12px;background:transparent;color:var(--ink);font-size:12.5px;font-weight:700}
 .gh-move svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;fill:none}
 .gh-move:active{background:var(--soft)}
-.pc-carry{display:inline-block;margin:2px 0 0;padding:3px 10px;line-height:18px;border:0;border-radius:12px;background:#2C2C2E;color:#AEAEB2;font-size:12.5px;font-weight:600;text-align:left}
+.pc-carry{display:inline-block;margin:2px 0 0;padding:3px 10px;line-height:18px;border:0;border-radius:12px;background:var(--soft);color:var(--sub2);font-size:12.5px;font-weight:600;text-align:left}
 .pc-carry b{font-weight:700}
-.pc-carry b.in{color:#5BE39A}
-.pc-carry b.out{color:#F5F5F7}
+.pc-carry b.in{color:var(--in-ink)}
+.pc-carry b.out{color:var(--ink)}
 .row.is-carry .row-name,.row.is-carry .row-amt{color:var(--muted)}
 .row.is-carry .tick::before{display:none}
 .pc-carry:active{opacity:.75}
@@ -392,6 +395,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .xrow .amt-btn{padding:0 0 0 6px}
 .sugg .pick-r{display:flex;align-items:center;gap:8px;flex:none;font-size:13px;color:var(--muted);text-align:right}
 .sugg .pick-r.bad{color:var(--bad)}
+/* a check that comes after the bill is due */
+.sugg button.late, .sugg .pl-row.late{background:var(--red-bg)}
+.sugg button.late .s-name, .sugg button.late .s-sub, .sugg .pl-row.late .s-sub{color:var(--red-ink)}
+.pill.late{background:rgba(255,69,58,.2);color:var(--red-ink)}
 .sugg .pick-r svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;fill:none}
 /* bottom tab bar: white when selected, dimmed when not */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
@@ -407,7 +414,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .tabbar .tab-mid{gap:3px}
 .mid-ring{width:48px;height:48px;margin-top:-24px;border-radius:24px;display:grid;place-items:center;background:#1C1C1E;color:#C7C7CC;box-shadow:0 0 0 5px #080809,0 0 0 6px #232325;transition:background .15s,color .15s}
 .tabbar .mid-ring svg{width:22px;height:22px;stroke-width:2}
-.tabbar .tab-mid[aria-current="page"] .mid-ring{background:var(--ink);color:#000}
+.tabbar .tab-mid[aria-current="page"] .mid-ring{background:var(--ink);color:var(--on-ink)}
 .tabbar .tab-mid[aria-current="page"] .mid-ring svg{stroke-width:2.3}
 .status{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
 .toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}
@@ -417,35 +424,35 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .pc-card{flex:0 0 calc(100% - 40px);max-width:460px;scroll-snap-align:start;box-sizing:border-box;background:var(--surface);border-radius:24px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:12px}
 .pc-top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
 .pc-top > div{display:flex;flex-direction:column;gap:2px;min-width:0}
-.pc-card .pc-date{font-size:14px;font-weight:600;color:#A1A1A6;letter-spacing:0;white-space:nowrap}
+.pc-card .pc-date{font-size:14px;font-weight:600;color:var(--sub);letter-spacing:0;white-space:nowrap}
 .pc-card .pc-amt{font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
-.pc-adjust{flex:none;border:1px solid #3A3A3C;border-radius:16px;background:none;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink)}
+.pc-adjust{flex:none;border:1px solid var(--edge);border-radius:16px;background:none;padding:6px 12px;font-size:13px;font-weight:700;color:var(--ink)}
 .pc-card .pc-sub{margin:-6px 0 0;font-size:12.5px;color:var(--muted)}
 .pc-card .pc-line{margin:0;display:flex;justify-content:space-between;gap:6px}
 .pc-card .pc-sum{margin:4px 4px 2px}
-.pc-add{border:1.5px dashed #5A5A5E;background:var(--bg);align-items:center;justify-content:center;gap:8px;color:var(--ink);text-align:center;min-height:190px}
+.pc-add{border:1.5px dashed var(--e5a);background:var(--bg);align-items:center;justify-content:center;gap:8px;color:var(--ink);text-align:center;min-height:190px}
 .pc-plus{width:50px;height:50px;border-radius:25px;background:var(--ink);display:grid;place-items:center;margin-bottom:2px}
-.pc-plus svg{width:24px;height:24px;fill:none;stroke:#000;stroke-width:2.4;stroke-linecap:round}
+.pc-plus svg{width:24px;height:24px;fill:none;stroke:var(--on-ink);stroke-width:2.4;stroke-linecap:round}
 .pc-add-t{font-size:18px;font-weight:700}
-.pc-add-s{font-size:14px;font-weight:500;color:#A1A1A6}
+.pc-add-s{font-size:14px;font-weight:500;color:var(--sub)}
 .dots{display:flex;justify-content:center;align-items:center;gap:6px;margin:12px 0 16px;min-height:10px}
-.dots .d{width:6px;height:6px;border-radius:3px;background:#3A3A3C;transition:width .2s}
+.dots .d{width:6px;height:6px;border-radius:3px;background:var(--edge);transition:width .2s}
 .dots .d.on{width:18px;background:var(--ink)}
-.dot-plus{width:10px;height:10px;fill:none;stroke:#5A5A5E;stroke-width:1.8;stroke-linecap:round}
+.dot-plus{width:10px;height:10px;fill:none;stroke:var(--e5a);stroke-width:1.8;stroke-linecap:round}
 .dot-plus.on{stroke:var(--ink)}
-.pc-card.is-now{box-shadow:inset 0 0 0 1.5px rgba(245,245,247,.85)}
-.pc-card.is-past .pc-amt{color:#B4B4B9}
-.pc-card .pc-date .now-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:10px;background:var(--ink);color:#000;font-size:11px;font-weight:800;vertical-align:1px}
-.pc-card .pc-date .when{color:#8E8E93;font-weight:600}
+.pc-card.is-now{box-shadow:inset 0 0 0 1.5px var(--focus-ring)}
+.pc-card.is-past .pc-amt{color:var(--sub3)}
+.pc-card .pc-date .now-pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:10px;background:var(--ink);color:var(--on-ink);font-size:11px;font-weight:800;vertical-align:1px}
+.pc-card .pc-date .when{color:var(--muted);font-weight:600}
 .dots{position:relative}
 .dots button.d{position:relative;border:0;padding:0}
 .dots button.d::after{content:"";position:absolute;inset:-12px -6px}
-.dots .d.now{outline:1.5px solid #8E8E93;outline-offset:2px}
+.dots .d.now{outline:1.5px solid var(--muted);outline-offset:2px}
 .dots .d.now.on{outline-color:var(--ink)}
-.now-btn{position:absolute;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:3px;height:30px;padding:0 10px;border:1px solid #48484A;border-radius:15px;background:#000;color:var(--ink);font-size:12.5px;font-weight:700}
+.now-btn{position:absolute;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:3px;height:30px;padding:0 10px;border:1px solid var(--e48);border-radius:15px;background:var(--bg);color:var(--ink);font-size:12.5px;font-weight:700}
 .now-btn.right{right:0;padding-right:7px} .now-btn.left{left:0;padding-left:7px}
 .now-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.dot-tick{width:11px;height:11px;fill:none;stroke:#5A5A5E;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.dot-tick{width:11px;height:11px;fill:none;stroke:var(--e5a);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .dot-tick.on{stroke:var(--ink)}
 .pc-done{flex:0 0 calc(100% - 40px);max-width:460px;scroll-snap-align:start;box-sizing:border-box;border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:stretch;text-align:left;color:var(--ink)}
 .pc-done-main{position:relative;z-index:2;display:flex;flex-direction:column;gap:16px;background:var(--surface);border-radius:24px;padding:18px 16px}
@@ -453,11 +460,11 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .fin-stack::-webkit-scrollbar{display:none}
 .fin-stack > .pc-card, .fin-stack > .fin-sum{flex:none;width:100%;max-width:none;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always}
 .fin-sum{border:0;text-align:left;color:var(--ink);font:inherit;justify-content:space-between}
-.fin-hint{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:-4px;font-size:12.5px;font-weight:600;color:#8E8E93}
+.fin-hint{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:-4px;font-size:12.5px;font-weight:600;color:var(--muted)}
 .fin-hint svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .done-pill{display:inline-flex;align-items:center;gap:3px;margin-left:6px;padding:2px 7px 2px 5px;border-radius:10px;background:rgba(48,199,123,.16);color:var(--check);font-size:11px;font-weight:800;vertical-align:1px;white-space:nowrap}
 .done-pill svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
-.done-pill .of{color:#A1A1A6;font-weight:700;margin-left:2px}
+.done-pill .of{color:var(--sub);font-weight:700;margin-left:2px}
 .done-pill.todo{background:rgba(255,214,10,.14);color:var(--xbar)}
 .done-pill.todo i{width:6px;height:6px;border-radius:3px;background:currentColor;margin:0 2px 0 1px}
 .fin-ico.todo{background:var(--xbar);color:#000;font-size:15px;font-weight:800}
@@ -468,65 +475,65 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .assign-card strong{font-size:16px;color:var(--xbar)}
 .exp-head{background:var(--surface);border-radius:24px;padding:18px 16px 16px;margin:0 0 16px;display:flex;flex-direction:column;gap:12px}
 .eh-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.eh-t{font-size:14px;font-weight:600;color:#A1A1A6}
-.eh-s{font-size:13px;font-weight:600;color:#8E8E93}
+.eh-t{font-size:14px;font-weight:600;color:var(--sub)}
+.eh-s{font-size:13px;font-weight:600;color:var(--muted)}
 .eh-amt{margin-top:-8px;font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
 .eh-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .eh-stats.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .eh-stats > div{display:flex;flex-direction:column;gap:3px;min-width:0}
-.eh-stats .k{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#A1A1A6;white-space:nowrap}
+.eh-stats .k{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--sub);white-space:nowrap}
 .eh-stats .v{font-size:16px;font-weight:700}
 .eh-stats .v.ta{color:var(--xbar)}
-.dot.n{background:#545458}
+.dot.n{background:var(--e54)}
 .eh-bar{display:flex;gap:2px;height:10px}
 .eh-bar span{min-width:6px;border-radius:5px}
-.eh-bar .p{background:var(--check)} .eh-bar .u{background:var(--plan)} .eh-bar .x{background:var(--xbar)} .eh-bar .n{background:#3A3A3C}
-.eh-note{margin:0;font-size:13.5px;color:#A1A1A6;line-height:1.4}
+.eh-bar .p{background:var(--check)} .eh-bar .u{background:var(--plan)} .eh-bar .x{background:var(--xbar)} .eh-bar .n{background:var(--edge)}
+.eh-note{margin:0;font-size:13.5px;color:var(--sub);line-height:1.4}
 .eh-note strong{color:var(--ink)}
-.eh-btn{height:44px;border:0;border-radius:14px;background:var(--ink);color:#000;font-size:15px;font-weight:800}
+.eh-btn{height:44px;border:0;border-radius:14px;background:var(--ink);color:var(--on-ink);font-size:15px;font-weight:800}
 .eh-ok{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--check)}
 .eh-ok svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .sec-card{background:var(--surface);border-radius:20px;padding:14px 16px;margin:0 0 4px;display:flex;flex-direction:column;gap:10px}
 .sc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .sc-amt{font-size:22px;font-weight:800;letter-spacing:-0.01em}
-.sc-amt small{margin-left:5px;font-size:13px;font-weight:600;color:#A1A1A6;letter-spacing:0}
-.sc-n{font-size:13px;font-weight:600;color:#8E8E93}
+.sc-amt small{margin-left:5px;font-size:13px;font-weight:600;color:var(--sub);letter-spacing:0}
+.sc-n{font-size:13px;font-weight:600;color:var(--muted)}
 .sec-card .eh-stats .v{font-size:15px}
-.set-aside{display:flex;align-items:center;gap:10px;border:1px solid #3A3A3C;border-radius:16px;padding:10px 10px 10px 14px;margin:0 0 8px;font-size:13.5px;color:#A1A1A6;line-height:1.35}
+.set-aside{display:flex;align-items:center;gap:10px;border:1px solid var(--edge);border-radius:16px;padding:10px 10px 10px 14px;margin:0 0 8px;font-size:13.5px;color:var(--sub);line-height:1.35}
 .set-aside span{flex:1;min-width:0}
 .set-aside strong{color:var(--ink)}
-.set-aside button{flex:none;border:0;border-radius:12px;background:var(--ink);color:#000;font-weight:800;font-size:13.5px;padding:8px 12px}
+.set-aside button{flex:none;border:0;border-radius:12px;background:var(--ink);color:var(--on-ink);font-weight:800;font-size:13.5px;padding:8px 12px}
 .debt{width:100%;display:flex;flex-direction:column;gap:10px;background:var(--surface);border:0;border-radius:20px;padding:14px 16px;margin:0 0 8px;text-align:left;color:var(--ink);font:inherit}
 .debt-top{display:flex;align-items:center;gap:12px}
 .debt-nm{flex:1;min-width:0;font-size:16px;font-weight:700}
-.debt-nm small{display:block;margin-top:2px;font-size:13px;font-weight:500;color:#A1A1A6}
+.debt-nm small{display:block;margin-top:2px;font-size:13px;font-weight:500;color:var(--sub)}
 .debt-bal{font-size:19px;font-weight:800}
 .debt-bar{display:flex;gap:2px;height:6px}
 .debt-bar span{min-width:3px;border-radius:3px}
-.debt-bar .p{background:var(--check)} .debt-bar .n{background:#3A3A3C}
-.debt-foot{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:#A1A1A6}
+.debt-bar .p{background:var(--check)} .debt-bar .n{background:var(--edge)}
+.debt-foot{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:var(--sub)}
 .debt-foot > span:last-child{white-space:nowrap;text-align:right}
 .debt-foot .bad,.db-hint .bad,.db-goal .bad,.eh-stats .v.bad{color:var(--bad)} .debt-foot .good{color:var(--check)}
-.debt-tip{background:var(--surface);border-radius:20px;padding:14px 16px;margin:0 0 16px;font-size:14px;line-height:1.45;color:#A1A1A6}
+.debt-tip{background:var(--surface);border-radius:20px;padding:14px 16px;margin:0 0 16px;font-size:14px;line-height:1.45;color:var(--sub)}
 .debt-tip b{color:var(--ink)} .debt-tip .warn{color:var(--bad)}
 .field-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .db-hint{margin:2px 0 12px;line-height:1.5} .db-hint b{color:var(--ink)}
-.db-goal{display:flex;align-items:center;gap:10px;margin:-4px 0 10px;font-size:14px;color:#A1A1A6} .db-goal:empty{display:none}
+.db-goal{display:flex;align-items:center;gap:10px;margin:-4px 0 10px;font-size:14px;color:var(--sub)} .db-goal:empty{display:none}
 .db-goal span{flex:1} .db-goal b{color:var(--ink)}
-.use-btn{flex:none;border:0;border-radius:12px;background:var(--ink);color:#000;font-weight:800;font-size:13.5px;padding:8px 12px}
+.use-btn{flex:none;border:0;border-radius:12px;background:var(--ink);color:var(--on-ink);font-weight:800;font-size:13.5px;padding:8px 12px}
 .plan-card{background:var(--surface);border-radius:20px;padding:16px;margin:0 0 16px;display:flex;flex-direction:column;gap:8px}
 .pl-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pl-t{font-size:17px;font-weight:800}
-.pl-line{margin:0;font-size:14px;line-height:1.45;color:#A1A1A6}
+.pl-line{margin:0;font-size:14px;line-height:1.45;color:var(--sub)}
 .pl-line b{color:var(--ink)} .pl-line.bad{color:var(--bad)}
 .plan-card .soft-btn{padding:7px 12px;font-size:13px}
 .plan-card .eh-btn{margin-top:4px}
-.pill.focus{background:var(--ink);color:#000}
+.pill.focus{background:var(--ink);color:var(--on-ink)}
 .pill.own{background:rgba(255,214,10,.16);color:var(--xbar)}
 .ownl,.pl-line.ownl{color:var(--xbar)} .pl-line.ownl b{color:var(--xbar)}
-.db-plan{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px;font-size:14px;color:#A1A1A6}
+.db-plan{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px;font-size:14px;color:var(--sub)}
 .db-plan b{color:var(--ink)} .db-plan .field{margin-top:10px} .db-out{margin:4px 0 0} .db-out .bad{color:var(--bad)}
-.debt.is-focus{box-shadow:inset 0 0 0 1.5px rgba(245,245,247,.85)}
+.debt.is-focus{box-shadow:inset 0 0 0 1.5px var(--focus-ring)}
 .dp-opts{display:flex;flex-direction:column;gap:8px;margin:2px 0 12px}
 .dp-opt{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer}
 .dp-opt input{margin:3px 0 0;width:20px;height:20px;accent-color:var(--check);flex:none}
@@ -534,7 +541,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .dp-body{display:flex;flex-direction:column;gap:3px;min-width:0}
 .dp-t{font-size:16px;font-weight:700}
 .dp-tag{margin-left:8px;font-size:11px;font-weight:800;color:var(--check)}
-.dp-desc{font-size:13.5px;color:#A1A1A6;line-height:1.35}
+.dp-desc{font-size:13.5px;color:var(--sub);line-height:1.35}
 .dp-proj{font-size:13px;color:var(--ink);line-height:1.45;margin-top:2px}
 .dp-proj .bad,#dpMins .bad{color:var(--bad)} #dpMins b{color:var(--ink)}
 .dp-list{background:var(--bg);border:1px solid var(--line);border-radius:14px;margin:0 0 12px}
@@ -542,7 +549,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .dp-row:first-child{border-top:0}
 .dp-n{flex:none;width:22px;height:22px;border-radius:11px;background:var(--soft);display:grid;place-items:center;font-size:12px;font-weight:800}
 .dp-nm{flex:1;min-width:0;font-size:15px;font-weight:600}
-.dp-nm small{display:block;font-size:12.5px;font-weight:500;color:#A1A1A6}
+.dp-nm small{display:block;font-size:12.5px;font-weight:500;color:var(--sub)}
 .dp-mv{flex:none;width:36px;height:36px;border:0;border-radius:10px;background:var(--soft);color:var(--ink);display:grid;place-items:center}
 .dp-mv:disabled{opacity:.3}
 .dp-mv svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -550,15 +557,15 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .plan-list .pl-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:10px 12px}
 .plan-list .pl-row:first-child{border-top:0}
 .assign-card button{flex:none;border:0;border-radius:12px;background:var(--xbar);color:#000;font-weight:800;font-size:15px;padding:10px 16px}
-.pc-done .stk1{position:relative;z-index:1;height:8px;margin:-1px 14px 0;background:#2A2A2C;border-radius:0 0 18px 18px}
-.pc-done .stk2{height:7px;margin:0 28px;background:#18181A;border-radius:0 0 14px 14px}
+.pc-done .stk1{position:relative;z-index:1;height:8px;margin:-1px 14px 0;background:var(--stk1);border-radius:0 0 18px 18px}
+.pc-done .stk2{height:7px;margin:0 28px;background:var(--stk2);border-radius:0 0 14px 14px}
 .pc-done-top{display:flex;align-items:center;gap:12px}
 .pc-done-ico{flex:none;width:42px;height:42px;border-radius:21px;background:var(--check);display:grid;place-items:center}
 .pc-done-ico svg{width:22px;height:22px;fill:none;stroke:var(--check-ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .pc-done-t{display:block;font-size:19px;font-weight:800}
-.pc-done-s{display:block;margin-top:2px;font-size:13.5px;font-weight:500;color:#A1A1A6}
+.pc-done-s{display:block;margin-top:2px;font-size:13.5px;font-weight:500;color:var(--sub)}
 .pc-done-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.pc-done-stats .k{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#A1A1A6}
+.pc-done-stats .k{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--sub)}
 .pc-done-stats .v{display:block;margin-top:3px;font-size:19px;font-weight:700}
 .pc-done-stats .v.bad{color:var(--bad)}
 .pc-done-bar{display:flex;gap:2px;height:8px}
@@ -571,14 +578,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .fin-ico svg{width:15px;height:15px;fill:none;stroke:var(--check-ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .fin-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .fin-d{font-size:16px;font-weight:700}
-.fin-s{font-size:13px;font-weight:500;color:#A1A1A6}
+.fin-s{font-size:13px;font-weight:500;color:var(--sub)}
 .fin-amt{font-size:16px;font-weight:700}
-.fin-row .chev{flex:none;width:16px;height:16px;fill:none;stroke:#636366;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.fin-row .chev{flex:none;width:16px;height:16px;fill:none;stroke:var(--dim);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .fin-back{display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:var(--ink);font-size:15px;font-weight:700;padding:2px 10px 12px 0}
 .fin-back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .pc-card.fin-open{max-width:none;margin:0 0 18px}
 /* items grouped: To pay, then Paid */
-.grp-head{display:flex;justify-content:space-between;padding:0 6px;margin:0 0 6px;font-size:14px;font-weight:700;color:#A1A1A6}
+.grp-head{display:flex;justify-content:space-between;padding:0 6px;margin:0 0 6px;font-size:14px;font-weight:700;color:var(--sub)}
 .rows{list-style:none;margin:0 0 8px;padding:2px 16px;background:var(--surface);border-radius:24px}
 .row{display:flex;align-items:center;gap:6px;border-top:.5px solid var(--line)}
 .row:first-child{border-top:0}
@@ -589,10 +596,25 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .row.is-paid .row-name,.row.is-paid .row-amt{color:var(--muted)}
 .row.is-paid .cat-ico{opacity:.5}
 .tick{flex:none;width:44px;height:44px;margin-right:-9px;border:0;background:none;display:grid;place-items:center;padding:0}
-.tick::before{content:"";grid-area:1/1;width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px #48484A}
+.tick::before{content:"";grid-area:1/1;width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--e48)}
 .tick svg{grid-area:1/1;width:14px;height:14px;fill:none;stroke:var(--check-ink);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;opacity:0}
 .row.is-paid .tick::before{background:var(--check);box-shadow:none}
 .row.is-paid .tick svg{opacity:1}
+/* a bill the app put on a check for you: lifted, not all the way in, until you confirm it */
+.row.is-tent{position:relative;flex-wrap:wrap;margin:6px -8px;padding:0 8px;border:1px dashed var(--auto-edge);border-radius:16px;background:var(--auto-bg);box-shadow:0 8px 18px rgba(0,0,0,.32);transform:translateY(-3px)}
+.row.is-tent + .row{border-top-color:transparent}
+.row.is-tent.lift-in{animation:tentLift .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes tentLift{from{transform:none;box-shadow:0 0 0 rgba(0,0,0,0)}to{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.32)}}
+.row.is-tent.settle{transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease,border-color .22s ease;transform:none;box-shadow:none;background:transparent;border-color:transparent}
+.row.is-tent .row-main{padding-bottom:6px}
+.pill.auto{background:var(--auto-bg);color:var(--auto-ink);border:1px solid var(--auto-edge)}
+.tent-bar{flex-basis:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 0 10px 44px}
+.tent-bar .q{font-size:12.5px;font-weight:500;color:var(--auto-ink)}
+.tent-acts{display:flex;gap:6px;flex:none}
+.tent-ok{height:36px;padding:0 14px;border:0;border-radius:18px;background:var(--ink);color:var(--on-ink);font-size:13.5px;font-weight:700}
+.tent-no{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--edge);border-radius:18px;background:transparent;padding:0}
+.tent-no svg{width:12px;height:12px;fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round}
+html.paper .row.is-tent{box-shadow:0 8px 18px rgba(20,20,10,.12)}
 .rows-empty{margin:0 0 8px;padding:16px;background:var(--surface);border-radius:24px;color:var(--muted);font-size:15px;text-align:center}
 .newitem{display:flex;width:100%;align-items:center;justify-content:center;gap:8px;height:42px;margin:0 0 18px;border:1px solid var(--ink);border-radius:16px;background:var(--bg);color:var(--ink);font-size:15px;font-weight:600}
 .newitem svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
@@ -610,15 +632,44 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .pane{display:none}
 body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="debt"] #paneDebt, body[data-tab="ana"] #paneAna, body[data-tab="set"] #paneSet{display:block}
 @media (orientation: landscape) and (min-width: 640px){
-  html, body{height:100%;overflow:hidden}
-  .wrap{max-width:none;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;
+  html:not(.desk), html:not(.desk) body{height:100%;overflow:hidden}
+  html:not(.desk) .wrap{max-width:none;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;
     padding:0 max(16px, env(safe-area-inset-right,0px)) 60px max(16px, env(safe-area-inset-left,0px))}
-  #app{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  body[data-tab] #panePay, body[data-tab="pay"] #paneExp{display:block}
-  .pane{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 2px 24px}
-  .pc-rail{margin:0;padding:0;scroll-padding:0}
-  .pc-card{flex-basis:calc(100% - 40px)}
+  html:not(.desk) #app{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  html:not(.desk) body[data-tab] #panePay, html:not(.desk) body[data-tab="pay"] #paneExp{display:block}
+  html:not(.desk) .pane{min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 2px 24px}
+  html:not(.desk) .pc-rail{margin:0;padding:0;scroll-padding:0}
+  html:not(.desk) .pc-card{flex-basis:calc(100% - 40px)}
 }
+/* drag a bill onto a paycheck when both pages show (phone sideways, or windows on a computer) */
+#paneExp li.item.rec, #paneExp .xcard{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:pan-y}
+.bd-src{opacity:.35;transition:opacity .2s ease}
+.bd-ghost{position:fixed;left:0;top:0;z-index:2000;pointer-events:none;width:280px;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;
+  background:var(--surface);border:1.5px solid var(--edge);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.55);color:var(--ink);
+  transition:transform .18s ease,border-color .15s ease}
+.bd-ghost.lift{transform:rotate(-1.5deg) scale(1.03)}
+.bd-ghost.ok{border-color:var(--check)}
+.bd-ghost.bad{border-color:var(--bad)}
+.bd-ghost .bd-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bd-ghost b{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bd-ghost .bd-s{font-size:12.5px;color:var(--muted)}
+.bd-ghost.ok .bd-s{color:var(--good)}
+.bd-ghost.bad .bd-s{color:var(--red-ink)}
+.bd-ghost .num{font-weight:700}
+.bd-ghost.fly{transition:left .32s cubic-bezier(.2,.8,.2,1),top .32s cubic-bezier(.2,.8,.2,1),transform .32s cubic-bezier(.2,.8,.2,1),opacity .28s ease}
+.bd-dragging #pcRail .pc-card[data-pc]:not([data-pc="add"]):not([data-pc="done"]){outline:2px dashed var(--edge);outline-offset:-2px}
+.bd-dragging #pcRail .pc-card.bd-over{outline-color:var(--check)}
+.bd-dragging #pcRail .pc-card.bd-over.bd-bad{outline-color:var(--bad)}
+.row.just-in{animation:justIn 1.1s cubic-bezier(.2,.8,.2,1)}
+@keyframes justIn{0%{opacity:0;transform:translateY(-6px);background-color:rgba(48,209,88,.18)}40%{opacity:1;transform:none;background-color:rgba(48,209,88,.18)}100%{background-color:transparent}}
+/* split a bill across checks */
+.split-box{margin:0 0 6px}
+.split-part{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:0 10px;padding:12px 0 0;border-top:1px solid var(--line)}
+.split-part .field{margin-bottom:6px}
+.split-left{grid-column:1 / -1;margin:0 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.split-left.bad{color:var(--red-ink)}
+.split-sum{margin:2px 0 8px;font-size:14px;font-weight:700;color:var(--red-ink)}
+.split-sum.ok{color:var(--good)}
 /* analysis charts */
 .rng{display:flex;overflow-x:auto;scrollbar-width:none}
 .rng::-webkit-scrollbar{display:none}
@@ -632,20 +683,21 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 .mini-seg button{border:0;background:none;border-radius:7px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--muted)}
 .mini-seg button[aria-pressed="true"]{background:var(--raise);color:var(--ink)}
 .chart{display:block;width:100%;height:auto}
-.chart .cg{stroke:#2C2C2E;stroke-width:1}
-.chart .cg.base{stroke:#48484A}
-.chart .cy{fill:#8E8E93;font-size:10px;text-anchor:end;font-family:inherit}
-.chart .cx{fill:#8E8E93;font-size:10px;text-anchor:middle;font-family:inherit}
+.chart{color:var(--ink)}
+.chart .cg{stroke:var(--line);stroke-width:1}
+.chart .cg.base{stroke:var(--e48)}
+.chart .cy{fill:var(--muted);font-size:10px;text-anchor:end;font-family:inherit}
+.chart .cx{fill:var(--muted);font-size:10px;text-anchor:middle;font-family:inherit}
 .chart .cline{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .chart .cdot{stroke:var(--surface);stroke-width:2}
 .chart .chit{fill:transparent;cursor:pointer}
-.chart .cguide{stroke:#636366;stroke-width:1;stroke-dasharray:3 3}
+.chart .cguide{stroke:var(--dim);stroke-width:1;stroke-dasharray:3 3}
 .ana-read{margin:0;min-height:18px;font-size:13px;color:var(--muted)}
 .ana-read strong{color:var(--ink);font-weight:700}
 .ana-read .rd{display:inline-flex;align-items:center;gap:5px;margin-right:10px;white-space:nowrap}
 .ana-read .rd i,.chip i,.pie-legend i{display:inline-block;width:8px;height:8px;border-radius:4px;flex:none}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #3A3A3C;border-radius:999px;background:none;padding:6px 10px;font-size:12px;font-weight:600;color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--edge);border-radius:999px;background:none;padding:6px 10px;font-size:12px;font-weight:600;color:var(--ink)}
 .chip[aria-pressed="true"]{background:var(--raise);border-color:var(--ink)}
 .ana-slide .legend{margin:0}
 .pie-wrap{position:relative;width:min(100%,250px);margin:2px auto 4px}
@@ -665,6 +717,88 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 .pie-legend i{width:9px;height:9px;border-radius:3px}
 .ana-dots{margin:12px 0 18px}
 @media (prefers-reduced-motion: reduce){.ana-rail{transition:none}.mid-ring{transition:none}.bar span{transition:none}.dots .d{transition:none}}
+
+/* ---------- desktop layout: only on a computer (mouse or trackpad, wide window) ---------- */
+html.desk{
+  --dk-page:#0A0A0B; --dk-sheet:#111113; --dk-sheet-edge:#2A2A30; --dk-tab:#0C0C0E; --dk-tab-edge:#1E1E22; --dk-strong:#FFFFFF; --dk-muted:#6C6C74;
+  --dk-win-edge:#3A3A42; --dk-win-bar:#17171A; --dk-ring:#4A4A52; --dk-snap:rgba(91,140,255,.10); --dk-shadow:0 24px 60px rgba(0,0,0,.7);
+  --dk-font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --dk-tab-r:12px 0 0 12px; --dk-sheet-r:0 16px 16px 16px;
+  --bg:#111113; --surface:#1A1A1D;
+}
+html.desk.paper{
+  color-scheme:light;
+  --dk-page:#F1F1EE; --dk-sheet:#FFFFFF; --dk-sheet-edge:#D6D6CF; --dk-tab:#E7E7E2; --dk-tab-edge:#D8D8D1; --dk-strong:#000000; --dk-muted:#8C8F96;
+  --dk-win-edge:#CFCFC8; --dk-win-bar:#F7F7F4; --dk-ring:#B9B9B2; --dk-snap:rgba(31,111,92,.08); --dk-shadow:0 20px 50px rgba(20,20,10,.18);
+  --dk-font:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --dk-tab-r:10px 0 0 10px; --dk-sheet-r:0 14px 14px 14px;
+  --bg:#FFFFFF; --surface:#F4F4F0; --ink:#17181A; --muted:#62656C; --line:#E6E6E0; --dim:#8C8F96; --raise:#E4E4DE; --soft:#ECECE7;
+  --check:#17844C; --check-ink:#FFFFFF; --good:#1F7A52; --bad:#C8473F; --accent:#17181A; --accent-ink:#FFFFFF;
+  --banner:#FBF4E2; --banner-ink:#7A5200; --red-bg:#FBECEA; --red-ink:#B23A33; --extra-bg:#FBF4E2; --extra-ink:#8A5A00; --plan:#A9D3BD; --xbar:#E0A800;
+  --sub:#5C5F66; --sub2:#5C5F66; --sub3:#6B6E75; --edge:#D6D6CF; --e5a:#B9B9B2; --e54:#B9B9B2; --e48:#C4C4BE;
+  --auto-bg:rgba(47,111,219,.08); --auto-edge:rgba(47,111,219,.45); --auto-ink:#1F5FBF;
+  --on-ink:#FFFFFF; --in-ink:#1F7A52; --stk1:#E4E4DE; --stk2:#EDEDE8; --focus-ring:rgba(23,24,26,.7);
+}
+html.desk.paper .pill.own, html.desk.paper .done-pill.todo, html.desk.paper .pc-line .v.good, html.desk.paper .fin-s .ta, html.desk.paper .pc-done-stats .v.ta,
+html.desk.paper .assign-card strong, html.desk.paper .eh-stats .v.ta, html.desk.paper .ownl, html.desk.paper .pl-line.ownl b{color:var(--extra-ink)}
+html.desk.paper .done-pill{color:var(--good)}
+#desk{display:none}
+html.desk body{font-family:var(--dk-font);overflow:hidden}
+html.desk .wrap, html.desk body::before{display:none}
+html.desk #desk{position:fixed;inset:0;display:flex;align-items:stretch;padding-left:10px;background:var(--dk-page);color:var(--ink)}
+.dk-tabs{flex:0 0 60px;position:relative;z-index:2;padding:14px 0 16px;display:flex;flex-direction:column;align-items:flex-end}
+.dk-tab{position:relative;flex:none;width:44px;height:98px;margin:0 -1px -10px 0;display:grid;place-items:center;padding:0;border:1px solid var(--dk-tab-edge);border-right:0;border-radius:var(--dk-tab-r);background:var(--dk-tab);color:var(--dk-muted);touch-action:none;user-select:none;-webkit-user-select:none;transition:margin-top .2s ease,height .2s ease,opacity .15s ease,color .15s}
+.dk-tab svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.dk-tab:hover{color:var(--ink)}
+.dk-tab[aria-current="page"]{width:52px;background:var(--dk-sheet);border-color:var(--dk-sheet-edge);color:var(--dk-strong)}
+.dk-tab[aria-current="page"] svg{stroke-width:2.3}
+.dk-tab.out{height:0;margin-bottom:0;border-width:0;opacity:0;overflow:hidden}
+.dk-sheet{flex:1;min-width:0;position:relative;z-index:1;margin:14px 14px 14px 0;background:var(--dk-sheet);border:1px solid var(--dk-sheet-edge);border-radius:var(--dk-sheet-r);display:flex;flex-direction:column;overflow:hidden}
+.dk-head{flex:none;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin:0 28px;padding:20px 0 14px;border-bottom:1px solid var(--line)}
+.dk-head h1{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.dk-head span{font-size:13px;color:var(--muted)}
+.dk-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:12px 28px 48px;transition:padding .2s ease}
+html.desk #desk .pane{display:block}
+.dk-body > .pane{max-width:640px;margin:0 auto}
+html.desk .page-h{display:none}
+html.desk .status{left:86px;bottom:24px}
+html.desk .toast{bottom:24px}
+.dk-layer{position:absolute;inset:0;z-index:30;pointer-events:none}
+.dk-win{position:absolute;pointer-events:auto;display:flex;flex-direction:column;background:var(--dk-sheet);border:1px solid var(--dk-win-edge);border-radius:12px;box-shadow:var(--dk-shadow);overflow:hidden}
+.dk-win.docked{box-shadow:none}
+.dk-win.leaving{opacity:.55}
+.dk-win.closing{transition:transform .2s ease,opacity .2s ease;transform:scale(.92);opacity:0;pointer-events:none}
+.dk-grow{transition:left .24s cubic-bezier(.2,.8,.2,1),top .24s cubic-bezier(.2,.8,.2,1),width .24s cubic-bezier(.2,.8,.2,1),height .24s cubic-bezier(.2,.8,.2,1)}
+.dk-win-bar{flex:none;display:flex;align-items:center;gap:10px;height:46px;padding:0 6px 0 12px;background:var(--dk-win-bar);border-bottom:1px solid var(--line);cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+.dk-win-bar:active{cursor:grabbing}
+.dk-win-ico svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dk-win-bar h2{flex:1;min-width:0;margin:0;font-size:14px;font-weight:600}
+.dk-win-back{border:1px solid var(--edge);background:transparent;border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:500;color:var(--muted)}
+.dk-win-x{width:34px;height:34px;display:grid;place-items:center;border:0;background:transparent;border-radius:8px;padding:0}
+.dk-win-x svg{width:12px;height:12px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.dk-win-back:hover,.dk-win-x:hover{background:var(--soft)}
+.dk-win-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:4px 18px 32px}
+.dk-win-grip{position:absolute;right:0;bottom:0;width:20px;height:20px;cursor:nwse-resize;touch-action:none}
+.dk-win.docked .dk-win-grip{display:none}
+.dk-fly{position:absolute;z-index:1000;pointer-events:none;width:52px;height:98px;border:1px solid var(--dk-sheet-edge);border-radius:var(--dk-tab-r);background:var(--dk-sheet);box-shadow:var(--dk-shadow);overflow:hidden;transition:width .18s ease,height .18s ease,border-radius .18s ease}
+.dk-fly.as-win{width:420px;height:280px;border-radius:12px;border-color:var(--dk-win-edge)}
+.dk-fly-tab{position:absolute;left:0;top:0;width:52px;height:98px;display:grid;place-items:center;color:var(--dk-strong);transition:opacity .15s}
+.dk-fly-tab svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.dk-fly-win{position:absolute;inset:0;opacity:0;transition:opacity .15s}
+.dk-fly.as-win .dk-fly-tab{opacity:0}
+.dk-fly.as-win .dk-fly-win{opacity:1}
+.dk-fly-bar{display:flex;align-items:center;gap:10px;height:46px;padding:0 12px;background:var(--dk-win-bar);border-bottom:1px solid var(--line);font-size:14px;font-weight:600;white-space:nowrap}
+.dk-fly-bar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dk-fly-lines{display:flex;flex-direction:column;gap:10px;padding:18px}
+.dk-fly-lines i{display:block;height:12px;border-radius:6px;background:var(--soft)}
+.dk-fly-lines i:nth-child(2){width:70%}
+.dk-fly-lines i:nth-child(3){width:45%}
+.dk-snap{position:absolute;z-index:29;border:2px dashed var(--dk-ring);border-radius:12px;background:var(--dk-snap);pointer-events:none}
+.dk-div{position:absolute;pointer-events:auto;cursor:col-resize;touch-action:none;background:var(--dk-page)}
+#desk.covered .dk-tab[aria-current="page"]{width:44px;background:var(--dk-tab);border-color:var(--dk-tab-edge);color:var(--dk-muted)}
+#desk.covered .dk-tab[aria-current="page"] svg{stroke-width:1.8}
+.dk-div::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:56px;margin:-28px 0 0 -2px;border-radius:2px;background:var(--dk-ring)}
+.set-desk{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:14px}
+.set-desk .t{display:block;font-weight:700}
+.set-desk .s{display:block;font-size:13px;color:var(--muted);max-width:360px}
 </style>
 </head>
 <body>
@@ -692,6 +826,15 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
     <button type="button" data-act="tab" data-tab="ana"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V5M19 20v-10"/></svg>Analysis</button>
     <button type="button" data-act="tab" data-tab="set"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.9-1.9M17.5 6.5l1.9-1.9"/></svg>Settings</button>
   </nav>
+</div>
+
+<div id="desk" hidden>
+  <nav class="dk-tabs" id="dkTabs" aria-label="Pages"></nav>
+  <section class="dk-sheet" id="dkSheet" aria-labelledby="dkTitle">
+    <header class="dk-head"><h1 id="dkTitle">Paychecks</h1><span id="dkDate"></span></header>
+    <div class="dk-body" id="dkBody"></div>
+  </section>
+  <div class="dk-layer" id="dkLayer"></div>
 </div>
 
 <div id="toast" class="toast" role="status" hidden><span id="toastMsg"></span><button type="button" id="toastUndo">Undo</button></div>
@@ -818,6 +961,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     return o;
   }
   let ready = false, tab = "pay";
+  // desktop layout state: tab order, pages pulled out into windows, split between two windows
+  let dk = { on: false, order: ["pay", "exp", "debt", "ana", "set"], open: "pay", wins: [], z: 10, split: 0.5, justDragged: false };
   let docRef = null, readOnly = false;
   let saveTimer = null, inflight = false, again = false;
 
@@ -837,6 +982,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       if (it && it.recId){ o.recId = str(it.recId); o.recFor = str(it.recFor); const al = arr(it.also).filter(x => typeof x === "string" && isoRe.test(x)).slice(0, 12); if (al.length) o.also = al; }
       if (it && it.carryTo){ o.carryTo = str(it.carryTo); o.cid = str(it.cid); o.why = str(it.why); o.paid = true; }
       if (it && it.debtX){ o.debtX = str(it.debtX); o.on = isoOr(it.on); }
+      if (it && it.tent) o.tent = true;
       return o; };
     const hrs = h => h && typeof h === "object" ? {reg: num(h.reg), ot: num(h.ot), oncall: !!h.oncall, bonus: num(h.bonus), bonusMethod: h.bonusMethod === "agg" ? "agg" : "flat"} : null;
     const s = Object.assign({}, S0, {groupsOff: []}), ds = d.settings && typeof d.settings === "object" ? d.settings : null;
@@ -928,6 +1074,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
 
   function commit(){
+    if (!readOnly) linkByName();
     if (state.debts && state.debts.length) syncDebtAmounts();
     render();
     if (readOnly) return;
@@ -1058,6 +1205,34 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     return out;
   }
   function findLinked(r, o){ return linkedAll(r, o)[0] || null; }
+  // what's still not on any check for this due date (a bill can be split over several checks)
+  function recLeft(r, o){
+    const placed = linkedAll(r, o).reduce((a, l) => a + (+l.it.amount || 0), 0);
+    return Math.max(0, Math.round((r.amount - placed) * 100) / 100);
+  }
+  function recLeftNow(r){
+    if (isPaidNow(r)) return 0;
+    const o = openOcc(r); return linkedAll(r, o).length ? recLeft(r, o) : r.amount;
+  }
+  // a bill typed by hand on a check ("Rent", "Car") counts as that bill, for the due date closest to the check
+  const billKey = v => String(v || "").toLowerCase().replace(/[\u2018\u2019`\u00b4]/g, "'").replace(/\s+/g, " ").trim();
+  function recByName(name){ const n = billKey(name); return n ? state.recurring.find(r => billKey(r.name) === n) || null : null; }
+  function linkItem(it, pc){
+    if (!it || it.recId || it.debtX || it.carryTo || it.cid) return false;
+    const r = recByName(it.name); if (!r) return false;
+    const o = nearestOcc(r, pc.date); if (!o || o < r.since) return false;
+    it.recId = r.id; it.recFor = o;
+    if (!it.due && !noDay(r)) it.due = o;
+    if (!it.cat && r.cat) it.cat = r.cat;
+    // it was already ticked off: the bill counts as paid for that date too
+    if (it.paid && o === openOcc(r) && linkedAll(r, o).every(l => l.it.paid)) r.paidThrough = o;
+    return true;
+  }
+  function linkByName(){
+    const from = addDays(iso(today()), -45); let ch = false;
+    for (const pc of state.paychecks){ if (pc.date < from) continue; for (const it of pc.items) ch = linkItem(it, pc) || ch; }
+    return ch;
+  }
   function dueText(days, date){
     if (days < 0) return "overdue, was due " + dayLabel(date);
     if (days === 0) return "due today";
@@ -1086,10 +1261,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     for (const r of state.recurring){
       if (groupOff(r)) continue;
-      const o = openOcc(r);
-      if (linkedAll(r, o).length) continue;
+      const o = openOcc(r), lft = linkedAll(r, o).length ? recLeft(r, o) : r.amount;
+      if (lft <= 0.004) continue;
       const days = daysUntil(o);
-      const e = {name: r.name, amount: r.amount, due: o, days};
+      const e = {name: r.name, amount: lft, due: o, days};
       if (noDay(r)){ if (!isPaidNow(r)) yellow.push(e); continue; }
       if (days <= RD) red.push(e); else if (days <= W) yellow.push(e);
     }
@@ -1125,13 +1300,40 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   function lastInMonth(p){ const d = snapPay(p.date); return nextPayday(d).slice(0, 7) !== d.slice(0, 7); }
   function weekOk(p, w){ return w === "last" ? lastInMonth(p) : payIndex(p) === Number(w); }
-  function placeOcc(r, o, p){
+  function placeOcc(r, o, p, tent){
     if (o < r.since || (r.paidThrough && o <= r.paidThrough) || r.skip.includes(o) || linkedAll(r, o).length) return false;
     const nm = r.name.trim().toLowerCase();
     const ex = p.items.find(i => !i.recId && i.name.trim().toLowerCase() === nm);
     if (ex){ ex.recId = r.id; ex.recFor = o; if (!ex.cat) ex.cat = r.cat || ""; return true; }
-    p.items.push({id: "a-" + r.id + "-" + o, name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""});
+    const add = {id: "a-" + r.id + "-" + o, name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""};
+    if (tent) add.tent = true;
+    p.items.push(add);
     return true;
+  }
+  // keeps at least a month and a half of paychecks ahead, on your pay schedule. A check you delete stays deleted.
+  const AHEAD_DAYS = 45;
+  function ensureChecks(){
+    if (!state.paychecks.length) return false;
+    const s = state.settings, t = iso(today()), end = addDays(t, AHEAD_DAYS), from = addDays(t, -Math.round(PERIOD_DAYS[s.payFreq] || 7));
+    const gone = Array.isArray(state.skipChecks) ? state.skipChecks : [];
+    const near = (a, b) => Math.abs(parseISO(a) - parseISO(b)) <= 2 * 864e5;
+    const sorted = [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+    const last = sorted[sorted.length - 1], lh = last.hours;
+    let d = last.date, made = false, guard = 0;
+    while (d < end && guard++ < 80){
+      const nd = nextPayday(d); if (!nd || nd <= d) break;
+      d = nd;
+      if (d <= from || state.paychecks.some(p => near(p.date, d)) || gone.some(g => near(g, d))) continue;
+      const hours = {reg: stdHours(s), ot: lh ? lh.ot : 0, oncall: lh ? !!lh.oncall : false, bonus: 0, bonusMethod: "flat"};
+      state.paychecks.push({id: "pc-" + d, date: d, amount: budgetAmt(payCalc(hours, s)), hours, hoursSet: false, items: []});
+      made = true;
+    }
+    return made;
+  }
+  function forgetCheck(d){
+    const keep = addDays(iso(today()), -30);
+    state.skipChecks = (Array.isArray(state.skipChecks) ? state.skipChecks : []).filter(x => typeof x === "string" && x >= keep);
+    if (!state.skipChecks.includes(d)) state.skipChecks.push(d);
   }
   // puts bills marked "automatic" on the right upcoming paychecks; true if anything changed
   function autoFill(){
@@ -1148,10 +1350,12 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         for (const p of upcoming) if (weekOk(p, r.autoWeek)) changed = placeOcc(r, occOnOrAfter(r, p.date), p) || changed;
         continue;
       }
+      // a monthly (or yearly) bill could go on more than one check: the app picks the last one before it's due and asks you to confirm
+      const tent = (r.freq === "monthly" || r.freq === "yearly") && state.settings.payFreq !== "monthly";
       let o = occOnOrAfter(r, upcoming[0].date), guard = 0;
       while (o <= end && guard++ < 80){
         let p = null; for (const q of all) if (q.date <= o) p = q;
-        if (p && p.date >= t) changed = placeOcc(r, o, p) || changed;
+        if (p && p.date >= t) changed = placeOcc(r, o, p, tent) || changed;
         o = nextOcc(r, o);
       }
     }
@@ -1387,7 +1591,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   function lineChart(data, keys){
     const band = PW / data.length, X = i => PL + band * i + band / 2;
-    const series = !anaSplit ? [{color: "#F5F5F7", vals: data.map(d => d.total)}]
+    const series = !anaSplit ? [{color: "currentColor", vals: data.map(d => d.total)}]
       : keys.filter(k => !anaFocus || k === anaFocus).map(k => ({color: chartColor(k), vals: data.map(d => d.by[k] || 0)}));
     const max = niceMax(Math.max(0, ...series.map(s => Math.max(0, ...s.vals))));
     const Y = v => PT + PH - (v / max) * PH;
@@ -1889,6 +2093,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       bc.hidden = !n; bc.textContent = n; bc.classList.toggle("red", a.red.length > 0);
     }
     document.body.dataset.tab = tab;
+    if (dk.on) deskTab();
     if (!ready){ $("#panePay").innerHTML = '<p class="empty">Loading your budget…</p>'; $("#paneExp").innerHTML = ""; $("#paneAna").innerHTML = ""; $("#paneSet").innerHTML = ""; $("#paneDebt").innerHTML = ""; return; }
     // every page is drawn; CSS shows one (upright) or Paychecks plus one more (sideways)
     $("#panePay").innerHTML = renderPay();
@@ -1904,6 +2109,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
   // mv = the check to move leftovers to, when this check's week is over
   const CARRY_ICO = '<span class="cat-ico" style="background:#3A3A3C;color:#F5F5F7" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>';
+  const seenTent = new Set();   // auto rows already shown, so the lift plays only once
   function itemRow(i, pc, mv){
     if (i.carryTo){
       const to = findPc(i.carryTo);
@@ -1911,8 +2117,20 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<span class="row-name">Carried to ' + (to ? dayLabel(to.date) : "another check") + '<span class="row-sub">' + esc(carryWhy(i)) + '</span></span>' +
         '<span class="row-amt num">' + money(i.amount) + '</span></button><span class="tick" aria-hidden="true"></span></li>';
     }
-    const showDue = i.due && i.due !== pc.date, move = mv && !i.paid;
-    return '<li class="row' + (i.paid ? " is-paid" : "") + '">' +
+    const showDue = i.due && i.due !== pc.date, tent = i.tent && !i.paid, move = mv && !i.paid && !tent;
+    if (tent){
+      const fresh = !seenTent.has(i.id); seenTent.add(i.id);
+      return '<li class="row is-tent' + (fresh ? " lift-in" : "") + '">' +
+        '<button class="row-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
+          '<span class="row-name">' + esc(i.name) + '<span class="pill auto">Auto</span>' + (showDue ? '<span class="row-sub">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
+          '<span class="row-amt num">' + money(i.amount) + '</span></button>' +
+        '<div class="tent-bar"><span class="q">Added for you. Keep it on this check?</span><span class="tent-acts">' +
+          '<button type="button" class="tent-ok" data-act="tentOk" data-pc="' + pc.id + '" data-id="' + i.id + '">Confirm</button>' +
+          '<button type="button" class="tent-no" data-act="tentNo" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-label="Not on this check: ' + esc(i.name) + '">' +
+          '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12"/></svg></button></span></div></li>';
+    }
+    const fresh = justIn && justIn.id === i.id && Date.now() - justIn.at < 1500;
+    return '<li class="row' + (i.paid ? " is-paid" : "") + (fresh ? " just-in" : "") + '">' +
       '<button class="row-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
         '<span class="row-name">' + esc(i.name) + (showDue ? '<span class="row-sub">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
         (move ? "" : '<span class="row-amt num">' + money(i.amount) + '</span>') + '</button>' +
@@ -2372,6 +2590,15 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         const name = String(fd.get("what") || "").trim(); if (!name) return false;
         if (name.toLowerCase() === "extra"){ setStatus("Extra is calculated for you"); return false; }
         const amt = toNum(fd.get("amount"));
+        const rb = recByName(name);
+        if (rb){
+          const it = {id: uid(), name: rb.name, amount: amt, paid: false, due: "", cat: rb.cat || ""};
+          if (!linkItem(it, pc)){ it.cat = rb.cat || ""; }
+          else if (!amt) it.amount = recLeft(rb, it.recFor) || rb.amount;
+          if (!it.amount) it.amount = rb.amount;
+          pc.items.push(it); setStatus(rb.name + " added to " + dayLabel(pc.date));
+          return;
+        }
         askCategory(name, amt, catGuess(name), cat => {
           pc.items.push({id: uid(), name, amount: amt, paid: false, due: "", cat});
           commit(); setStatus("Added to " + dayLabel(pc.date));
@@ -2415,14 +2642,17 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
 
   function recRow(r, g){
     const o = openOcc(r), paid = isPaidNow(r), ls = linkedAll(r, o), days = daysUntil(o), nd = noDay(r);
+    const left = ls.length ? recLeft(r, o) : r.amount, part = !paid && ls.length > 0 && left > 0.004;
     let sub = "", red = false;
     if (paid) sub = paidLabel(r) + (nd ? "" : ". Next due " + dayLabel(o));
     else if (nd) sub = "No set due day";
-    else { sub = dueText(days, o); red = days <= redDays() && !ls.length; }
+    else { sub = dueText(days, o); red = days <= redDays() && (!ls.length || part); }
     const onChecks = " on the " + ls.map(l => dayLabel(l.pc.date)).join(" and ") + (ls.length > 1 ? " checks" : " check");
     if (ls.length && !paid && ls.length === 1 && ls[0].pc.date === o) sub = "On the" + onChecks.slice(7);
     else if (ls.length) sub += (paid && nd ? ". Next one is" : ",") + onChecks;
-    const showAdd = !paid && !ls.length;
+    if (!paid && ls.some(l => l.it.tent)) sub += ", waiting for you to confirm";
+    if (part) sub += ", " + money(left) + " left to put on a check";
+    const showAdd = !paid && (!ls.length || part);
     return '<li class="item rec' + (paid ? " is-paid" : "") + '">' +
       '<button class="chk" data-act="recToggle" data-id="' + r.id + '" aria-pressed="' + paid + '" aria-label="' + (paid ? "Unmark " : "Mark ") + esc(r.name) + ' as paid">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button>' +
@@ -2434,26 +2664,91 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     return '<button class="addchk" data-act="addTo" data-kind="' + kind + '" data-id="' + id + '" aria-label="Add ' + esc(name) + ' to a check">' + PLUS + 'Add</button>';
   }
   // pick which check an expense goes on; each one shows what would be left after adding it
-  function addToCheckSheet(kind, id){
-    let name, amount, due;
-    if (kind === "rec"){ const r = recById(id); if (!r) return; const o = openOcc(r); name = r.name; amount = r.amount; due = noDay(r) ? "" : o; }
+  function addToCheckSheet(kind, id, opt){
+    opt = opt || {};
+    let name, amount, due, occ = "", full = 0;
+    if (kind === "rec"){ const r = recById(id); if (!r) return; const o = opt.occ || openOcc(r); occ = opt.occ || ""; name = r.name; full = r.amount; amount = recLeft(r, o) || r.amount; due = noDay(r) ? "" : o; }
     else { const it = state.payments.find(i => i.id === id); if (!it) return; name = it.name; amount = it.amount; due = it.due || ""; }
     // the check you're living on now (the last one before today) plus every check still to come
     const t = iso(today()), fut = railList().filter(p => p.date >= t), last = railList().filter(p => p.date < t).pop();
-    const list = (last ? [last] : []).concat(fut);
+    const list = (last ? [last] : []).concat(fut).filter(p => p.id !== opt.not);
     const sug = suggestPaycheck(due, list);
     const rows = list.map(p => {
       const after = pcFunds(p) - sum(realItems(p)) - amount;
-      return '<button type="button" data-act="addPick" data-kind="' + kind + '" data-id="' + id + '" data-pc="' + p.id + '">' +
-        '<span><span class="s-name">' + dayLabel(p.date) + (p.id === sug ? '<span class="pill">Suggested</span>' : "") + '</span>' +
-        '<span class="s-sub">' + (p === last ? "Current check, " : "") + p.items.length + ' item' + (p.items.length === 1 ? "" : "s") + ' planned</span></span>' +
+      // this check comes after the bill is due: paying from it would be late
+      const late = !!due && p.date > due, lateDays = late ? Math.round((Date.parse(p.date) - Date.parse(due)) / 864e5) : 0;
+      return '<button type="button"' + (late ? ' class="late"' : "") + ' data-act="addPick" data-kind="' + kind + '" data-id="' + id + '" data-pc="' + p.id + '"' + (occ ? ' data-occ="' + occ + '"' : "") + '>' +
+        '<span><span class="s-name">' + dayLabel(p.date) + (p.id === sug ? '<span class="pill">Suggested</span>' : "") + (late ? '<span class="pill late">Past due</span>' : "") + '</span>' +
+        '<span class="s-sub">' + (late ? lateDays + ' day' + (lateDays === 1 ? "" : "s") + ' after it\'s due, ' : "") + (p === last ? (late ? "current check, " : "Current check, ") : "") +
+        p.items.length + ' item' + (p.items.length === 1 ? "" : "s") + ' planned</span></span>' +
         '<span class="pick-r' + (after < -0.004 ? " bad" : "") + '">' + (after < -0.004 ? "Goes " + money(-after) + " over" : "Leaves " + money(after) + " extra") + PLUS + '</span></button>';
     }).join("");
+    const no = opt.not && findPc(opt.not);
+    // Split payment: pay it from 2 to 4 checks, each with its own amount
+    const maxParts = Math.min(4, list.length), canSplit = maxParts >= 2;
+    const lateOf = p => !!due && p.date > due;
+    const pcOpts = cur => list.map(p => '<option value="' + p.id + '"' + (p.id === cur ? " selected" : "") + '>' + dayLabel(p.date) +
+      (p === last ? " (current)" : "") + (lateOf(p) ? " (past due)" : "") + '</option>').join("");
+    const cents = v => Math.round(v * 100) / 100, amtTxt = v => Number.isInteger(v) ? String(v) : v.toFixed(2);
+    function splitDefaults(n){
+      // the last n checks up to the due date (the suggested one), the bill shared evenly
+      let i = Math.max(0, list.findIndex(p => p.id === sug));
+      let start = Math.max(0, i - n + 1); if (start + n > list.length) start = Math.max(0, list.length - n);
+      const each = Math.floor(amount / n * 100) / 100;
+      return list.slice(start, start + n).map((p, k) => ({pc: p.id, amt: k === n - 1 ? cents(amount - each * (n - 1)) : each}));
+    }
+    const partRow = (k, d) => '<div class="split-part">' +
+      '<label class="field"><span>Check ' + (k + 1) + '</span><select name="pc' + k + '">' + pcOpts(d.pc) + '</select></label>' +
+      '<label class="field"><span>Amount</span><input name="amt' + k + '" inputmode="decimal" autocomplete="off" value="' + amtTxt(d.amt) + '"></label>' +
+      '<p class="split-left" id="splitLeft' + k + '"></p></div>';
+    let shownN = 0;
     openSheet({
-      title: "Add to a check", noSave: true,
-      body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + ", " + money(amount) + (due ? ", due " + dayLabel(due) : "") + '</p>' +
-        (rows ? '<div class="sugg pick">' + rows + '</div>' : '<p class="empty small">No upcoming paychecks yet. Add one on the Paychecks page first.</p>')
+      title: no ? "Pick a check for " + name : "Add to a check", noSave: true, saveText: "Split it", cancelText: no ? "Later" : "",
+      body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + ", " + (full && amount < full ? money(amount) + " left of " + money(full) : money(amount)) + (due ? ", due " + dayLabel(due) : "") + '</p>' +
+        (no ? '<p class="hint" style="margin:-6px 0 14px">Taken off the ' + dayLabel(no.date) + ' check. Pick another one, or choose Later and it stays on your bills to plan.</p>' : "") +
+        (canSplit ? '<div class="card-box">' + swRow("split", "Split payment", "Pay it from more than one check", false) +
+          '<div class="split-box" id="splitBox" hidden>' +
+            field("How many checks", '<select name="parts">' + selOpts([2, 3, 4].filter(n => n <= maxParts).map(n => [n, n + " checks"]), 2) + '</select>') +
+            '<div id="splitParts"></div><p class="split-sum" id="splitSum"></p>' +
+          '</div></div>' : "") +
+        '<div id="pickList">' + (rows ? '<div class="sugg pick">' + rows + '</div>' : '<p class="empty small">No upcoming paychecks yet. Add one on the Paychecks page first.</p>') + '</div>',
+      onInput: () => {
+        const f = $("#sheetForm").elements; if (!f.split) return;
+        const on = f.split.checked;
+        $("#splitBox").hidden = !on; $("#pickList").hidden = on; $("#sheetSave").hidden = !on;
+        if (!on) return;
+        const n = +f.parts.value || 2;
+        if (n !== shownN){ shownN = n; $("#splitParts").innerHTML = splitDefaults(n).map((d, k) => partRow(k, d)).join(""); }
+        // each part: what that check leaves; then whether the parts add up to the bill
+        let tot = 0; const used = {};
+        for (let k = 0; k < n; k++){
+          const p = findPc(f["pc" + k].value), a = toNum(f["amt" + k].value), el = $("#splitLeft" + k); tot += a;
+          if (!p || !el) continue;
+          const after = pcFunds(p) - sum(realItems(p)) - a, dup = used[p.id]; used[p.id] = true;
+          el.textContent = dup ? "This check is already picked above" :
+            (after < -0.004 ? "Goes " + money(-after) + " over" : "Leaves " + money(after) + " extra") + (lateOf(p) ? ", comes after it's due" : "");
+          el.classList.toggle("bad", !!dup || after < -0.004 || lateOf(p));
+        }
+        const d = cents(amount - tot), sm = $("#splitSum");
+        sm.textContent = Math.abs(d) < 0.005 ? "Adds up to " + money(amount) + "." : d > 0 ? money(d) + " isn't on a check yet. You can add it later." : money(-d) + " more than the bill.";
+        sm.classList.toggle("ok", Math.abs(d) < 0.005);
+      },
+      onSave: fd => {
+        if (!fd.get("split")) return false;
+        const n = +fd.get("parts") || 2, parts = [];
+        for (let k = 0; k < n; k++) parts.push({pc: String(fd.get("pc" + k) || ""), amt: cents(toNum(fd.get("amt" + k)))});
+        if (parts.some(x => !(x.amt > 0))){ setStatus("Give each check an amount"); return false; }
+        if (new Set(parts.map(x => x.pc)).size !== parts.length){ setStatus("Pick a different check for each part"); return false; }
+        if (kind === "rec") for (const x of parts) addToCheck("rec", id, x.pc, occ, x.amt);
+        else {
+          const it = state.payments.find(i => i.id === id); if (!it) return;
+          state.payments = state.payments.filter(i => i !== it);
+          parts.forEach((x, k) => { const p = findPc(x.pc); if (p) p.items.push(Object.assign({}, it, {id: k ? uid() : it.id, amount: x.amt, paid: false})); });
+        }
+        setStatus(name + " split over " + n + " checks");
+      }
     });
+    sheetCfg.onInput();
   }
   const REC_EMPTY = {weekly: "Things you pay every week, like groceries or gas.", biweekly: "Bills that come every other week.",
     monthly: "Rent, car, utilities and other monthly bills.", yearly: "Car tags, memberships and other once-a-year bills."};
@@ -2525,9 +2820,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     openSheet({
       title: "Put " + money(sum(todo)) + " on checks", saveText: "Add all",
       body: '<p class="hint" style="margin:-8px 0 12px">Each bill goes on the last check before it\'s due. You can move any of them later.</p>' +
-        '<div class="sugg plan-list">' + plan.map(({x, pc}) => '<div class="pl-row"><span><span class="s-name">' + esc(x.name) + '</span>' +
+        '<div class="sugg plan-list">' + plan.map(({x, pc}) => { const late = !!x.due && pc.date > x.due;
+          return '<div class="pl-row' + (late ? " late" : "") + '"><span><span class="s-name">' + esc(x.name) + (late ? '<span class="pill late">Past due</span>' : "") + '</span>' +
           '<span class="s-sub">' + (x.due ? "Due " + dayLabel(x.due) : "No set day") + ', on the ' + dayLabel(pc.date) + ' check</span></span>' +
-          '<span class="num">' + money(x.amount) + '</span></div>').join("") + '</div>',
+          '<span class="num">' + money(x.amount) + '</span></div>'; }).join("") + '</div>',
       onSave: () => {
         for (const {x, pc} of plan){
           if (x.kind === "rec") pc.items.push({id: uid(), name: x.r.name, amount: x.r.amount, paid: false, due: noDay(x.r) ? "" : x.o, recId: x.r.id, recFor: x.o, cat: x.r.cat || ""});
@@ -2568,9 +2864,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       h += '<div class="sub-head"><h3>' + FREQ_LABEL[f] + '</h3><span class="sub-r"><span class="num muted">' + money(sum(list)) + REC_PER[f] + '</span>' +
         '<button class="grp-x" data-act="hideGrp" data-f="' + f + '" aria-label="Remove the ' + FREQ_LABEL[f] + ' section">' + XSVG + '</button></span></div>';
       // bills still needing a paycheck on top, the ones already on a check (or paid) below
-      const covered = r => isPaidNow(r) || linkedAll(r, openOcc(r)).length > 0;
+      const covered = r => recLeftNow(r) <= 0.004;
       const todo = list.filter(r => !covered(r)), done = list.filter(covered).sort((a, b) => isPaidNow(a) - isPaidNow(b));
-      const part = (cls, title, rs) => !rs.length ? "" : '<div class="rec-h' + cls + '"><span>' + title + '</span><span class="num">' + money(sum(rs)) + '</span></div>' +
+      const part = (cls, title, rs) => !rs.length ? "" : '<div class="rec-h' + cls + '"><span>' + title + '</span><span class="num">' +
+        money(cls ? rs.reduce((a, r) => a + recLeftNow(r), 0) : sum(rs)) + '</span></div>' +
         '<ul class="items">' + rs.map(r => recRow(r, g)).join("") + '</ul>';
       h += '<section class="pc">' + part(" todo", "Not on a check yet", todo) + part("", "On a check", done) +
         (list.length ? "" : '<p class="empty small">' + REC_EMPTY[f] + '</p>') + addRecForm(f, g) + '</section>';
@@ -2891,7 +3188,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function editPc(id){
     const p = findPc(id); if (!p) return;
     pcSheet("Paycheck " + dayLabel(p.date), p, "", (fd, d, hours, amount) => { p.date = d; p.hours = hours; p.amount = amount; p.hoursSet = true; autoFill(); },
-      () => { p.items.forEach(unlink); dropCarries(id); state.paychecks = state.paychecks.filter(x => x.id !== id); if (selPc === id) selPc = null; });
+      () => { p.items.forEach(unlink); dropCarries(id); forgetCheck(p.date); state.paychecks = state.paychecks.filter(x => x.id !== id); if (selPc === id) selPc = null; });
   }
   function newPc(){
     const sorted = [...state.paychecks].sort((a, b) => a.date < b.date ? -1 : 1);
@@ -2952,9 +3249,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
           row("setPay", "Paychecks", esc(paySummary()), ICO.pay) +
           row("setBills", "Bills", groupsOn + " of 4 groups on, suggestions " + (s.sugg ? "on" : "off"), ICO.bills) +
           row("setNotif", "Notifications", nOn + " of " + keys.length + " on, just for you", ICO.bell) +
-        '</ul>' +
+        '</ul>' + (canDesk() || dk.on ? deskPrefRow() : '') +
         '<div class="acct"><p class="who">Signed in as ' + esc(currentEmail) + '</p><div class="acct-btns">' +
-        '<button type="button" data-act="backup">Back up</button><button type="button" data-act="importData">Restore</button>' +
+        '<button type="button" data-act="backup">Back up</button><button type="button" data-act="copyData">Copy data</button><button type="button" data-act="importData">Restore</button>' +
         '<button type="button" class="danger" data-act="signout">Sign out</button></div></div>';
   }
 
@@ -3039,7 +3336,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         s.filing = FILING[fd.get("filing")] ? fd.get("filing") : "mfj";
         s.budgetFrom = fd.get("budgetFrom") === "net" ? "net" : "main";
         for (const k of ["n1","n2","n3"]){ const v = String(fd.get(k) || "").trim().slice(0, 40); s[k] = v || S0[k]; }
-        refreshAmounts(); autoFill();
+        refreshAmounts(); ensureChecks(); autoFill();
       }
     });
     sheetCfg.onInput();
@@ -3164,7 +3461,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     openSheet({
       title: "Paste your data",
       body: '<p class="hint" style="margin:0 0 10px">Paste a backup, or the data from the Claude version. It replaces everything in the budget, for both of you.</p>' +
-        '<label class="field"><span>Data</span><textarea name="data" rows="8" required autocapitalize="off" spellcheck="false"></textarea></label>',
+        '<label class="field"><span>Data</span><textarea name="data" rows="8" required autocapitalize="off" spellcheck="false"></textarea></label>' +
+        '<label class="field"><span>Or pick a backup file</span><input type="file" name="file" accept=".json,application/json,text/plain"></label>',
       onSave: fd => {
         let d = null;
         try { d = JSON.parse(String(fd.get("data") || "").trim()); } catch(e){}
@@ -3172,6 +3470,12 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         state = normalize(d);
         setTimeout(() => setStatus("Budget imported"), 700);
       }
+    });
+    // a backup file fills in the box above
+    const f = $("#sheetForm").elements.file;
+    if (f) f.addEventListener("change", () => {
+      const file = f.files && f.files[0]; if (!file) return;
+      file.text().then(t => { $("#sheetForm").elements.data.value = t; setStatus("Backup loaded. Tap Save to use it"); }, () => setStatus("Couldn't read that file"));
     });
   }
   async function backup(){
@@ -3186,11 +3490,493 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
   }
 
+  // ---------- drag a bill onto a paycheck ----------
+  // Works when Expenses and Paychecks show together: a phone turned sideways, or windows on a computer.
+  // The row stays in the list and a copy follows your finger. On a phone: hold the row a moment, or slide it sideways.
+  let bd = null, bdJust = false, justIn = null;
+  function addToCheck(kind, id, pcId, occ, amt){
+    const to = findPc(pcId); if (!to) return null;
+    let added = null;
+    if (kind === "rec"){
+      const r = recById(id); if (!r) return null; const o = occ || openOcc(r);
+      const amount = amt != null ? amt : (recLeft(r, o) || r.amount);
+      added = {id: uid(), name: r.name, amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""};
+      to.items.push(added);
+    } else {
+      const it = state.payments.find(i => i.id === id); if (!it) return null;
+      state.payments = state.payments.filter(i => i !== it); it.paid = false; to.items.push(it); added = it;
+    }
+    justIn = {id: added.id, at: Date.now()};
+    return to;
+  }
+  function bdInfo(kind, id){
+    if (kind === "rec"){ const r = recById(id); if (!r) return null; const o = openOcc(r); return {name: r.name, amount: recLeft(r, o) || r.amount, cat: r.cat || "", due: noDay(r) ? "" : o, occ: o}; }
+    const it = state.payments.find(i => i.id === id); if (!it) return null;
+    return {name: it.name, amount: it.amount, cat: it.cat || "", due: it.due || "", occ: ""};
+  }
+  function bdPayShown(){
+    const pane = $("#panePay"); if (!pane || !pane.getClientRects().length || !$("#pcRail")) return false;
+    const r = pane.getBoundingClientRect();
+    return r.width > 0 && r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
+  }
+  // the box that scrolls the Paychecks page (the page itself sideways, or its folder or window on a computer)
+  function bdScroller(el){
+    for (let n = el && el.parentElement; n && n !== document.body; n = n.parentElement){
+      const o = getComputedStyle(n).overflowY;
+      if ((o === "auto" || o === "scroll") && n.scrollHeight > n.clientHeight) return n;
+    }
+    return null;
+  }
+  function bdTarget(x, y){
+    const el = document.elementFromPoint(x, y); if (!el || !el.closest) return null;
+    const card = el.closest("#pcRail .pc-card[data-pc]");
+    const id = card ? card.dataset.pc : el.closest("#pcItems") ? curSel() : null;
+    const p = id && findPc(id);
+    return p && !isFinished(p) ? p : null;
+  }
+  function bdHint(p, info){
+    const after = pcFunds(p) - sum(realItems(p)) - info.amount, late = !!info.due && p.date > info.due;
+    return {ok: after >= 0 && !late, text: dayLabel(p.date) + ": " + (after >= 0 ? "leaves " + money(after) + " extra" : "goes " + money(-after) + " over") + (late ? ", past due" : "")};
+  }
+  function bdStart(x, y){
+    clearTimeout(bd.timer);
+    const info = bdInfo(bd.kind, bd.id); if (!info){ bd = null; return; }
+    bd.on = true; bd.info = info;
+    const g = document.createElement("div"); g.className = "bd-ghost"; g.setAttribute("aria-hidden", "true");
+    g.innerHTML = catIcon(info.cat, "sm") + '<span class="bd-t"><b>' + esc(info.name) + '</b><span class="bd-s">Drop it on a paycheck</span></span><span class="num">' + money(info.amount) + '</span>';
+    document.body.appendChild(g); bd.g = g;
+    const r = bd.li.getBoundingClientRect(); bd.gx = Math.min(Math.max(bd.sx - r.left, 24), 240); bd.gy = 28;
+    bd.li.classList.add("bd-src");
+    bd.sc = bdScroller($("#pcRail"));
+    document.documentElement.classList.add("bd-dragging");
+    bdMove(x, y);
+    requestAnimationFrame(() => g.classList.add("lift"));
+    try { if (navigator.vibrate) navigator.vibrate(8); } catch(e){}
+  }
+  function bdMove(x, y){
+    bd.lx = x; bd.ly = y;
+    bd.g.style.left = (x - bd.gx) + "px"; bd.g.style.top = (y - bd.gy) + "px";
+    bdAim(x, y);
+    // hold near the top or bottom of the Paychecks page to scroll it (up to the cards, or down the list)
+    const sc = bd.sc;
+    if (sc){
+      const r = sc.getBoundingClientRect(), inX = x >= r.left && x <= r.right;
+      const v = !inX ? 0 : y < r.top + 56 ? -1 : y > r.bottom - 56 ? 1 : 0;
+      if (v !== (bd.sv || 0)){
+        bd.sv = v; cancelAnimationFrame(bd.sr);
+        if (v){ const step = () => { if (!bd || !bd.on || !bd.sv) return; sc.scrollTop += bd.sv * 9; bdAim(bd.lx, bd.ly); bd.sr = requestAnimationFrame(step); }; bd.sr = requestAnimationFrame(step); }
+      }
+    }
+  }
+  function bdAim(x, y){
+    const p = bdTarget(x, y);
+    document.querySelectorAll("#pcRail .pc-card.bd-over").forEach(c => { if (!p || c.dataset.pc !== p.id) c.classList.remove("bd-over", "bd-bad"); });
+    let ok = null, text = "Drop it on a paycheck";
+    if (p){
+      const h = bdHint(p, bd.info); ok = h.ok; text = h.text;
+      const card = document.querySelector('#pcRail .pc-card[data-pc="' + p.id + '"]');
+      if (card){ card.classList.add("bd-over"); card.classList.toggle("bd-bad", !h.ok); }
+    }
+    bd.g.classList.toggle("ok", ok === true); bd.g.classList.toggle("bad", ok === false);
+    bd.g.querySelector(".bd-s").textContent = text;
+    // hold near the side of the cards to slide to the next or previous check
+    const rail = $("#pcRail"), rr = rail.getBoundingClientRect();
+    const inRail = y >= rr.top && y <= rr.bottom && x >= rr.left - 12 && x <= rr.right + 12;
+    const dir = !inRail ? 0 : x < rr.left + 40 ? -1 : x > rr.right - 40 ? 1 : 0;
+    if (dir !== (bd.edgeDir || 0)){
+      bd.edgeDir = dir; clearInterval(bd.edgeT);
+      if (dir) bd.edgeT = setInterval(() => {
+        const c = rail.querySelector(".pc-card"); rail.scrollBy({left: dir * (c ? c.offsetWidth + 10 : 300), behavior: "smooth"});
+        setTimeout(() => { if (bd && bd.on) bdAim(bd.lx, bd.ly); }, 420);
+      }, 700);
+    }
+  }
+  function bdEnd(x, y, cancel){
+    const d = bd; bd = null; if (!d) return;
+    clearTimeout(d.timer); clearInterval(d.edgeT); cancelAnimationFrame(d.sr);
+    if (!d.on) return;
+    bdJust = true; setTimeout(() => { bdJust = false; }, 0);
+    document.documentElement.classList.remove("bd-dragging");
+    document.querySelectorAll("#pcRail .pc-card.bd-over").forEach(c => c.classList.remove("bd-over", "bd-bad"));
+    const p = cancel ? null : bdTarget(x, y), g = d.g;
+    d.li.classList.remove("bd-src");
+    g.classList.add("fly");
+    if (p && !readOnly){
+      // the copy shrinks into the check; the bill shows up in its list
+      const card = document.querySelector('#pcRail .pc-card[data-pc="' + p.id + '"]') || $("#pcItems"), r = card.getBoundingClientRect();
+      Object.assign(g.style, {left: (r.left + r.width / 2 - 140) + "px", top: (r.top + r.height / 2 - 28) + "px", transform: "scale(.5)", opacity: "0"});
+      if (addToCheck(d.kind, d.id, p.id, d.info.occ)){ selPc = p.id; finView = null; commit(); setStatus("Added to " + dayLabel(p.date)); }
+    } else {
+      // dropped somewhere else: the copy slides back into its row
+      const r = d.li.getBoundingClientRect();
+      Object.assign(g.style, {left: (r.left + 8) + "px", top: (r.top + r.height / 2 - 28) + "px", transform: "none", opacity: "0"});
+    }
+    setTimeout(() => g.remove(), 360);
+  }
+  document.addEventListener("pointerdown", e => {
+    if (bd || readOnly || (e.button != null && e.button > 0)) return;
+    const li = e.target.closest && e.target.closest("#paneExp li.item.rec, #paneExp .xcard"); if (!li) return;
+    const add = li.querySelector('[data-act="addTo"]'); if (!add || !bdPayShown()) return;
+    bd = {li, kind: add.dataset.kind, id: add.dataset.id, sx: e.clientX, sy: e.clientY, pid: e.pointerId, touch: e.pointerType !== "mouse", on: false};
+    if (bd.touch) bd.timer = setTimeout(() => { if (bd && !bd.on) bdStart(bd.sx, bd.sy); }, 380);
+  }, true);
+  document.addEventListener("pointermove", e => {
+    if (!bd || e.pointerId !== bd.pid) return;
+    if (!bd.on){
+      const dx = e.clientX - bd.sx, dy = e.clientY - bd.sy;
+      if (bd.touch){
+        if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)){ clearTimeout(bd.timer); bd = null; return; }   // that's a scroll
+        if (Math.abs(dx) < 12) return;
+      } else if (Math.hypot(dx, dy) < 6) return;
+      bdStart(e.clientX, e.clientY); if (!bd) return;
+    }
+    bdMove(e.clientX, e.clientY);
+  }, true);
+  document.addEventListener("pointerup", e => { if (bd && e.pointerId === bd.pid) bdEnd(e.clientX, e.clientY, false); }, true);
+  document.addEventListener("pointercancel", e => { if (bd && e.pointerId === bd.pid) bdEnd(0, 0, true); }, true);
+  document.addEventListener("touchmove", e => { if (bd && bd.on) e.preventDefault(); }, {passive: false});
+  document.addEventListener("contextmenu", e => { if (bd) e.preventDefault(); }, true);
+  document.addEventListener("click", e => { if (bdJust){ e.stopPropagation(); e.preventDefault(); bdJust = false; } }, true);
+
+  // ---------- desktop layout: folder tabs and windows, only on a computer ----------
+  // On when the main pointer is a mouse or trackpad and the window is wide. A phone (upright or sideways)
+  // or a tablet keeps the phone layout. Settings can force it on or off for one device.
+  const DK_PAGES = { pay: ["Paychecks", "#panePay"], exp: ["Expenses", "#paneExp"], debt: ["Debt", "#paneDebt"], ana: ["Analysis", "#paneAna"], set: ["Settings", "#paneSet"] };
+  const DK_ICO = {
+    pay: '<rect x="3" y="7" width="18" height="10" rx="2"/><circle cx="12" cy="12" r="2.2"/>',
+    exp: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+    debt: '<rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18"/>',
+    ana: '<path d="M6 20V11M12 20V5M18 20v-6"/>',
+    set: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>'
+  };
+  const DK_MQ = "(hover: hover) and (pointer: fine) and (min-width: 1024px) and (min-height: 560px)";
+  const DK_STEP = 88, DK_GAP = 12;
+  let dkDrag = null;
+  function dkIco(p){ return '<svg viewBox="0 0 24 24" aria-hidden="true">' + DK_ICO[p] + '</svg>'; }
+  function canDesk(){ try { return matchMedia("(hover: hover) and (pointer: fine)").matches; } catch(e){ return false; } }
+  function deskWanted(){
+    const pref = lsGet("desk") || "auto";
+    if (pref === "on") return true;
+    if (pref === "off") return false;
+    try { return matchMedia(DK_MQ).matches; } catch(e){ return false; }
+  }
+  function dkDark(){ try { return matchMedia("(prefers-color-scheme: dark)").matches; } catch(e){ return true; } }
+  function deskPrefRow(){
+    const v = lsGet("desk") || "auto";
+    const opt = (k, t) => '<button type="button" data-act="deskPref" data-v="' + k + '" aria-pressed="' + (v === k) + '">' + t + '</button>';
+    return '<div class="set-desk"><div><span class="t">Desktop layout</span><span class="s">Folder tabs and windows on a computer. Phones and tablets keep the phone layout.</span></div>' +
+      '<div class="mini-seg" role="group" aria-label="Desktop layout">' + opt("auto", "Automatic") + opt("on", "Always") + opt("off", "Never") + '</div></div>';
+  }
+  function dkSave(){ lsSet("desk-layout", JSON.stringify({ order: dk.order, wins: dk.wins, split: dk.split })); }
+  function dkLoad(){
+    try {
+      const v = JSON.parse(lsGet("desk-layout") || "null"); if (!v) return;
+      if (Array.isArray(v.order)){ const o = v.order.filter((p, i) => DK_PAGES[p] && v.order.indexOf(p) === i); Object.keys(DK_PAGES).forEach(p => { if (!o.includes(p)) o.push(p); }); dk.order = o; }
+      if (Array.isArray(v.wins)) dk.wins = v.wins.filter((w, i) => w && DK_PAGES[w.page] && v.wins.findIndex(x => x && x.page === w.page) === i)
+        .map(w => ({ page: w.page, x: +w.x || 120, y: +w.y || 60, w: +w.w || 560, h: +w.h || 640, z: +w.z || 10, dock: w.dock === "left" || w.dock === "right" ? w.dock : null }));
+      if (dk.wins.length >= Object.keys(DK_PAGES).length) dk.wins = dk.wins.slice(0, Object.keys(DK_PAGES).length - 1);
+      if (typeof v.split === "number") dk.split = Math.max(0.25, Math.min(0.75, v.split));
+      dk.z = Math.max(10, ...dk.wins.map(w => w.z));
+    } catch(e){}
+  }
+  function dkFonts(){
+    if (document.getElementById("dkFonts")) return;
+    const l = document.createElement("link"); l.id = "dkFonts"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap";
+    document.head.appendChild(l);
+  }
+  function dkVisible(skip){ const out = dk.wins.map(w => w.page); return dk.order.filter(p => p !== skip && !out.includes(p)); }
+  function dkFree(skip){ return dkVisible(skip)[0] || "pay"; }
+  function dkResync(){ if (!ready) return; try { syncRail(); syncFinStack(); syncAnaRail(); } catch(e){} }
+
+  function deskSync(){
+    const want = deskWanted(), root = document.documentElement;
+    root.classList.toggle("paper", want && !dkDark());
+    if (want !== dk.on){
+      dk.on = want;
+      root.classList.toggle("desk", want);
+      $("#desk").hidden = !want;
+      if (want){
+        dkFonts();
+        if (dk.wins.some(w => w.page === tab)) tab = dkFree();
+        dk.open = tab;
+      }
+      dkPlace();
+      if (ready) render();
+      return;
+    }
+    if (dk.on){ dkPlace(); dkDraw(); }
+  }
+  // each page is one element; it lives in the open folder, in its own window, or out of sight
+  function dkPlace(){
+    const app = $("#app"), st = $("#status");
+    if (!dk.on){
+      Object.keys(DK_PAGES).forEach(p => app.appendChild($(DK_PAGES[p][1])));
+      document.querySelectorAll(".dk-win, .dk-fly, .dk-snap, .dk-div").forEach(el => el.remove());
+      if (st && st.parentNode !== app.parentNode) app.parentNode.insertBefore(st, app);
+      return;
+    }
+    if (st && st.parentNode !== $("#desk")) $("#desk").appendChild(st);
+    if (dk.wins.some(w => w.page === dk.open)){ dk.open = tab = dkFree(); document.body.dataset.tab = tab; }
+    Object.keys(DK_PAGES).forEach(p => {
+      const pane = $(DK_PAGES[p][1]), w = dk.wins.find(x => x.page === p);
+      const home = p === dk.open ? $("#dkBody") : w ? dkWinEl(w).querySelector(".dk-win-body") : app;
+      if (pane.parentNode !== home) home.appendChild(pane);
+    });
+    document.querySelectorAll(".dk-win").forEach(el => { if (!el.classList.contains("closing") && !dk.wins.some(w => w.page === el.dataset.page)) el.remove(); });
+  }
+  function dkWinEl(w){
+    let el = document.querySelector('.dk-win[data-page="' + w.page + '"]:not(.closing)');
+    if (el) return el;
+    const t = DK_PAGES[w.page][0];
+    el = document.createElement("section");
+    el.className = "dk-win"; el.dataset.page = w.page; el.setAttribute("aria-label", t);
+    el.innerHTML = '<div class="dk-win-bar" data-dk="bar"><span class="dk-win-ico">' + dkIco(w.page) + '</span><h2>' + t + '</h2>' +
+      '<button type="button" class="dk-win-back" data-dk="back">Put back</button>' +
+      '<button type="button" class="dk-win-x" data-dk="close" aria-label="Close the ' + t + ' window"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>' +
+      '<div class="dk-win-body"></div><span class="dk-win-grip" data-dk="grip" aria-hidden="true"></span>';
+    $("#dkLayer").appendChild(el);
+    return el;
+  }
+  function dkWs(){ const s = $("#dkSheet"); return { x: s.offsetLeft, y: s.offsetTop, w: s.offsetWidth, h: s.offsetHeight }; }
+  function dkRect(w, ws){
+    if (w.dock){
+      const lw = Math.round((ws.w - DK_GAP) * dk.split);
+      return w.dock === "left" ? { x: ws.x, y: ws.y, w: lw, h: ws.h } : { x: ws.x + lw + DK_GAP, y: ws.y, w: ws.w - lw - DK_GAP, h: ws.h };
+    }
+    const D = $("#desk"), W = D.clientWidth, H = D.clientHeight;
+    const ww = Math.max(380, Math.min(w.w, W - 90)), hh = Math.max(280, Math.min(w.h, H - 20));
+    return { x: Math.round(Math.max(74, Math.min(w.x, W - ww - 10))), y: Math.round(Math.max(10, Math.min(w.y, H - hh - 10))), w: Math.round(ww), h: Math.round(hh) };
+  }
+  function dkDraw(){
+    if (!dk.on) return;
+    $("#dkTabs").innerHTML = dkVisible().map((p, i) =>
+      '<button type="button" class="dk-tab" data-dk="tab" data-page="' + p + '" aria-label="' + DK_PAGES[p][0] + '"' + (p === dk.open ? ' aria-current="page"' : "") +
+      ' style="z-index:' + (p === dk.open ? 20 : 10 - i) + '">' + dkIco(p) + '</button>').join("");
+    $("#dkTitle").textContent = DK_PAGES[dk.open][0];
+    $("#dkDate").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+    const ws = dkWs();
+    dk.wins.forEach(w => {
+      const el = dkWinEl(w), r = dkRect(w, ws);
+      Object.assign(el.style, { left: r.x + "px", top: r.y + "px", width: r.w + "px", height: r.h + "px", zIndex: w.z });
+      el.classList.toggle("docked", !!w.dock);
+    });
+    // two windows side by side share the screen; the bar between them changes the split
+    const L = dk.wins.find(w => w.dock === "left"), R = dk.wins.find(w => w.dock === "right");
+    let dv = $("#dkDiv");
+    if (L && R){
+      if (!dv){ dv = document.createElement("div"); dv.id = "dkDiv"; dv.className = "dk-div"; dv.dataset.dk = "div"; dv.setAttribute("role", "separator"); dv.setAttribute("aria-label", "Drag to resize the two windows"); $("#dkLayer").appendChild(dv); }
+      const lw = Math.round((ws.w - DK_GAP) * dk.split);
+      Object.assign(dv.style, { left: (ws.x + lw) + "px", top: ws.y + "px", width: DK_GAP + "px", height: ws.h + "px", zIndex: dk.z + 5 });
+    } else if (dv) dv.remove();
+    $("#desk").classList.toggle("covered", !!(L && R));
+    // one window on one side: the open folder's page moves over to the other half
+    const one = L && R ? null : (L || R), body = $("#dkBody");
+    body.style.paddingLeft = one && one.dock === "left" ? (dkRect(one, ws).w + DK_GAP + 28) + "px" : "";
+    body.style.paddingRight = one && one.dock === "right" ? (dkRect(one, ws).w + DK_GAP + 28) + "px" : "";
+  }
+  function dkFront(w){
+    if (!w) return;
+    w.z = ++dk.z;
+    const el = document.querySelector('.dk-win[data-page="' + w.page + '"]:not(.closing)'); if (el) el.style.zIndex = w.z;
+    const dv = $("#dkDiv"); if (dv) dv.style.zIndex = dk.z + 5;
+  }
+  // render() asks which page the folder shows
+  function deskTab(){
+    const w = dk.wins.find(x => x.page === tab);
+    if (w){ dkFront(w); tab = dk.open; document.body.dataset.tab = tab; }
+    else dk.open = tab;
+    dkPlace(); dkDraw();
+  }
+  function deskOpen(p){
+    if (!DK_PAGES[p]) return;
+    const w = dk.wins.find(x => x.page === p);
+    if (w){ dkFront(w); return; }
+    if (dk.wins.some(x => x.dock === "left") && dk.wins.some(x => x.dock === "right")){
+      // the two side-by-side windows cover the folder: they float off to the right so the page shows
+      const D = $("#desk"), ws = dkWs(); let i = 0;
+      dk.wins.forEach(x => { if (!x.dock) return; const r = dkRect(x, ws); x.dock = null; x.w = Math.min(r.w, 540); x.h = Math.min(r.h, 620); x.x = D.clientWidth - x.w - 24 - i * 40; x.y = 40 + i * 40; i++; });
+      dkSave();
+    }
+    const same = dk.open === p;
+    dk.open = tab = p;
+    render();
+    if (!same){ const b = $("#dkBody"); if (b) b.scrollTop = 0; }
+  }
+  function dkPutBack(page, open){
+    const el = document.querySelector('.dk-win[data-page="' + page + '"]:not(.closing)');
+    dk.wins = dk.wins.filter(w => w.page !== page);
+    if (el){ el.classList.add("closing"); setTimeout(() => el.remove(), 220); }
+    if (open){ dk.open = tab = page; document.body.dataset.tab = tab; }
+    dkPlace(); dkDraw(); dkSave(); dkResync();
+    if (open){ const b = $("#dkBody"); if (b) b.scrollTop = 0; }
+  }
+  // the window grows out of the tab you pulled (or into its side of the screen)
+  function dkGrow(w, fr){
+    const el = dkWinEl(w), r = dkRect(w, dkWs());
+    el.classList.remove("dk-grow");
+    Object.assign(el.style, { left: fr.left + "px", top: fr.top + "px", width: fr.width + "px", height: fr.height + "px" });
+    void el.offsetWidth;
+    el.classList.add("dk-grow");
+    Object.assign(el.style, { left: r.x + "px", top: r.y + "px", width: r.w + "px", height: r.h + "px" });
+    clearTimeout(el._g); el._g = setTimeout(() => el.classList.remove("dk-grow"), 300);
+  }
+  function dkIndexAt(y, skip){
+    const nav = $("#dkTabs").getBoundingClientRect(), n = dkVisible(skip).length;
+    return Math.max(0, Math.min(n, Math.round((y - nav.top - 14 - 49) / DK_STEP)));
+  }
+  function dkGapAt(idx, skip){
+    [...document.querySelectorAll("#dkTabs .dk-tab")].filter(t => t.dataset.page !== skip)
+      .forEach((t, i) => { t.style.marginTop = i === idx ? DK_STEP + "px" : ""; });
+  }
+  function dkSnapAt(x){ const ws = dkWs(); if (x < ws.x + 90) return "left"; if (x > ws.x + ws.w - 90) return "right"; return null; }
+  function dkSnapShow(side){
+    let el = $("#dkSnap");
+    if (!side){ if (el) el.remove(); return; }
+    if (!el){ el = document.createElement("div"); el.id = "dkSnap"; el.className = "dk-snap"; $("#dkLayer").appendChild(el); }
+    const r = dkRect({ dock: side }, dkWs());
+    Object.assign(el.style, { left: r.x + "px", top: r.y + "px", width: r.w + "px", height: r.h + "px", zIndex: dk.z + 1 });
+  }
+  function dkInsert(page, idx){
+    const before = dkVisible(page)[idx];
+    dk.order = dk.order.filter(p => p !== page);
+    dk.order.splice(before ? dk.order.indexOf(before) : dk.order.length, 0, page);
+  }
+  function dkBegin(d){
+    if (d.kind === "tab"){
+      const r = d.el.getBoundingClientRect();
+      d.canOut = dkVisible().length > 1;
+      const f = document.createElement("div");
+      f.className = "dk-fly";
+      f.innerHTML = '<span class="dk-fly-tab">' + dkIco(d.page) + '</span><span class="dk-fly-win"><span class="dk-fly-bar">' + dkIco(d.page) + '<span>' + DK_PAGES[d.page][0] +
+        '</span></span><span class="dk-fly-lines"><i></i><i></i><i></i></span></span>';
+      f.style.left = (r.right - 52) + "px"; f.style.top = r.top + "px";
+      $("#dkLayer").appendChild(f); d.fly = f;
+      d.el.classList.add("out");
+    } else if (d.kind === "bar" && d.w.dock){
+      // pulling a docked window loose: it goes back to a floating size under the pointer
+      const fw = Math.min(d.ow, 620), fh = Math.min(d.oh, 680), k = (d.sx - d.ox) / d.ow;
+      d.w.dock = null; d.w.w = fw; d.w.h = fh;
+      d.ox = d.sx - fw * k; d.w.x = d.ox; d.w.y = d.oy;
+      dkDraw();
+    }
+  }
+  function dkTabMove(d, e){
+    const nav = $("#dkTabs").getBoundingClientRect();
+    d.over = !d.canOut || e.clientX < nav.right + 24;
+    d.fly.classList.toggle("as-win", !d.over);
+    if (d.over){
+      d.fly.style.left = (nav.right - 52) + "px"; d.fly.style.top = (e.clientY - 49) + "px";
+      d.idx = dkIndexAt(e.clientY, d.page); dkGapAt(d.idx, d.page);
+      d.snap = null; dkSnapShow(null);
+    } else {
+      d.fly.style.left = (e.clientX - 70) + "px"; d.fly.style.top = (e.clientY - 22) + "px";
+      dkGapAt(-1, d.page);
+      d.snap = dkSnapAt(e.clientX); dkSnapShow(d.snap);
+    }
+  }
+  function dkTabUp(d, e, cancel){
+    const fr = d.fly.getBoundingClientRect();
+    d.fly.remove(); dkSnapShow(null);
+    if (cancel || d.over){
+      if (!cancel && d.idx != null) dkInsert(d.page, d.idx);
+      dkSave(); dkDraw(); return;
+    }
+    const H = $("#desk").clientHeight;
+    const w = { page: d.page, x: e.clientX - 70, y: Math.max(14, e.clientY - 22), w: 560, h: Math.min(680, H - 60), z: ++dk.z, dock: d.snap };
+    if (d.snap) dk.wins.forEach(o => { if (o.dock === d.snap){ o.dock = null; o.x = w.x + 40; o.y = 60; } });
+    dk.wins.push(w);
+    if (dk.open === d.page){ dk.open = tab = dkFree(); document.body.dataset.tab = tab; }
+    dkPlace(); dkDraw(); dkGrow(w, fr); dkSave(); dkResync();
+  }
+  function dkWinMove(d, e){
+    const nav = $("#dkTabs").getBoundingClientRect(), w = d.w, el = dkWinEl(w);
+    w.x = d.ox + e.clientX - d.sx; w.y = d.oy + e.clientY - d.sy;
+    const r = dkRect(w, dkWs());
+    el.style.left = r.x + "px"; el.style.top = r.y + "px";
+    d.over = e.clientX < nav.right + 24;
+    el.classList.toggle("leaving", d.over);
+    if (d.over){ d.idx = dkIndexAt(e.clientY, null); dkGapAt(d.idx, null); d.snap = null; dkSnapShow(null); }
+    else { dkGapAt(-1, null); d.snap = dkSnapAt(e.clientX); dkSnapShow(d.snap); }
+  }
+  function dkWinUp(d, e, cancel){
+    const w = d.w, el = dkWinEl(w);
+    dkSnapShow(null); el.classList.remove("leaving");
+    if (!cancel && d.over){ dkInsert(w.page, d.idx || 0); dkPutBack(w.page, true); return; }
+    if (!cancel && d.snap){
+      dk.wins.forEach(o => { if (o !== w && o.dock === d.snap){ o.dock = null; o.x = w.x + 40; o.y = 60; } });
+      w.dock = d.snap;
+      const fr = el.getBoundingClientRect();
+      dkDraw(); dkGrow(w, fr);
+    } else {
+      const r = dkRect(w, dkWs()); w.x = r.x; w.y = r.y;
+      dkDraw();
+    }
+    dkSave();
+  }
+  (function(){
+    const deskEl = $("#desk");
+    deskEl.addEventListener("pointerdown", e => {
+      if (e.button !== 0 || dkDrag) return;
+      const win = e.target.closest(".dk-win");
+      if (win) dkFront(dk.wins.find(x => x.page === win.dataset.page));
+      const t = e.target.closest("[data-dk]"); if (!t) return;
+      const kind = t.dataset.dk;
+      const d = { kind, el: t, sx: e.clientX, sy: e.clientY, on: false, pid: e.pointerId };
+      if (kind === "tab") d.page = t.dataset.page;
+      else if (kind === "bar" || kind === "grip"){
+        if (e.target.closest("button")) return;
+        const w = win && dk.wins.find(x => x.page === win.dataset.page); if (!w) return;
+        const r = dkRect(w, dkWs());
+        Object.assign(d, { page: w.page, w, ox: r.x, oy: r.y, ow: r.w, oh: r.h });
+        if (kind === "grip"){ d.on = true; w.dock = null; Object.assign(w, { x: r.x, y: r.y, w: r.w, h: r.h }); }
+        e.preventDefault();
+      } else if (kind === "div"){ d.on = true; e.preventDefault(); }
+      else return;
+      dkDrag = d;
+      try { t.setPointerCapture(e.pointerId); } catch(x){}
+    });
+    deskEl.addEventListener("pointermove", e => {
+      const d = dkDrag; if (!d) return;
+      if (!d.on){ if (Math.hypot(e.clientX - d.sx, e.clientY - d.sy) < 6) return; d.on = true; dkBegin(d); }
+      if (d.kind === "tab") dkTabMove(d, e);
+      else if (d.kind === "bar") dkWinMove(d, e);
+      else if (d.kind === "grip"){ d.w.w = Math.max(380, d.ow + e.clientX - d.sx); d.w.h = Math.max(280, d.oh + e.clientY - d.sy); dkDraw(); }
+      else if (d.kind === "div"){ const ws = dkWs(); dk.split = Math.max(0.25, Math.min(0.75, (e.clientX - ws.x - DK_GAP / 2) / (ws.w - DK_GAP))); dkDraw(); }
+    });
+    const end = (e, cancel) => {
+      const d = dkDrag; dkDrag = null; if (!d) return;
+      try { d.el.releasePointerCapture(d.pid); } catch(x){}
+      if (!d.on) return;   // a plain click: the click handler below opens the page
+      dk.justDragged = true; setTimeout(() => { dk.justDragged = false; }, 0);
+      if (d.kind === "tab") dkTabUp(d, e, cancel);
+      else if (d.kind === "bar") dkWinUp(d, e, cancel);
+      else { dkDraw(); dkSave(); }
+    };
+    deskEl.addEventListener("pointerup", e => end(e, false));
+    deskEl.addEventListener("pointercancel", e => end(e, true));
+    deskEl.addEventListener("click", e => {
+      const t = e.target.closest("[data-dk]"); if (!t) return;
+      if (dk.justDragged){ e.preventDefault(); return; }
+      const k = t.dataset.dk;
+      if (k === "tab") deskOpen(t.dataset.page);
+      else if (k === "back" || k === "close"){ const win = t.closest(".dk-win"); if (win) dkPutBack(win.dataset.page, k === "back"); }
+    });
+    window.addEventListener("resize", deskSync);
+    try {
+      const a = matchMedia(DK_MQ), b = matchMedia("(prefers-color-scheme: dark)");
+      if (a.addEventListener){ a.addEventListener("change", deskSync); b.addEventListener("change", deskSync); }
+      else { a.addListener(deskSync); b.addListener(deskSync); }
+    } catch(e){}
+    dkLoad(); deskSync();
+  })();
+
   // ---------- events ----------
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-act]"); if (!b) return;
     const act = b.dataset.act, id = b.dataset.id, pcId = b.dataset.pc;
-    if (act === "tab"){ tab = b.dataset.tab; render(); window.scrollTo({top: 0}); return; }
+    if (act === "tab"){ if (dk.on){ deskOpen(b.dataset.tab); return; } tab = b.dataset.tab; render(); window.scrollTo({top: 0}); return; }
+    if (act === "deskPref"){ lsSet("desk", b.dataset.v || "auto"); deskSync(); render(); return; }
     if (readOnly && act !== "tab") { setStatus("View only"); }
     if (act === "toggle"){ const pc = findPc(pcId); const it = pc && pc.items.find(i => i.id === id); if (it && !it.carryTo){ it.paid = !it.paid; syncRec(it); commit(); if (it.paid) maybeClose(pc); } }
     else if (act === "recToggle"){
@@ -3329,15 +4115,25 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       closeSheet(); commit(); toast("Took back " + money(c.it.amount) + " to " + dayLabel(c.src.date), undo);
     }
     else if (act === "addTo") addToCheckSheet(b.dataset.kind, id);
-    else if (act === "addPick"){
-      const to = findPc(pcId); if (!to) return;
-      if (b.dataset.kind === "rec"){
-        const r = recById(id); if (!r) return; const o = openOcc(r);
-        to.items.push({id: uid(), name: r.name, amount: r.amount, paid: false, due: noDay(r) ? "" : o, recId: r.id, recFor: o, cat: r.cat || ""});
-      } else {
-        const it = state.payments.find(i => i.id === id); if (!it) return;
-        state.payments = state.payments.filter(i => i !== it); it.paid = false; to.items.push(it);
+    else if (act === "tentOk" || act === "tentNo"){
+      const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id); if (!it || readOnly) return;
+      if (act === "tentOk"){
+        // settle the row into the list, then keep it
+        const li = b.closest("li"); if (li){ li.classList.remove("lift-in"); li.classList.add("settle"); }
+        setTimeout(() => {
+          const p2 = findPc(pcId), i2 = p2 && p2.items.find(i => i.id === id); if (!i2) return;
+          delete i2.tent; commit(); setStatus(i2.name + " is on the " + dayLabel(p2.date) + " check");
+        }, 230);
+        return;
       }
+      const o = it.recFor, r = it.recId && recById(it.recId);
+      skipOcc(it);
+      pc.items = pc.items.filter(i => i !== it);
+      commit();
+      if (r) addToCheckSheet("rec", r.id, {occ: o, not: pc.id});
+    }
+    else if (act === "addPick"){
+      const to = addToCheck(b.dataset.kind, id, pcId, b.dataset.occ); if (!to) return;
       closeSheet(); commit(); setStatus("Added to " + dayLabel(to.date));
     }
     else if (act === "setNotif") settingsNotif();
@@ -3347,6 +4143,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     else if (act === "importData"){ closeSheet(); importSheet(); }
     else if (act === "backup") backup();
+    else if (act === "copyData"){
+      // the whole budget as text, to paste into the test copy (or keep somewhere safe)
+      const text = JSON.stringify(state);
+      const done = () => setStatus("Budget data copied");
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => backup());
+      else backup();
+    }
     else if (act === "signout"){ closeSheet(); signOut(auth).catch(() => {}); }
     else if (act === "installDismiss"){ lsSet("install-dismissed", "1"); render(); }
     else if (act === "editPay") editPay(id);
@@ -3462,7 +4265,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       state = normalize(snap.exists() ? snap.data() : null);
       ready = true;
       render();
-      if (!readOnly){ const a = autoFill(), b = ensureMe(), c = fillCats(); if (a || b || c) commit(); }
+      if (!readOnly){ const z = ensureChecks(), l = linkByName(), a = autoFill(), b = ensureMe(), c = fillCats(); if (z || l || a || b || c) commit(); }
     }, err => {
       if (err && err.code === "permission-denied"){
         ready = false; render();
