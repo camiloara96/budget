@@ -624,6 +624,27 @@ html.paper .row.is-tent{box-shadow:0 8px 18px rgba(20,20,10,.12)}
 .cat-ico{flex:none;width:32px;height:32px;border-radius:9px;display:grid;place-items:center}
 .cat-ico svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .cat-ico.sm{width:28px;height:28px;border-radius:8px}
+.cat-ico .cat-l{font-size:15px;font-weight:800;line-height:1}
+.cat-ico.sm .cat-l{font-size:13px}
+.cat-btn.cat-new{border-style:dashed}
+.cat-plus{background:var(--soft);color:var(--ink)}
+.swatches{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:0 0 14px}
+.swatches label{position:relative;display:grid;place-items:center;cursor:pointer}
+.swatches input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.swatches span{width:38px;height:38px;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.swatches input:checked + span{outline:2.5px solid var(--ink);outline-offset:2px}
+.swatches input:focus-visible + span{outline:2.5px solid var(--check);outline-offset:2px}
+.cat-list{background:var(--bg);border:1px solid var(--line);border-radius:14px;margin:0 0 12px}
+.cat-li{display:flex;align-items:center;gap:12px;padding:8px 12px;border-top:1px solid var(--line)}
+.cat-li:first-child{border-top:0}
+.cat-li .cl-n{flex:1;min-width:0}
+.cat-li .cl-n b{display:block;font-weight:600}
+.cat-li .cl-n small{display:block;font-size:12.5px;color:var(--muted)}
+.cat-li .cl-del{flex:none;border:0;background:var(--soft);color:var(--bad);border-radius:10px;padding:7px 10px;font-weight:700;font-size:13px}
+.spend-less{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+.spend-less button{width:100%;border:0;border-radius:14px;padding:13px 14px;font-weight:700;font-size:15px;text-align:left}
+.spend-less button small{display:block;margin-top:2px;font-size:13px;font-weight:500;opacity:.75}
+.spend-less .primary small{opacity:.7}
 .cat-ico.sm svg{width:16px;height:16px}
 .cat-row .cat-ico{margin-top:1px}
 .item.rec .item-main{justify-content:flex-start}
@@ -856,7 +877,7 @@ html.desk .toast{bottom:24px}
 import firebaseConfig from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { initializeFirestore, getFirestore, persistentLocalCache, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeFirestore, getFirestore, persistentLocalCache, doc, onSnapshot, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
 
@@ -965,6 +986,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   let dk = { on: false, order: ["pay", "exp", "debt", "ana", "set"], open: "pay", wins: [], z: 10, split: 0.5, justDragged: false };
   let docRef = null, readOnly = false;
   let saveTimer = null, inflight = false, again = false;
+  // base: the budget as the server had it when this device last loaded or saved it. Edits are measured against it.
+  let base = null, baseRev = 0, editSeq = 0, unsaved = false, stash = null, retryTimer = null, retryWait = 0, lastSaveAt = 0, replaceAll = false, copyDay = "", autoDone = false, autoTimes = [];
 
   const FREQS = ["weekly", "biweekly", "monthly", "yearly"];
   const FREQ_LABEL = {weekly: "Weekly", biweekly: "Every 2 weeks", monthly: "Monthly", yearly: "Yearly"};
@@ -977,12 +1000,19 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const num = v => { const n = Number(v); return isFinite(n) ? n : 0; };
     const isoRe = /^\d{4}-\d{2}-\d{2}$/, monRe = /^\d{4}-\d{2}$/;
     const isoOr = v => (typeof v === "string" && isoRe.test(v)) ? v : "";
+    // categories you added, and the ones you hid in Settings
+    const customCats = arr(d.customCats).filter(c => c && typeof c === "object" && /^c-[a-z0-9]{3,20}$/.test(c.id) && str(c.name).trim())
+      .map(c => ({id: c.id, name: str(c.name).trim().slice(0, 40), color: /^#[0-9a-fA-F]{6}$/.test(c.color) ? c.color : "#8E8E93"}));
+    const hiddenCats = arr(d.hiddenCats).filter(k => typeof k === "string").slice(0, 80);
+    applyCats(customCats, hiddenCats);
     const cat = v => CAT_MAP[v] ? v : "";
     const item = it => { const o = {id: str(it && it.id) || uid(), name: str(it && it.name), amount: num(it && it.amount), paid: !!(it && it.paid), due: str(it && it.due), cat: cat(it && it.cat)};
       if (it && it.recId){ o.recId = str(it.recId); o.recFor = str(it.recFor); const al = arr(it.also).filter(x => typeof x === "string" && isoRe.test(x)).slice(0, 12); if (al.length) o.also = al; }
       if (it && it.carryTo){ o.carryTo = str(it.carryTo); o.cid = str(it.cid); o.why = str(it.why); o.paid = true; }
       if (it && it.debtX){ o.debtX = str(it.debtX); o.on = isoOr(it.on); }
       if (it && it.tent) o.tent = true;
+      if (it && it.whole) o.whole = true;
+      if (it && it.paid && /^\d{4}-\d{2}-\d{2}$/.test(it.paidOn || "")) o.paidOn = it.paidOn;
       return o; };
     const hrs = h => h && typeof h === "object" ? {reg: num(h.reg), ot: num(h.ot), oncall: !!h.oncall, bonus: num(h.bonus), bonusMethod: h.bonusMethod === "agg" ? "agg" : "flat"} : null;
     const s = Object.assign({}, S0, {groupsOff: []}), ds = d.settings && typeof d.settings === "object" ? d.settings : null;
@@ -1055,6 +1085,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         apr: Math.max(0, Math.min(99, num(x.apr))), min: Math.max(0, num(x.min)), target: Math.max(0, num(x.target)), override: Math.max(0, num(x.override)),
         day: Math.max(0, Math.min(31, Math.round(num(x.day)))), recId: recMap[str(x.recId)] ? str(x.recId) : "", inBills: x.inBills !== false}; });
     return Object.assign(out, {
+      customCats, hiddenCats,
       settings: s,
       people,
       paychecks,
@@ -1066,45 +1097,240 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     });
   }
   let statusTimer = null;
-  const STICKY = ["Saving…", "Couldn't save. Retrying…", "Couldn't save", "This account can't save", "Daily limit reached, try tomorrow", "Signed out, sign in again", "Can't reach the budget. Check your connection"];
+  const STICKY = ["Saving…", "Offline. Your changes are kept on this device", "Couldn't save. Retrying…", "Couldn't save", "This account can't save", "Daily limit reached, try tomorrow", "Signed out, sign in again", "Can't reach the budget. Check your connection"];
   function setStatus(t){
     const el = $("#status"); el.textContent = t; el.classList.add("show");
     clearTimeout(statusTimer);
     if (!STICKY.includes(t)) statusTimer = setTimeout(() => el.classList.remove("show"), 2000);
   }
 
+  // ---------- saving ----------
+  // Every save reads the budget as it is on the server right now and folds in what changed there since this
+  // device last saw it (Kelly ticked something on her phone, the computer added a bill...). Only what you
+  // changed here goes over the top; everything else keeps its newest value. Until a save goes through,
+  // your edits wait on this device, so closing the app fast or losing signal doesn't lose them.
   function commit(){
     if (!readOnly) linkByName();
     if (state.debts && state.debts.length) syncDebtAmounts();
     render();
-    if (readOnly) return;
+    if (readOnly || !ready) return;
+    editSeq++; unsaved = true; keepLocal();
     clearTimeout(saveTimer);
     setStatus("Saving…");
     saveTimer = setTimeout(() => { saveTimer = null; flush(); }, 500);
   }
+  const withTimeout = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no({code: "timeout"}), ms))]);
   async function flush(){
     if (inflight){ again = true; return; }
-    inflight = true;
-    const body = JSON.parse(JSON.stringify(state));
+    if (!docRef || readOnly || !base || !unsaved) return;
+    inflight = true; clearTimeout(retryTimer);
+    if (!retryWait) setStatus("Saving…");
+    const seq = editSeq, body = plain(state), b0 = base, r0 = baseRev, force = replaceAll;
+    let saved = null, err = null;
     try {
-      if (!docRef) throw {code: "unauthenticated"};
-      await docRef.set(body);
-      setStatus("Saved");
-    } catch(e){
-      const code = e && e.code;
-      if (code === "permission-denied"){ readOnly = true; setStatus("This account can't save"); }
-      else if (code === "resource-exhausted"){ setStatus("Daily limit reached, try tomorrow"); }
+      saved = await withTimeout(docRef.save(async (tx, ref) => {
+        const snap = await tx.get(ref);
+        const raw = snap.exists() ? snap.data() : null, srv = normCats(raw);
+        const m = force || sameData(srv, b0) ? plain(body) : mergeBudget(b0, body, srv);
+        m.rev = Math.max(revOf(raw), r0) + 1; m.savedAt = Date.now(); m.savedBy = currentUid;
+        tx.set(ref, m);
+        return m;
+      }), 20000);
+    } catch(e){ err = e || {}; }
+    inflight = false;
+    if (saved){
+      if (force) replaceAll = false;
+      base = plain(saved); baseRev = saved.rev; retryWait = 0; lastSaveAt = Date.now();
+      if (editSeq === seq){
+        unsaved = false; dropLocal();
+        const news = !sameData(saved, body);
+        adopt(saved); if (news) render();   // the other phone's changes show up too
+        setStatus("Saved");
+      } else {
+        // you kept editing while it saved: those edits go on top, then save again
+        adopt(mergeBudget(body, plain(state), saved)); render(); keepLocal(); again = true;
+      }
+    } else {
+      const code = err.code;
+      if (code === "permission-denied"){ readOnly = true; unsaved = false; dropLocal(); setStatus("This account can't save"); }
       else if (code === "unauthenticated"){ setStatus("Signed out, sign in again"); }
       else {
-        setStatus("Couldn't save. Retrying…");
-        await new Promise(r => setTimeout(r, 1200 + Math.random() * 800));
-        try { if (docRef) await docRef.set(JSON.parse(JSON.stringify(state))); setStatus("Saved"); }
-        catch(e2){ setStatus("Couldn't save"); }
+        // no signal, or the server was busy: the edits stay on this device and go up as soon as it can
+        const off = navigator.onLine === false || code === "unavailable" || code === "timeout";
+        setStatus(code === "resource-exhausted" ? "Daily limit reached, try tomorrow" : off ? "Offline. Your changes are kept on this device" : "Couldn't save. Retrying…");
+        retryWait = Math.min(60000, retryWait ? retryWait * 2 : 4000);
+        retryTimer = setTimeout(flush, code === "resource-exhausted" ? 3600000 : retryWait);
       }
     }
-    inflight = false;
-    if (again){ again = false; flush(); }
+    if (again){ again = false; if (!saveTimer && saved) flush(); return; }
+    if (stash && !saveTimer && !inflight && !unsaved){ const sn = stash; stash = null; take(sn); }
   }
+  // a budget update from the server (or this device's cache) while nothing is waiting to save
+  function take(snap){
+    const md = snap.metadata || {}, raw = snap.exists() ? snap.data() : null, rev = revOf(raw);
+    let changed = false;
+    if (!ready){
+      changed = true;
+      // first look: bring back edits from last time that never made it up (app closed too fast, no signal...)
+      const kept = readLocal();
+      if (kept){ base = plain(kept.base); baseRev = kept.baseRev || 0; adopt(kept.local); unsaved = true; editSeq++; stash = snap; }
+      else { base = normCats(raw); baseRev = rev; adopt(base); }
+      ready = true; render();
+    } else {
+      // an older copy arriving just after this device saved is skipped; anything else new is shown
+      const old = rev < baseRev && Date.now() - lastSaveAt < 15000;
+      const srv = old ? null : normCats(raw);
+      if (srv && !sameData(srv, base)){ base = srv; baseRev = rev; adopt(srv); render(); changed = true; }
+      else if (srv) baseRev = Math.max(baseRev, rev);
+    }
+    if (!md.fromCache && !unsaved) keepCopy(base);
+    if (readOnly) return;
+    // automatic changes (new paychecks, auto bills...) only on the server's copy, never on an old cached one,
+    // and only when something new came in (not this device's own save coming back)
+    if (!md.fromCache && (changed || !autoDone)){
+      autoDone = true;
+      const now = Date.now(); autoTimes = autoTimes.filter(t => now - t < 60000);
+      if (autoTimes.length < 6){ const z = ensureChecks(), l = linkByName(), a = autoFill(), b = ensureMe(), c = fillCats(); if (z || l || a || b || c){ autoTimes.push(now); commit(); return; } }
+    }
+    if (unsaved && !saveTimer && !inflight) flush();
+  }
+
+  // ---------- merging two versions of the budget ----------
+  const META = ["rev", "savedAt", "savedBy"];
+  const plain = v => v === undefined ? undefined : JSON.parse(JSON.stringify(v));
+  const isObj = v => v !== null && typeof v === "object" && !Array.isArray(v);
+  const revOf = d => d && isFinite(Number(d.rev)) ? Number(d.rev) : 0;
+  const strip = d => { const o = Object.assign({}, d || {}); for (const k of META) delete o[k]; return o; };
+  function same(a, b){
+    if (a === b) return true;
+    if (Array.isArray(a)){
+      if (!Array.isArray(b) || a.length !== b.length) return false;
+      for (let i = 0; i < a.length; i++) if (!same(a[i], b[i])) return false;
+      return true;
+    }
+    if (isObj(a) && isObj(b)){
+      const ka = Object.keys(a).filter(k => a[k] !== undefined), kb = Object.keys(b).filter(k => b[k] !== undefined);
+      if (ka.length !== kb.length) return false;
+      for (const k of ka) if (!same(a[k], b[k])) return false;
+      return true;
+    }
+    return false;
+  }
+  const sameData = (a, b) => same(strip(a), strip(b));
+  const hasIds = a => a.every(x => isObj(x) && typeof x.id === "string" && x.id);
+  const flat = a => a.every(x => typeof x === "string" || typeof x === "number");
+  // b = what both started from, l = this device's version, s = the server's. Changes on both sides are kept;
+  // where both changed the very same thing, this device wins (it's what you just did).
+  function merge3(b, l, s){
+    if (same(l, s)) return l;
+    if (same(l, b)) return s;
+    if (same(s, b)) return l;
+    if (isObj(l) && isObj(s)){
+      const bo = isObj(b) ? b : {}, out = {};
+      for (const k of new Set([...Object.keys(s), ...Object.keys(l)])){
+        const inL = l[k] !== undefined, inS = s[k] !== undefined, inB = bo[k] !== undefined;
+        if (inL && inS) out[k] = merge3(bo[k], l[k], s[k]);
+        else if (inL){ if (!inB || !same(l[k], bo[k])) out[k] = l[k]; }   // they removed it: gone, unless you changed it
+        else if (inS){ if (!inB || !same(s[k], bo[k])) out[k] = s[k]; }   // you removed it: gone, unless they changed it
+      }
+      return out;
+    }
+    if (Array.isArray(l) && Array.isArray(s)){
+      const ba = Array.isArray(b) ? b : [];
+      if (hasIds(l) && hasIds(s) && hasIds(ba)) return mergeRows(ba, l, s);
+      if (flat(l) && flat(s) && flat(ba)){   // lists of dates or names: what you added or removed, on top of theirs
+        const gone = ba.filter(x => !l.includes(x)), added = l.filter(x => !ba.includes(x));
+        const out = s.filter(x => !gone.includes(x));
+        for (const x of added) if (!out.includes(x)) out.push(x);
+        return out;
+      }
+    }
+    return l;
+  }
+  // rows with ids (paychecks, bills on a check...): matched by id, in your order, with their new rows slotted in
+  function mergeRows(b, l, s){
+    const B = new Map(b.map(x => [x.id, x])), L = new Map(l.map(x => [x.id, x])), S = new Map(s.map(x => [x.id, x]));
+    const pick = id => {
+      const bx = B.get(id), lx = L.get(id), sx = S.get(id);
+      if (lx && sx) return merge3(bx, lx, sx);
+      if (lx) return bx && same(lx, bx) ? null : lx;
+      if (sx) return bx && same(sx, bx) ? null : sx;
+      return null;
+    };
+    const out = [], seen = new Set();
+    for (const x of l){ if (seen.has(x.id)) continue; seen.add(x.id); const v = pick(x.id); if (v) out.push(v); }
+    let after = null;
+    for (const x of s){
+      if (seen.has(x.id)){ if (out.some(y => y.id === x.id)) after = x.id; continue; }
+      seen.add(x.id);
+      const v = pick(x.id); if (!v) continue;
+      const at = after ? out.findIndex(y => y.id === after) + 1 : 0;
+      out.splice(at, 0, v); after = x.id;
+    }
+    return out;
+  }
+  // a bill moved to another check here while it was changed on the other phone: keep one, where you put it
+  function fixDupes(m, b, l, s){
+    const lists = st => [...(st.paychecks || []).map(p => [p.id, p.items || []]), ["payments", st.payments || []]];
+    const where = st => { const h = new Map(); for (const [w, arr] of lists(st)) for (const it of arr) if (it && it.id && !h.has(it.id)) h.set(it.id, {w, it}); return h; };
+    const seen = new Set(), dup = new Set();
+    for (const [, arr] of lists(m)) for (const it of arr){ if (seen.has(it.id)) dup.add(it.id); else seen.add(it.id); }
+    if (!dup.size) return;
+    const hb = where(b), hl = where(l), hs = where(s);
+    for (const id of dup){
+      const L = hl.get(id), S = hs.get(id), Bx = hb.get(id);
+      const home = (L || S || {}).w, val = L && S ? merge3(Bx && Bx.it, L.it, S.it) : (L || S || {}).it;
+      const spots = [];
+      for (const [w, arr] of lists(m)) arr.forEach((it, i) => { if (it.id === id) spots.push({w, arr, i}); });
+      const keep = spots.find(x => x.w === home) || spots[0];
+      if (val) keep.arr[keep.i] = plain(val);
+      for (const x of spots) if (x !== keep) x.arr.splice(x.i, 1);
+    }
+  }
+  function mergeBudget(b, l, s){
+    const m = merge3(strip(plain(b)), strip(plain(l)), strip(plain(s)));
+    fixDupes(m, b, l, s);
+    const out = normCats(m);   // tidy up (money moved between checks stays in pairs)
+    for (const k of META) if (s && s[k] !== undefined) out[k] = s[k];
+    return plain(out);
+  }
+  // normalize() switches the category list to the data it reads; put this device's back afterwards
+  function normCats(raw){ const n = normalize(raw); applyCats(state.customCats || [], state.hiddenCats || []); return n; }
+  // make the budget on screen match `src`, keeping the same objects for the same ids (so an open sheet keeps working)
+  function graft(t, v){
+    if (Array.isArray(t) && Array.isArray(v)){
+      const old = new Map(); for (const x of t) if (isObj(x) && typeof x.id === "string") old.set(x.id, x);
+      return v.map(x => isObj(x) && typeof x.id === "string" && old.has(x.id) ? graft(old.get(x.id), x) : x);   // a new list, the same rows
+    }
+    if (isObj(t) && isObj(v)){
+      for (const k of Object.keys(t)) if (!(k in v)) delete t[k];
+      for (const k of Object.keys(v)){ const a = t[k], x = v[k]; t[k] = (Array.isArray(a) && Array.isArray(x)) || (isObj(a) && isObj(x)) ? graft(a, x) : x; }
+      return t;
+    }
+    return v;
+  }
+  function adopt(src){
+    const v = plain(src) || {};
+    if (isObj(state)) graft(state, v); else state = v;
+    applyCats(state.customCats || [], state.hiddenCats || []);
+  }
+  // edits not saved yet, kept on this device
+  const localKey = () => "unsaved-" + currentUid;
+  function keepLocal(){ if (!currentUid || !base) return; lsSet(localKey(), JSON.stringify({v: 1, at: Date.now(), baseRev, base, local: state})); }
+  function readLocal(){ try { const k = JSON.parse(lsGet(localKey()) || "null"); return k && k.v === 1 && isObj(k.base) && isObj(k.local) ? k : null; } catch(e){ return null; } }
+  function dropLocal(){ try { localStorage.removeItem("fb-" + localKey()); } catch(e){} }
+  // a copy of the budget as it was each day (the last 7 days), kept on this device; Settings > Restore can bring one back
+  function keepCopy(data){
+    const day = iso(today()); if (!currentUid || !data || copyDay === day) return;
+    const k = "fb-copies-" + currentUid;
+    let list = []; try { list = JSON.parse(localStorage.getItem(k) || "[]"); } catch(e){}
+    if (!Array.isArray(list)) list = [];
+    copyDay = day;
+    if (list.some(c => c && c.day === day)) return;
+    list = [{day, at: Date.now(), data: plain(data)}].concat(list.filter(c => c && c.data)).slice(0, 7);
+    for (let n = list.length; n > 0; n--){ try { localStorage.setItem(k, JSON.stringify(list.slice(0, n))); return; } catch(e){} }
+  }
+  function copiesList(){ try { const l = JSON.parse(localStorage.getItem("fb-copies-" + currentUid) || "[]"); return Array.isArray(l) ? l.filter(c => c && isObj(c.data) && c.at) : []; } catch(e){ return []; } }
 
   // ---------- derived ----------
   function groups(){
@@ -1207,7 +1433,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function findLinked(r, o){ return linkedAll(r, o)[0] || null; }
   // what's still not on any check for this due date (a bill can be split over several checks)
   function recLeft(r, o){
-    const placed = linkedAll(r, o).reduce((a, l) => a + (+l.it.amount || 0), 0);
+    const ls = linkedAll(r, o);
+    if (ls.some(l => l.it.whole)) return 0;   // you chose to spend less this time
+    const placed = ls.reduce((a, l) => a + (+l.it.amount || 0), 0);
     return Math.max(0, Math.round((r.amount - placed) * 100) / 100);
   }
   function recLeftNow(r){
@@ -1402,14 +1630,16 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
 
   // ---------- categories ----------
-  const CATS = [
+  const CAT_BASE = [
     ["bills", "Bills & utilities", "🧾"], ["subs", "Subscriptions", "🔁"], ["cards", "Credit card bills", "💳"], ["health", "Health & wellness", "🩺"],
     ["family", "Family care", "👨‍👩‍👧"], ["gifts", "Gifts & donations", "🎁"], ["shopping", "Shopping", "🛍️"],
     ["auto", "Auto & transportation", "🚗"], ["alcohol", "Alcohol & tobacco", "🍺"], ["dining", "Dining out & takeout", "🍽️"],
     ["groceries", "Groceries", "🛒"], ["fun", "Travel & entertainment", "✈️"], ["pocket", "Pocket spending", "💵"],
     ["savings", "Savings & investments", "🏦"], ["loans", "Loans", "📄"], ["misc", "Miscellaneous", "📦"]
   ];
-  const CAT_MAP = {}; for (const c of CATS) CAT_MAP[c[0]] = c;
+  const CATS = [];     // what the pickers offer (hidden ones left out)
+  const CAT_MAP = {};  // every category, hidden ones too, so older expenses keep their name and color
+  const CAT_COLORS = ["#0A84FF", "#30D158", "#FF9F0A", "#FF375F", "#BF5AF2", "#5E5CE6", "#64D2FF", "#FFD60A", "#00C7BE", "#FF6B3D", "#AC8E68", "#8E8E93"];
   // one colored tile per category: [tile color, glyph, glyph color]
   const CAT_ICONS = {
     bills: ["#0A84FF", '<path d="M13 3L5.5 13.5H11l-1 7.5 7.5-10.5H12z"/>', "#fff"],
@@ -1432,8 +1662,19 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   };
   function catIcon(key, cls){
     const c = CAT_ICONS[key] || CAT_ICONS[""];
-    return '<span class="cat-ico' + (cls ? " " + cls : "") + '" style="background:' + c[0] + ';color:' + c[2] + '" aria-hidden="true"><svg viewBox="0 0 24 24">' + c[1] + '</svg></span>';
+    const inner = c[1] ? '<svg viewBox="0 0 24 24">' + c[1] + '</svg>' : '<b class="cat-l">' + esc(c[3] || "") + '</b>';   // a category you added: its first letter
+    return '<span class="cat-ico' + (cls ? " " + cls : "") + '" style="background:' + c[0] + ';color:' + c[2] + '" aria-hidden="true">' + inner + '</span>';
   }
+  // dark letters on light colors, white on the rest
+  const inkOn = hex => { const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return (r * 299 + g * 587 + b * 114) / 1000 > 170 ? "#1C1C1E" : "#FFFFFF"; };
+  function applyCats(custom, hidden){
+    custom = Array.isArray(custom) ? custom : []; hidden = Array.isArray(hidden) ? hidden : [];
+    CATS.length = 0; for (const k in CAT_MAP) delete CAT_MAP[k];
+    for (const k in CAT_ICONS) if (k.startsWith("c-")) delete CAT_ICONS[k];
+    for (const c of custom) CAT_ICONS[c.id] = [c.color, "", inkOn(c.color), (Array.from(c.name)[0] || "?").toUpperCase()];
+    for (const c of CAT_BASE.concat(custom.map(c => [c.id, c.name, "🏷️"]))){ CAT_MAP[c[0]] = c; if (!hidden.includes(c[0])) CATS.push(c); }
+  }
+  applyCats([], []);
 
   const NO_CAT = ["", "No category", "❔"];
   // first match wins, so the more specific groups come first
@@ -1485,11 +1726,12 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     for (const p of state.paychecks) p.items.forEach(set);
   }
   const catField = cur => field("Category", '<select name="cat">' + (cur ? "" : '<option value="" selected>Pick a category</option>') +
-    CATS.map(c => '<option value="' + c[0] + '"' + (c[0] === cur ? " selected" : "") + '>' + c[1] + '</option>').join("") + '</select>');
+    (CAT_MAP[cur] && !CATS.includes(CAT_MAP[cur]) ? [CAT_MAP[cur]] : []).concat(CATS).map(c => '<option value="' + c[0] + '"' + (c[0] === cur ? " selected" : "") + '>' + c[1] + '</option>').join("") + '</select>');
   const catFrom = (fd, cur) => CAT_MAP[fd.get("cat")] ? fd.get("cat") : cur;
   // asked every time a new expense is added
-  let catPending = null;
+  let catPending = null, catAsk = null;
   function askCategory(name, amount, guess, onPick){
+    catAsk = [name, amount, guess, onPick];
     const btn = c => '<button type="button" class="cat-btn' + (c[0] === guess ? " sug" : "") + '" data-act="pickCat" data-cat="' + c[0] + '">' +
       catIcon(c[0]) + '<span>' + c[1] + '</span></button>';
     const g = guess && CAT_MAP[guess];
@@ -1498,11 +1740,60 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       title: "What kind of expense?", saveText: "Save",
       body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + (amount ? ", " + money(amount) : "") + '</p>' +
         (g ? '<p class="grp-h">Suggested</p><div class="cat-grid one">' + btn(g) + '</div><p class="grp-h">All categories</p>' : "") +
-        '<div class="cat-grid">' + CATS.map(btn).join("") + '</div>',
+        '<div class="cat-grid">' + CATS.map(btn).join("") +
+        '<button type="button" class="cat-btn cat-new" data-act="newCat"><span class="cat-ico cat-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span>New category</span></button></div>',
       onSave: () => { if (!g) return false; const fn = catPending; closeSheet(); if (fn) fn(g[0]); return false; }
     });
     $("#sheetSave").disabled = !g;
     catPending = onPick;
+  }
+
+  // a category of your own: a name and a color. done(key) runs after it's saved; back() returns to where you were
+  function newCatSheet(done, back){
+    const used = new Set((state.customCats || []).map(c => c.color)), first = CAT_COLORS.find(c => !used.has(c)) || CAT_COLORS[0];
+    openSheet({
+      title: "New category", saveText: "Add", back,
+      body: field("Name", '<input name="cname" maxlength="40" autocomplete="off" required placeholder="Like Pets or Home repairs">') +
+        '<p class="lbl">Color</p><div class="swatches" role="radiogroup" aria-label="Color">' +
+        CAT_COLORS.map(c => '<label><input type="radio" name="ccolor" value="' + c + '"' + (c === first ? " checked" : "") + ' aria-label="' + c + '"><span style="background:' + c + '"></span></label>').join("") + '</div>',
+      onSave: fd => {
+        const name = String(fd.get("cname") || "").trim().slice(0, 40); if (!name){ setStatus("Give it a name"); return false; }
+        // the same name again: use that one (and show it again if it was hidden)
+        const dup = Object.values(CAT_MAP).find(c => normName(c[1]) === normName(name));
+        let key = dup ? dup[0] : "";
+        if (!key){
+          const c = {id: "c-" + Math.random().toString(36).slice(2, 10), name, color: String(fd.get("ccolor") || first)};
+          state.customCats = (state.customCats || []).concat(c); key = c.id;
+        }
+        state.hiddenCats = (state.hiddenCats || []).filter(k => k !== key);
+        applyCats(state.customCats, state.hiddenCats);
+        closeSheet(); done(key); return false;
+      }
+    });
+  }
+  // Settings > Categories: turn off the ones you don't use, delete the ones you added
+  function catsSheet(){
+    const n = {};
+    const count = o => { if (o && o.cat) n[o.cat] = (n[o.cat] || 0) + 1; };
+    state.recurring.forEach(count); state.payments.forEach(count); state.wishlist.forEach(count);
+    for (const p of state.paychecks) p.items.forEach(count);
+    const hid = state.hiddenCats || [], own = state.customCats || [];
+    const li = c => '<label class="cat-li">' + catIcon(c[0], "sm") + '<span class="cl-n"><b>' + esc(c[1]) + '</b>' +
+      (n[c[0]] ? '<small>Used ' + n[c[0]] + ' time' + (n[c[0]] === 1 ? "" : "s") + '</small>' : "") + '</span>' +
+      (c[0].startsWith("c-") ? '<button type="button" class="cl-del" data-act="delCat" data-cat="' + c[0] + '">Delete</button>' : "") +
+      '<input type="checkbox" class="switch" name="show_' + c[0] + '"' + (hid.includes(c[0]) ? "" : " checked") + ' aria-label="Show ' + esc(c[1]) + '"></label>';
+    openSheet({
+      title: "Categories", saveText: "Save",
+      body: '<p class="hint" style="margin:-8px 0 12px">Turn off the ones you don\u2019t use and they won\u2019t show when you pick a category. Expenses already in them keep it.</p>' +
+        (own.length ? grpH("Yours") + '<div class="cat-list">' + own.map(c => li(CAT_MAP[c.id])).join("") + '</div>' : "") +
+        grpH("Built in") + '<div class="cat-list">' + CAT_BASE.map(li).join("") + '</div>' +
+        '<button type="button" class="btn-wide" data-act="newCatSet" style="margin:4px 0 8px">+ New category</button>',
+      onSave: fd => {
+        state.hiddenCats = CAT_BASE.concat(own.map(c => [c.id])).map(c => c[0]).filter(k => !fd.get("show_" + k));
+        applyCats(state.customCats, state.hiddenCats);
+        setStatus("Categories saved");
+      }
+    });
   }
 
   // ---------- spending analysis ----------
@@ -1769,19 +2060,26 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
   // what's owed now: the balance as of its date, minus every payment marked paid since then
   function debtNow(d){
-    const r = d.recId && recById(d.recId);
-    let paid = 0;
+    const r = d.recId && recById(d.recId), key = billKey(d.name);
+    let paid = 0; const hit = new Set();
+    // every payment ticked off on a check since the balance was entered, even part of a month's payment.
+    // It counts when it's this debt's monthly bill, or carries the debt's name (typed by hand, or a bill of its own).
+    for (const p of state.paychecks) for (const it of p.items){
+      if (!it.paid || it.carryTo) continue;
+      if (it.debtX){ if (it.debtX === d.id && (it.on || p.date) >= d.asOf) paid += +it.amount || 0; continue; }   // extra from a check's leftover
+      const ir = it.recId && recById(it.recId), mine = !!r && it.recId === r.id;
+      if (!mine && (billKey(it.name) !== key || (ir && ir.debtId && ir.debtId !== d.id))) continue;
+      const counts = it.paidOn ? it.paidOn >= d.asOf : (it.recFor || p.date) > d.asOf;
+      if (!counts) continue;
+      paid += +it.amount || 0;
+      if (mine && it.recFor) hit.add(it.recFor);
+    }
+    // due dates marked paid on the Expenses page with nothing ticked on a check: the monthly payment
     if (r && r.paidThrough && r.paidThrough > d.asOf){
       const from = addDays(d.asOf, 1);
       let o = occOnOrAfter(r, from > r.since ? from : r.since), g = 0;
-      while (o <= r.paidThrough && g++ < 600){
-        const ls = linkedAll(r, o).filter(l => l.it.paid);
-        paid += ls.length ? sum(ls.map(l => l.it)) : r.amount;
-        o = nextOcc(r, o);
-      }
+      while (o <= r.paidThrough && g++ < 600){ if (!hit.has(o)) paid += r.amount; o = nextOcc(r, o); }
     }
-    // extra payments given from a check's leftover
-    for (const p of state.paychecks) for (const it of p.items) if (it.debtX === d.id && it.paid && (it.on || p.date) >= d.asOf) paid += it.amount;
     return Math.max(0, Math.round((d.balance - paid) * 100) / 100);
   }
   // months to pay off and interest along the way; null when the payment doesn't cover the interest
@@ -2706,6 +3004,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       title: no ? "Pick a check for " + name : "Add to a check", noSave: true, saveText: "Split it", cancelText: no ? "Later" : "",
       body: '<p class="hint" style="margin:-8px 0 14px">' + esc(name) + ", " + (full && amount < full ? money(amount) + " left of " + money(full) : money(amount)) + (due ? ", due " + dayLabel(due) : "") + '</p>' +
         (no ? '<p class="hint" style="margin:-6px 0 14px">Taken off the ' + dayLabel(no.date) + ' check. Pick another one, or choose Later and it stays on your bills to plan.</p>' : "") +
+        (kind === "rec" && full && amount < full - 0.004 ? '<div class="spend-less"><button type="button" class="ghost" data-act="spendLess" data-id="' + id + '" data-occ="' + (opt.occ || openOcc(recById(id))) + '">' +
+          'Just spend less this time<small>Leave it at ' + money(full - amount) + ' and don\u2019t add the other ' + money(amount) + '.</small></button></div>' : "") +
         (canSplit ? '<div class="card-box">' + swRow("split", "Split payment", "Pay it from more than one check", false) +
           '<div class="split-box" id="splitBox" hidden>' +
             field("How many checks", '<select name="parts">' + selOpts([2, 3, 4].filter(n => n <= maxParts).map(n => [n, n + " checks"]), 2) + '</select>') +
@@ -3017,7 +3317,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
             paidFromHtml(pc),
       onSave: fd => {
         it.name = String(fd.get("what") || "").trim() || it.name;
+        const was = it.amount;
         it.amount = toNum(fd.get("amount"));
+        // a smaller amount on a bill: ask whether the rest goes on another check or you'll just spend less
+        const lr = it.recId && recById(it.recId);
+        if (lr && !it.whole && it.amount < was - 0.004 && (!fd.get("move") || fd.get("move") === pcId)){
+          const left = recLeft(lr, it.recFor);
+          if (left > 0.004){ setTimeout(() => spendLessSheet(lr, it.recFor, it.amount, left, pcId), 0); }
+        }
         it.cat = catFrom(fd, it.cat);
         it.due = String(fd.get("due") || "");
         const dest = fd.get("move");
@@ -3031,6 +3338,18 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       onDelete: () => { skipOcc(it); pc.items = pc.items.filter(i => i.id !== id); setTimeout(() => maybeClose(pc), 0); }
     });
     sheetCfg.onInput();
+  }
+  function spendLessSheet(r, o, amt, left, pcId){
+    const pc = findPc(pcId);
+    openSheet({
+      title: "What about the other " + money(left) + "?", noSave: true,
+      body: '<p class="hint" style="margin:-8px 0 14px">' + esc(r.name) + ' is ' + money(r.amount) + (noDay(r) ? "" : ", due " + dayLabel(o)) + '. ' +
+        (pc ? 'The ' + dayLabel(pc.date) + ' check now has ' + money(amt) + ' for it.' : "") + '</p>' +
+        '<div class="spend-less">' +
+          '<button type="button" class="primary" data-act="spendLess" data-id="' + r.id + '" data-occ="' + o + '">Just spend less this time<small>Nothing else goes on a check. ' + esc(r.name) + ' stays ' + money(r.amount) + ' next time.</small></button>' +
+          '<button type="button" class="ghost" data-act="restOnCheck" data-id="' + r.id + '" data-occ="' + o + '" data-pc="' + pcId + '">Put ' + money(left) + ' on another check<small>Pick the check next.</small></button>' +
+        '</div>'
+    });
   }
   function editRec(id){
     const r = recById(id); if (!r) return;
@@ -3249,6 +3568,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
           row("setPay", "Paychecks", esc(paySummary()), ICO.pay) +
           row("setBills", "Bills", groupsOn + " of 4 groups on, suggestions " + (s.sugg ? "on" : "off"), ICO.bills) +
           row("setNotif", "Notifications", nOn + " of " + keys.length + " on, just for you", ICO.bell) +
+          row("setCats", "Categories", CATS.length + " shown" + ((state.customCats || []).length ? ", " + state.customCats.length + " of your own" : ""),
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.5V4.5a1 1 0 0 1 1-1h8l8 8a1.4 1.4 0 0 1 0 2l-7 7a1.4 1.4 0 0 1-2 0z"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>') +
         '</ul>' + (canDesk() || dk.on ? deskPrefRow() : '') +
         '<div class="acct"><p class="who">Signed in as ' + esc(currentEmail) + '</p><div class="acct-btns">' +
         '<button type="button" data-act="backup">Back up</button><button type="button" data-act="copyData">Copy data</button><button type="button" data-act="importData">Restore</button>' +
@@ -3462,14 +3783,20 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       title: "Paste your data",
       body: '<p class="hint" style="margin:0 0 10px">Paste a backup, or the data from the Claude version. It replaces everything in the budget, for both of you.</p>' +
         '<label class="field"><span>Data</span><textarea name="data" rows="8" required autocapitalize="off" spellcheck="false"></textarea></label>' +
-        '<label class="field"><span>Or pick a backup file</span><input type="file" name="file" accept=".json,application/json,text/plain"></label>',
+        '<label class="field"><span>Or pick a backup file</span><input type="file" name="file" accept=".json,application/json,text/plain"></label>' + copiesField(),
       onSave: fd => {
         let d = null;
         try { d = JSON.parse(String(fd.get("data") || "").trim()); } catch(e){}
         if (!d || typeof d !== "object" || !Array.isArray(d.paychecks)){ setStatus("That text isn't budget data"); return false; }
-        state = normalize(d);
+        state = normalize(d); replaceAll = true;   // a restore replaces everything, it isn't merged
         setTimeout(() => setStatus("Budget imported"), 700);
       }
+    });
+    // a copy saved on this device fills in the box above
+    const cp = $("#sheetForm").elements.copy, cps = copiesList();
+    if (cp) cp.addEventListener("change", () => {
+      const c = cps[Number(cp.value)]; if (!c) return;
+      $("#sheetForm").elements.data.value = JSON.stringify(c.data); setStatus("Copy loaded. Tap Save to use it");
     });
     // a backup file fills in the box above
     const f = $("#sheetForm").elements.file;
@@ -3477,6 +3804,14 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       const file = f.files && f.files[0]; if (!file) return;
       file.text().then(t => { $("#sheetForm").elements.data.value = t; setStatus("Backup loaded. Tap Save to use it"); }, () => setStatus("Couldn't read that file"));
     });
+  }
+  // the daily copies this device kept, newest first, with how many bills were ticked paid in each
+  function copiesField(){
+    const cps = copiesList(); if (!cps.length) return "";
+    const lbl = c => { const d = new Date(c.at), n = (c.data.paychecks || []).reduce((a, p) => a + (p.items || []).filter(i => i.paid && !i.carryTo).length, 0);
+      return d.toLocaleDateString([], {weekday: "short", month: "short", day: "numeric"}) + ", " + d.toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}) + " \u00b7 " + n + " marked paid"; };
+    return '<label class="field"><span>Or pick a copy saved on this device</span><select name="copy"><option value="">Choose a day</option>' +
+      cps.map((c, i) => '<option value="' + i + '">' + esc(lbl(c)) + '</option>').join("") + '</select></label>';
   }
   async function backup(){
     const name = "family-budget-" + iso(today()) + ".json";
@@ -3978,7 +4313,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (act === "tab"){ if (dk.on){ deskOpen(b.dataset.tab); return; } tab = b.dataset.tab; render(); window.scrollTo({top: 0}); return; }
     if (act === "deskPref"){ lsSet("desk", b.dataset.v || "auto"); deskSync(); render(); return; }
     if (readOnly && act !== "tab") { setStatus("View only"); }
-    if (act === "toggle"){ const pc = findPc(pcId); const it = pc && pc.items.find(i => i.id === id); if (it && !it.carryTo){ it.paid = !it.paid; syncRec(it); commit(); if (it.paid) maybeClose(pc); } }
+    if (act === "toggle"){ const pc = findPc(pcId); const it = pc && pc.items.find(i => i.id === id); if (it && !it.carryTo){ it.paid = !it.paid; if (it.paid) it.paidOn = iso(today()); else delete it.paidOn; syncRec(it); commit(); if (it.paid) maybeClose(pc); } }
     else if (act === "recToggle"){
       const r = recById(id); if (!r) return;
       if (isPaidNow(r)){
@@ -3987,7 +4322,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         const pv = prevOcc(r, k); r.paidThrough = pv >= r.since ? pv : "";
       } else {
         const o = openOcc(r); r.paidThrough = o;
-        linkedAll(r, o).forEach(l => { l.it.paid = true; });
+        linkedAll(r, o).forEach(l => { if (!l.it.paid) l.it.paidOn = iso(today()); l.it.paid = true; });
       }
       commit(); setStatus(r.paidThrough ? paidLabel(r) : "Marked unpaid");
     }
@@ -4038,6 +4373,31 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "editPc") editPc(id);
     else if (act === "newPc") newPc();
     else if (act === "pickCat"){ const fn = catPending; closeSheet(); if (fn) fn(b.dataset.cat); }
+    else if (act === "newCat"){
+      // from the "What kind of expense?" sheet: make the category, then file the expense under it
+      const ask = catAsk; if (!ask) return;
+      newCatSheet(key => ask[3](key), () => askCategory(ask[0], ask[1], ask[2], ask[3]));
+    }
+    else if (act === "setCats") catsSheet();
+    else if (act === "spendLess"){
+      const r = recById(id), o = b.dataset.occ; if (!r) return;
+      linkedAll(r, o).forEach(l => { l.it.whole = true; });
+      closeSheet(); commit(); setStatus("Okay, less for " + r.name + " this time");
+    }
+    else if (act === "restOnCheck"){ const r = recById(id); if (!r) return; addToCheckSheet("rec", r.id, {occ: b.dataset.occ}); }
+    else if (act === "newCatSet") newCatSheet(() => { commit(); catsSheet(); }, () => catsSheet());
+    else if (act === "delCat"){
+      // two taps, so a slip doesn't delete it; what used it moves to Miscellaneous
+      if (b.dataset.sure !== "1"){ b.dataset.sure = "1"; b.textContent = "Delete?"; return; }
+      const k = b.dataset.cat;
+      const move = o => { if (o && o.cat === k) o.cat = "misc"; };
+      state.recurring.forEach(move); state.payments.forEach(move); state.wishlist.forEach(move);
+      for (const p of state.paychecks) p.items.forEach(move);
+      state.customCats = (state.customCats || []).filter(c => c.id !== k);
+      state.hiddenCats = (state.hiddenCats || []).filter(x => x !== k);
+      applyCats(state.customCats, state.hiddenCats);
+      commit(); catsSheet(); setStatus("Category deleted");
+    }
     else if (act === "catName"){ const nm = b.dataset.name; askCategory(nm, 0, catGuess(nm), cat => { setCatForName(nm, cat); commit(); }); }
     else if (act === "anaRange"){ anaRange = b.dataset.r; lsSet("ana-range", anaRange); anaPt = -1; anaSlice = ""; render(); }
     else if (act === "anaPt"){ const i = Number(b.dataset.i); anaPt = anaPt === i ? -1 : i; render(); }
@@ -4245,27 +4605,37 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     catch(err){ loginErr.textContent = authMsg(err && err.code); }
   });
 
+  // switching apps or locking the phone: save now instead of waiting
+  const saveNow = () => { if (saveTimer){ clearTimeout(saveTimer); saveTimer = null; flush(); } };
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") saveNow();
+    else if (unsaved && !saveTimer && !inflight){ retryWait = 0; flush(); }
+  });
+  window.addEventListener("pagehide", saveNow);
+  window.addEventListener("online", () => { if (unsaved && !saveTimer && !inflight){ retryWait = 0; flush(); } });
   let unsub = null;
   onAuthStateChanged(auth, user => {
     if (unsub){ unsub(); unsub = null; }
     clearTimeout(saveTimer); saveTimer = null;
     if (!user){
-      docRef = null; ready = false; currentEmail = ""; currentUid = "";
+      docRef = null; ready = false; currentEmail = ""; currentUid = ""; base = null; unsaved = false; stash = null; clearTimeout(retryTimer);
       state = normalize(null);
       login.hidden = false; render();
       return;
     }
     login.hidden = true; currentEmail = user.email || ""; currentUid = user.uid || "";
-    readOnly = false;
+    readOnly = false; ready = false; base = null; baseRev = 0; unsaved = false; stash = null; clearTimeout(retryTimer); retryWait = 0; copyDay = ""; autoDone = false;
     const ref = doc(fsdb, "budgets", "family");
-    docRef = {set: body => setDoc(ref, body)};
-    unsub = onSnapshot(ref, snap => {
+    docRef = {save: fn => runTransaction(fsdb, tx => fn(tx, ref))};
+    unsub = onSnapshot(ref, {includeMetadataChanges: true}, snap => {
       if (snap.metadata && snap.metadata.hasPendingWrites) return;
-      if (saveTimer || inflight) return;           // don't clobber edits in progress
-      state = normalize(snap.exists() ? snap.data() : null);
-      ready = true;
-      render();
-      if (!readOnly){ const z = ensureChecks(), l = linkByName(), a = autoFill(), b = ensureMe(), c = fillCats(); if (z || l || a || b || c) commit(); }
+      if (ready && (saveTimer || inflight || unsaved)){
+        // your edits are waiting to go up: the save folds this in, so just hold on to it
+        stash = snap;
+        if (!(snap.metadata && snap.metadata.fromCache) && unsaved && !saveTimer && !inflight){ retryWait = 0; flush(); }
+        return;
+      }
+      take(snap);
     }, err => {
       if (err && err.code === "permission-denied"){
         ready = false; render();
