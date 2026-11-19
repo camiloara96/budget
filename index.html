@@ -8,7 +8,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Budget">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -881,6 +882,31 @@ html.desk .toast{bottom:24px}
 .set-desk{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);border-radius:14px}
 .set-desk .t{display:block;font-weight:700}
 .set-desk .s{display:block;font-size:13px;color:var(--muted);max-width:360px}
+/* light mode follows the phone. On an iPhone home-screen app the clock and battery turn black or white with the
+   phone's setting, so the app follows the phone too (a separate switch here would hide them). The computer layout
+   has its own light look (paper). */
+@media (prefers-color-scheme: light){
+  html:not(.desk){
+    color-scheme:light;
+    --bg:#F2F2F7; --surface:#FFFFFF; --ink:#0B0B0C; --muted:#6C6C70; --line:#E3E3E8; --dim:#7A7A7F; --raise:#E5E5EA;
+    --soft:#E9E9EE; --check:#1E9E55; --check-ink:#FFFFFF; --good:#1F7A52; --bad:#D70015;
+    --accent:#0B0B0C; --accent-ink:#FFFFFF; --banner:#FBF1D6; --banner-ink:#7A5200; --red-bg:#FCE8E6; --red-ink:#B3261E; --extra-bg:#FBF1D6; --extra-ink:#8A5A00; --plan:#A9D3BD; --xbar:#F5B800;
+    --sub:#5C5F66; --sub2:#5C5F66; --sub3:#6B6E75; --edge:#D1D1D6; --e5a:#AEAEB2; --e54:#AEAEB2; --e48:#C7C7CC;
+    --auto-bg:rgba(10,102,255,.07); --auto-edge:rgba(10,102,255,.45); --auto-ink:#0A5BD6;
+    --on-ink:#FFFFFF; --in-ink:#1F7A52; --stk1:#E5E5EA; --stk2:#EEEEF2; --focus-ring:rgba(11,11,12,.7);
+  }
+  html:not(.desk) .tabbar{background:rgba(249,249,251,.94);border-top-color:#D1D1D6}
+  html:not(.desk) .tabbar button[aria-current="page"]{color:var(--ink)}
+  html:not(.desk) .mid-ring{background:#FFFFFF;color:#6C6C70;box-shadow:0 0 0 5px #F9F9FB,0 0 0 6px #D1D1D6}
+  html:not(.desk) .tabbar .tab-mid[aria-current="page"] .mid-ring{background:var(--ink);color:var(--on-ink)}
+  html:not(.desk) .row.is-tent{box-shadow:0 8px 18px rgba(20,20,40,.10)}
+  html:not(.desk) .bd-ghost{box-shadow:0 18px 40px rgba(20,20,40,.18)}
+  html:not(.desk) .swatches span{box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+  /* yellow text is hard to read on white: the darker gold instead */
+  html:not(.desk) .pill.own, html:not(.desk) .done-pill.todo, html:not(.desk) .pc-line .v.good, html:not(.desk) .fin-s .ta, html:not(.desk) .pc-done-stats .v.ta,
+  html:not(.desk) .assign-card strong, html:not(.desk) .eh-stats .v.ta, html:not(.desk) .ownl, html:not(.desk) .pl-line.ownl b{color:var(--extra-ink)}
+  html:not(.desk) .done-pill{color:var(--good)}
+}
 </style>
 </head>
 <body>
