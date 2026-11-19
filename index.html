@@ -286,6 +286,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 #sheetSave:disabled{opacity:.35}
 .pf{margin-bottom:12px}
 .pf-h{font-size:13px;color:var(--muted);margin:0 0 4px;font-weight:600}
+.pf-chev{flex:none;width:18px;height:18px;display:none;place-items:center;color:var(--muted)}
+.pf-chev svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pf-list.pf-closed .pf-row:not(:has(input:checked)){display:none}
+.pf-list.pf-closed .pf-row{background:var(--bg)}
+.pf-list.pf-closed .pf-tick{display:none}
+.pf-list.pf-closed .pf-chev{display:grid}
+.pf-list:not(.pf-closed) .pf-row{animation:pfIn .2s ease both}
+@keyframes pfIn{from{opacity:0}}
 .pf-list{border:1px solid var(--line);border-radius:12px;background:var(--bg);overflow:hidden}
 .pf-row{position:relative;display:flex;align-items:center;gap:10px;min-height:44px;padding:0 12px;border-top:1px solid var(--line);cursor:pointer}
 .pf-row:first-child{border-top:0}
@@ -682,6 +690,59 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 .bd-dragging #pcRail .pc-card.bd-over{outline-color:var(--check)}
 .bd-dragging #pcRail .pc-card.bd-over.bd-bad{outline-color:var(--bad)}
 .row.just-in{animation:justIn 1.1s cubic-bezier(.2,.8,.2,1)}
+/* vaults: a row you spend bit by bit; the yellow bar shrinks as you add what you spent */
+.row.vault{flex-wrap:wrap}
+.row.vault .row-main{padding-bottom:4px}
+.v-left{flex:none;display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}
+.v-left .num{font-size:17px;font-weight:800}
+.v-left small{font-size:11.5px;color:var(--muted);font-weight:600}
+.row-sub.bad{color:var(--bad)}
+.tick.v-add::before{background:var(--ink);box-shadow:none}
+.tick.v-add svg{opacity:1;stroke:var(--accent-ink);width:15px;height:15px;stroke-width:3}
+.v-wrap{flex:none;border:0;border-radius:999px;background:var(--ink);color:var(--accent-ink);font-weight:700;font-size:13px;padding:9px 12px;margin-left:4px}
+.v-bar{flex-basis:100%;margin:2px 0 0 44px;height:8px;border-radius:4px;background:var(--soft);overflow:hidden}
+.v-bar i{display:block;height:100%;border-radius:4px;background:var(--xbar)}
+.v-bar i.low{background:var(--bad)}
+.v-bar i.anim{animation:vShrink .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vShrink{from{width:var(--from)}}
+.row.vault.v-new .v-left .num{animation:vPop .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes vPop{40%{transform:scale(1.12)}}
+.v-last{flex-basis:100%;display:flex;align-items:center;gap:8px;margin-left:44px;padding:4px 0 8px;font-size:12.5px;color:var(--muted);min-width:0}
+.v-last span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-last button{flex:none;border:0;background:none;color:var(--ink);font-weight:700;font-size:12.5px;padding:6px 0}
+.row.vault .v-pad{flex-basis:100%;height:6px}
+.vp{display:flex;flex-direction:column;align-items:center;gap:4px;margin:-6px 0 10px}
+.vp-when{font-size:13px;color:var(--muted);text-align:center;margin:0 0 6px}
+.vp-ring{position:relative;width:168px;height:168px}
+.vp-ring svg{width:168px;height:168px;transform:rotate(-90deg)}
+.vp-ring circle{fill:none;stroke-width:14}
+.vp-ring .bg{stroke:var(--soft)}
+.vp-ring .fg{stroke:var(--xbar);stroke-linecap:round}
+.vp-ring .fg.low{stroke:var(--bad)}
+.vp-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.vp-mid b{font-size:34px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.vp-mid b.sm{font-size:26px}
+.vp-mid span{font-size:13px;color:var(--muted);margin-top:4px}
+.vp-pace{font-size:14px;font-weight:700;color:var(--in-ink);text-align:center;margin-top:6px}
+.vp-pace.bad{color:var(--bad)}
+.vp-days{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;margin:6px 0 12px}
+.vp-day{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px;border-radius:14px;background:var(--soft);border:2px solid transparent;min-width:0}
+.vp-day.today{border-color:var(--ink)}
+.vp-day small{font-size:11px;color:var(--muted);font-weight:700}
+.vp-day b{font-size:16px;font-weight:800}
+.vp-day span{font-size:12px;font-weight:700}
+.vp-day.none span{color:var(--muted)}
+.vp-acts{display:flex;gap:8px;justify-content:center;margin:0 0 6px}
+.vp-acts button{border:0;border-radius:999px;background:var(--soft);color:var(--ink);font-weight:700;font-size:14px;padding:10px 16px}
+.vp-h{font-size:13px;font-weight:700;color:var(--muted);margin:10px 4px 2px}
+.vp-list button{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;border:0;border-top:.5px solid var(--line);background:none;color:var(--ink);padding:11px 4px;font-size:15px;text-align:left}
+.vp-list button:first-child{border-top:0}
+.vp-list .num{font-weight:700;flex:none}
+.vp-empty{font-size:14px;color:var(--muted);text-align:center;margin:10px 0 12px}
+.va-amt input{font-size:32px;font-weight:800;text-align:center;padding:10px 12px}
+.va-hint{font-size:14px;font-weight:700;color:var(--in-ink);text-align:center;margin:-4px 0 12px;min-height:19px}
+.va-hint.bad{color:var(--bad)}
+.va-chips{margin:-2px 0 14px}
 @keyframes justIn{0%{opacity:0;transform:translateY(-6px);background-color:rgba(48,209,88,.18)}40%{opacity:1;transform:none;background-color:rgba(48,209,88,.18)}100%{background-color:transparent}}
 /* split a bill across checks */
 .split-box{margin:0 0 6px}
@@ -1013,6 +1074,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       if (it && it.tent) o.tent = true;
       if (it && it.whole) o.whole = true;
       if (it && it.paid && /^\d{4}-\d{2}-\d{2}$/.test(it.paidOn || "")) o.paidOn = it.paidOn;
+      if (it && it.vault && typeof it.vault === "object" && !o.carryTo && !o.debtX){
+        const v = it.vault;
+        o.vault = {from: isoOr(v.from), to: isoOr(v.to), end: ["extra", "savings", "keep"].includes(v.end) ? v.end : "extra",
+          spends: arr(v.spends).filter(x => x && typeof x === "object").slice(-500)
+            .map(x => ({id: str(x.id) || uid(), amt: Math.round(num(x.amt) * 100) / 100, what: str(x.what).slice(0, 60), on: isoOr(x.on)})).filter(x => x.amt > 0)};
+        if (typeof v.plan === "number" && isFinite(v.plan) && v.plan >= 0) o.vault.plan = v.plan;
+      }
       return o; };
     const hrs = h => h && typeof h === "object" ? {reg: num(h.reg), ot: num(h.ot), oncall: !!h.oncall, bonus: num(h.bonus), bonusMethod: h.bonusMethod === "agg" ? "agg" : "flat"} : null;
     const s = Object.assign({}, S0, {groupsOff: []}), ds = d.settings && typeof d.settings === "object" ? d.settings : null;
@@ -1819,10 +1887,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         if (it.carryTo) continue;
         const c = it.cat || "";
         const e = by[c] || (by[c] = {total: 0, paid: 0, items: []});
-        e.total += it.amount; if (it.paid) e.paid += it.amount; e.items.push({pc: p, it});
+        e.total += it.amount; e.paid += paidPart(it); e.items.push({pc: p, it});
         if (!c) out.uncat.push(it);
         if (c === "savings") out.saved += it.amount;
-        else { out.spent += it.amount; if (it.paid) out.paid += it.amount; }
+        else { out.spent += it.amount; out.paid += paidPart(it); }
       }
     }
     return out;
@@ -2408,7 +2476,46 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   // mv = the check to move leftovers to, when this check's week is over
   const CARRY_ICO = '<span class="cat-ico" style="background:#3A3A3C;color:#F5F5F7" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>';
   const seenTent = new Set();   // auto rows already shown, so the lift plays only once
+  // ---------- vaults: money set aside on a check that you spend bit by bit (a trip, a project) ----------
+  const r2 = n => Math.round(n * 100) / 100;
+  const vSpent = i => i.vault ? r2(i.vault.spends.reduce((a, x) => a + (+x.amt || 0), 0)) : 0;
+  const vBudget = i => i.vault && typeof i.vault.plan === "number" ? i.vault.plan : (+i.amount || 0);
+  const vLeft = i => i.paid ? 0 : Math.max(0, r2((+i.amount || 0) - vSpent(i)));
+  const vOver = i => !i.paid && i.vault && typeof i.vault.plan === "number" ? Math.max(0, r2((+i.amount || 0) - i.vault.plan)) : 0;
+  const vEnded = i => !!(i.vault && !i.paid && i.vault.to && i.vault.to < iso(today()));
+  const vPct = i => { const b = vBudget(i); return b > 0 ? Math.max(0, Math.min(100, vLeft(i) / b * 100)) : 0; };
+  // what of a row counts as paid on the check: all of it once ticked, or for a vault what's been spent so far
+  const paidPart = i => i.paid ? (+i.amount || 0) : i.vault ? Math.min(vSpent(i), +i.amount || 0) : 0;
+  const paidSum = list => r2(list.reduce((a, i) => a + paidPart(i), 0));
+  // spending past what the vault had: the row grows by the difference (it comes out of Extra), and remembers the plan
+  function vFit(i){
+    const v = i.vault, sp = vSpent(i);
+    if (i.paid){ i.amount = sp; return; }
+    if (typeof v.plan === "number"){ i.amount = Math.max(v.plan, sp); if (i.amount <= v.plan + 0.004){ i.amount = v.plan; delete v.plan; } }
+    else if (sp > (+i.amount || 0) + 0.004){ v.plan = +i.amount || 0; i.amount = sp; }
+  }
+  let vJust = null;   // the vault you just added to, so its bar shrinks into place
+  function vaultRow(i, pc){
+    const sp = vSpent(i), left = vLeft(i), over = vOver(i), ended = vEnded(i), pct = vPct(i), t = iso(today());
+    const n = i.vault.spends.length, j = vJust && vJust.id === i.id && Date.now() - vJust.at < 2000 ? vJust : null;
+    const sub = over ? '<span class="row-sub bad">Went ' + money(over) + ' over</span>'
+      : ended ? '<span class="row-sub">Trip\'s over, wrap it up</span>'
+      : sp > 0.004 ? '<span class="row-sub">Vault · ' + money(sp) + ' spent</span>'
+      : i.vault.from && i.vault.from > t ? '<span class="row-sub">Vault · starts ' + dayLabel(i.vault.from) + '</span>'
+      : '<span class="row-sub">Vault · nothing spent yet</span>';
+    const recent = i.vault.spends.slice(-3).reverse().map(x => esc(x.what || "Spent") + " " + money(x.amt)).join(" · ");
+    return '<li class="row vault' + (j ? " v-new" : "") + '">' +
+      '<button class="row-main" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
+        '<span class="row-name">' + esc(i.name) + sub + '</span>' +
+        '<span class="v-left"><span class="num">' + money(left) + '</span><small>left of ' + money(vBudget(i)) + '</small></span></button>' +
+      (ended ? '<button type="button" class="v-wrap" data-act="vaultWrap" data-pc="' + pc.id + '" data-id="' + i.id + '">Wrap up</button>'
+        : '<button type="button" class="tick v-add" data-act="vaultAdd" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-label="Add spending to ' + esc(i.name) + '">' + PLUS + '</button>') +
+      '<div class="v-bar" role="img" aria-label="' + Math.round(pct) + '% left"><i class="' + (pct < 10 ? "low" : "") + (j ? " anim" : "") + '" style="width:' + pct.toFixed(1) + '%' + (j ? ";--from:" + j.from.toFixed(1) + "%" : "") + '"></i></div>' +
+      (n ? '<div class="v-last"><span>' + recent + '</span><button type="button" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">See all ' + n + '</button></div>' : '<div class="v-pad"></div>') +
+      '</li>';
+  }
   function itemRow(i, pc, mv){
+    if (i.vault && !i.paid && !i.carryTo) return vaultRow(i, pc);
     if (i.carryTo){
       const to = findPc(i.carryTo);
       return '<li class="row is-paid is-carry"><button class="row-main" data-act="carryOpen" data-id="' + i.cid + '">' + CARRY_ICO +
@@ -2429,8 +2536,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     const fresh = justIn && justIn.id === i.id && Date.now() - justIn.at < 1500;
     return '<li class="row' + (i.paid ? " is-paid" : "") + (fresh ? " just-in" : "") + '">' +
-      '<button class="row-main" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
-        '<span class="row-name">' + esc(i.name) + (showDue ? '<span class="row-sub">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
+      '<button class="row-main" data-act="' + (i.vault ? "vaultOpen" : "editItem") + '" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
+        '<span class="row-name">' + esc(i.name) + (i.vault ? '<span class="row-sub">Vault · ' + money(vSpent(i)) + ' spent of ' + money(vBudget(i)) + '</span>' : showDue ? '<span class="row-sub">due ' + dayLabel(i.due) + '</span>' : "") + '</span>' +
         (move ? "" : '<span class="row-amt num">' + money(i.amount) + '</span>') + '</button>' +
       (move ? '<button class="addchk mvchk" data-act="moveLeft" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-label="Move ' + esc(i.name) + ' to the ' + dayLabel(mv.date) + ' check">Move' + ARROW + '</button>' +
         '<button class="amt-btn row-amt num" data-act="editItem" data-pc="' + pc.id + '" data-id="' + i.id + '">' + money(i.amount) + '</button>' : "") +
@@ -2512,7 +2619,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     return '<button type="button" class="pc-carry" data-act="carryIn" data-id="' + p.id + '" aria-label="Money moved between checks">' + money(pcAmount(p)) + ' check · ' + inTxt + (both ? " · " : "") + outTxt + '</button>';
   }
   function pcCard(p, plain){
-    const real = realItems(p), amt = pcFunds(p), planned = sum(real), paid = sum(real.filter(i => i.paid)), sub = pcSub(p), c = plain ? null : currentPc();
+    const real = realItems(p), amt = pcFunds(p), planned = sum(real), paid = paidSum(real), sub = pcSub(p), c = plain ? null : currentPc();
     const cls = !c ? "" : p.id === c.id ? " is-now" : p.date < c.date ? " is-past" : "";
     return '<section class="pc-card' + cls + '" data-pc="' + p.id + '" aria-label="Paycheck ' + dayLabel(p.date) + '">' +
       '<div class="pc-top"><div><span class="pc-date">' + dayLabel(p.date) + (plain ? "" : whenLabel(p)) + '</span><span class="pc-amt num">' + money(amt) + '</span></div>' +
@@ -2675,7 +2782,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     const real = realItems(pc), toPay = real.filter(i => !i.paid), paid = real.filter(i => i.paid), moved = pc.items.filter(i => i.carryTo), mv = moveTarget(pc);
     let h = '<div class="grp-head"><span class="gh-l">To pay' + (mv && toPay.length > 1 ? '<button type="button" class="gh-move" data-act="moveAll" data-pc="' + pc.id + '">Move all' + ARROW + '</button>' : "") + '</span>' +
-      '<span class="num">' + money(sum(toPay)) + '</span></div>';
+      '<span class="num">' + money(sum(toPay) - paidSum(toPay)) + '</span></div>';
     h += toPay.length ? '<ul class="rows">' + toPay.map(i => itemRow(i, pc, mv)).join("") + '</ul>'
       : '<p class="rows-empty">' + (real.length ? "Everything on this check is paid." : moved.length ? "Everything moved to other checks." : "Nothing on this check yet.") + '</p>';
     h += '<button class="newitem" data-act="newItem" data-pc="' + pc.id + '">' + PLUS + 'New item</button>';
@@ -2758,7 +2865,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
 
   let mvPending = null;   // what each choice in the move sheet does
   function moveLeftover(from, list){
-    const to = moveTarget(from); list = list.filter(i => !i.paid);
+    const to = moveTarget(from); list = list.filter(i => !i.paid && !i.vault);
     if (!to || !list.length) return;
     const tw = new Map(list.map(it => [it, twinOn(it, to)]));
     const asks = list.filter(it => tw.get(it) && !tw.get(it).same);   // repeats and same names: combine or replace?
@@ -3280,14 +3387,15 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     commit();
   });
 
-  // "Paid from": every check still in play, each showing what it would have left with this item on it
+  // "Paid from": closed it shows just the check it's on; tap to open the list of every check still in play,
+  // each saying what it would have left with this item on it (red when it goes over), tap one and it closes
   function paidFromHtml(pc){
     const list = [...groups().upcoming]; if (!list.includes(pc)) list.push(pc);
     list.sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
     const c = currentPc();
     const row = (val, label, right, on, cls) => '<label class="pf-row' + (cls || "") + '"><input type="radio" name="move" value="' + val + '"' + (on ? " checked" : "") + '>' +
-      '<span class="pf-d">' + label + '</span>' + right + '<span class="pf-tick">' + TICK + '</span></label>';
-    return '<div class="pf"><p class="pf-h" id="pfH">Paid from</p><div class="pf-list" role="radiogroup" aria-labelledby="pfH">' +
+      '<span class="pf-d">' + label + '</span>' + right + '<span class="pf-tick">' + TICK + '</span><span class="pf-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></label>';
+    return '<div class="pf"><p class="pf-h" id="pfH">Paid from</p><div class="pf-list pf-closed" id="pfList" role="radiogroup" aria-labelledby="pfH">' +
       list.map(p => row(p.id, dayLabel(p.date) + (c && p.id === c.id ? '<small>' + NOW_WORD() + '</small>' : ""), '<span class="pf-r" data-pf="' + p.id + '"></span>', p.id === pc.id)).join("") +
       row("__none", "Take it off the paycheck", "", false, " pf-off") + '</div></div>';
   }
@@ -3299,6 +3407,16 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       el.textContent = after < -0.004 ? "Goes " + money(-after) + " over" : "Leaves " + money(after) + " extra";
     }
   }
+  function pfWire(){
+    const pl = $("#pfList"); if (!pl) return;
+    const open = () => { pl.classList.remove("pf-closed"); const on = pl.querySelector("input:checked"); if (on) on.focus({preventScroll: true}); };
+    pl.addEventListener("click", e => {
+      if (!e.target.closest(".pf-row")) return;
+      if (pl.classList.contains("pf-closed")){ e.preventDefault(); open(); return; }
+      setTimeout(() => pl.classList.add("pf-closed"), 120);   // picked one: close up after the tick shows
+    });
+    pl.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && pl.classList.contains("pf-closed")){ e.preventDefault(); open(); } });
+  }
 
   function editItem(pcId, id){
     const pc = findPc(pcId); if (!pc) return;
@@ -3309,16 +3427,20 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       onInput: () => {
         const v = toNum($("#sheetForm").elements.amount.value);
         paidFromAmounts(pc, it, v);
+        vaultFieldsShow(it);
+        partShow(it, v);
         if (idebt) $("#itPlan").innerHTML = Math.abs(v - ir.amount) > 0.004 ? '<span class="ownl">Your plan has ' + money(ir.amount) + ' for this payment. Paying ' + money(v) + ' is fine; only this payment changes, and the plan adjusts to what you actually pay.</span>' : "Part of your payoff plan.";
       },
       body: field("Item", '<input name="what" required autocomplete="off" value="' + esc(it.name) + '">') +
-            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + (idebt ? '<p class="hint" id="itPlan" style="margin-top:-4px"></p>' : "") + catField(it.cat) +
+            field("Amount", '<input name="amount" inputmode="decimal" value="' + it.amount + '">') + (idebt ? '<p class="hint" id="itPlan" style="margin-top:-4px"></p>' : "") + partFields(it) + catField(it.cat) +
             field("Due date (optional)", '<input name="due" type="date" value="' + esc(it.due) + '">') +
+            (it.debtX ? "" : vaultFields(it)) +
             paidFromHtml(pc),
       onSave: fd => {
         it.name = String(fd.get("what") || "").trim() || it.name;
         const was = it.amount;
         it.amount = toNum(fd.get("amount"));
+        if (!it.debtX) vaultSave(it, fd, Math.abs(it.amount - was) > 0.004);
         // a smaller amount on a bill: ask whether the rest goes on another check or you'll just spend less
         const lr = it.recId && recById(it.recId);
         if (lr && !it.whole && it.amount < was - 0.004 && (!fd.get("move") || fd.get("move") === pcId)){
@@ -3333,11 +3455,169 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
           if (dest === "__none"){ if (it.recId) skipOcc(it); else { it.paid = false; state.payments.push(it); } }
           else { const to = findPc(dest); if (to) to.items.push(it); }
         }
+        if (dest !== "__none") partSave(it, fd, findPc(dest) || pc);
         setTimeout(() => maybeClose(pc), 0);
       },
       onDelete: () => { skipOcc(it); pc.items = pc.items.filter(i => i.id !== id); setTimeout(() => maybeClose(pc), 0); }
     });
+    sheetCfg.onInput(); pfWire();
+  }
+  // ---------- paying part of a bill ----------
+  function partFields(it){
+    if (it.paid || it.carryTo || it.vault || !(it.amount > 0)) return "";
+    return '<label class="check-field" id="partWrap"><input type="checkbox" name="part"> Paid part of it</label>' +
+      '<div id="partOpts" hidden>' + field("How much did you pay?", '<input name="partAmt" inputmode="decimal" placeholder="$0" autocomplete="off">') + '<p class="hint" id="partHint"></p></div>';
+  }
+  function partShow(it, v){
+    const f = $("#sheetForm").elements, box = $("#partOpts"); if (!f.part || !box) return;
+    const vault = f.vault && f.vault.checked;
+    $("#partWrap").hidden = !!vault;
+    const on = f.part.checked && !vault;
+    if (on && box.hidden) setTimeout(() => f.partAmt.focus(), 0);
+    box.hidden = !on;
+    const a = toNum(f.partAmt.value), h = $("#partHint");
+    h.textContent = !on || !a ? "" : a >= v - 0.004 ? "That's all of it, so it'll be marked paid." : "Marks " + money(a) + " paid. The other " + money(r2(v - a)) + " stays on the check to pay.";
+  }
+  // the item becomes the part you paid (ticked), and a copy right under it holds the rest, still to pay
+  function partSave(it, fd, pc){
+    if (!fd.get("part") || it.paid || it.vault || it.carryTo) return;
+    const a = toNum(fd.get("partAmt")); if (!(a > 0.004)) return;
+    delete it.tent;
+    if (a >= it.amount - 0.004){ it.paid = true; it.paidOn = iso(today()); syncRec(it); setStatus(it.name + " paid"); return; }
+    const rest = JSON.parse(JSON.stringify(it));
+    rest.id = uid(); rest.amount = r2(it.amount - a); rest.paid = false; delete rest.paidOn;
+    it.amount = a; it.paid = true; it.paidOn = iso(today());
+    const list = pc.items.includes(it) ? pc.items : state.payments;
+    list.splice(list.indexOf(it) + 1, 0, rest);
+    syncRec(it);
+    setStatus("Paid " + money(a) + " of " + it.name + " · " + money(rest.amount) + " left to pay");
+  }
+  // ---------- vault sheets ----------
+  function vaultFields(it){
+    const v = it.vault || {from: "", to: "", end: "extra"};
+    const opt = (k, l) => '<option value="' + k + '"' + (v.end === k ? " selected" : "") + '>' + l + '</option>';
+    return '<label class="check-field"><input type="checkbox" name="vault"' + (it.vault ? " checked" : "") + '> Make it a vault: add what you spend as you go</label>' +
+      '<div id="vaultOpts"><div class="two">' + field("Starts (optional)", '<input name="vfrom" type="date" value="' + esc(v.from) + '">') +
+        field("Ends (optional)", '<input name="vto" type="date" value="' + esc(v.to) + '">') + '</div>' +
+      field("Money left at the end goes to", '<select name="vend">' + opt("extra", "Extra on this check") + opt("savings", "Savings") + opt("keep", "Keep it in the vault") + '</select>') + '</div>' +
+      '<p class="hint" id="vaultHint"></p>';
+  }
+  function vaultFieldsShow(it){
+    const f = $("#sheetForm").elements, box = $("#vaultOpts"), h = $("#vaultHint"); if (!f.vault || !box) return;
+    const on = f.vault.checked, n = it.vault ? it.vault.spends.length : 0;
+    box.hidden = !on;
+    h.textContent = !on && n ? "Turning it off removes the " + n + " spending" + (n === 1 ? "" : "s") + " you added." : on && !it.vault ? "With dates, it shows how much you can spend a day." : "";
+  }
+  function vaultSave(it, fd, amountChanged){
+    if (!fd.get("vault")){ delete it.vault; return; }
+    const v = it.vault || {spends: []};
+    let a = String(fd.get("vfrom") || ""), b = String(fd.get("vto") || "");
+    if (a && b && b < a){ const x = a; a = b; b = x; }
+    v.from = a; v.to = b; v.end = ["extra", "savings", "keep"].includes(fd.get("vend")) ? fd.get("vend") : "extra";
+    if (amountChanged) delete v.plan;
+    it.vault = v; vFit(it);
+  }
+  function vaultPage(pcId, id){
+    const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id); if (!it || !it.vault) return;
+    const v = it.vault, t = iso(today()), sp = vSpent(it), bud = vBudget(it), left = vLeft(it), over = vOver(it), pct = vPct(it);
+    const C = 2 * Math.PI * 70, ring = it.paid ? 100 : pct;
+    const span = (a, b) => Math.round((parseISO(b) - parseISO(a)) / 864e5) + 1;
+    let pace = "";
+    if (it.paid) pace = '<p class="vp-pace">Wrapped up</p>';
+    else if (over) pace = '<p class="vp-pace bad">Went ' + money(over) + ' over. It came out of Extra on this check.</p>';
+    else if (v.from && v.to && t <= v.to && left > 0.004){
+      const days = span(t < v.from ? v.from : t, v.to);
+      pace = '<p class="vp-pace">' + (days === 1 ? money(left) + " for today" : "About " + money(r2(left / days)) + " a day for " + (t < v.from ? "" : "the ") + days + " days" + (t < v.from ? "" : " left")) + '</p>';
+    } else if (vEnded(it)) pace = '<p class="vp-pace">The trip ended ' + dayLabel(v.to) + '</p>';
+    let strip = "";
+    if (v.from && v.to && span(v.from, v.to) <= 14){
+      strip = '<div class="vp-days">';
+      for (let d = v.from; d <= v.to; d = addDays(d, 1)){
+        const amt = r2(v.spends.filter(x => x.on === d).reduce((a, x) => a + x.amt, 0)), dt = parseISO(d);
+        strip += '<div class="vp-day' + (d === t ? " today" : "") + (amt ? "" : " none") + '"><small>' + (d === t ? "Today" : DAYS[dt.getDay()]) + '</small><b>' + dt.getDate() + '</b><span>' + (amt ? money(amt) : "–") + '</span></div>';
+      }
+      strip += '</div>';
+    }
+    const order = v.spends.map((x, k) => ({x, k})).sort((a, b) => (b.x.on || "").localeCompare(a.x.on || "") || b.k - a.k);
+    let list = "", day = null;
+    for (const {x} of order){
+      if (x.on !== day){
+        if (day !== null) list += '</div>';
+        day = x.on;
+        list += '<p class="vp-h">' + (day === t ? "Today" : day === addDays(t, -1) ? "Yesterday" : day ? dayLabel(day) : "Earlier") + '</p><div class="vp-list">';
+      }
+      list += '<button type="button" data-act="vaultSpend" data-pc="' + pc.id + '" data-id="' + it.id + '" data-sid="' + esc(x.id) + '"><span>' + esc(x.what || "Spent") + '</span><span class="num">' + money(x.amt) + '</span></button>';
+    }
+    if (day !== null) list += '</div>';
+    const when = (v.from && v.to ? dayLabel(v.from) + " – " + dayLabel(v.to) + " · " : v.from ? "From " + dayLabel(v.from) + " · " : "") + "from the " + dayLabel(pc.date) + " check";
+    openSheet({
+      title: it.name, saveText: "Add spending", cancelText: "Close",
+      body: '<p class="vp-when">' + when + '</p><div class="vp"><div class="vp-ring"><svg viewBox="0 0 168 168" aria-hidden="true"><circle class="bg" cx="84" cy="84" r="70"></circle>' +
+          (ring > 0.5 ? '<circle class="fg' + (!it.paid && pct < 10 ? " low" : "") + '" cx="84" cy="84" r="70" stroke-dasharray="' + (C * ring / 100).toFixed(1) + ' ' + C.toFixed(1) + '"></circle>' : "") + '</svg>' +
+          '<div class="vp-mid">' + (it.paid ? '<b class="num' + (money(sp).length > 6 ? " sm" : "") + '">' + money(sp) + '</b><span>spent of ' + money(bud) + '</span>' : '<b class="num' + (money(left).length > 6 ? " sm" : "") + '">' + money(left) + '</b><span>left of ' + money(bud) + '</span>') + '</div></div>' +
+          (it.paid ? "" : '<span class="vp-when" style="margin:4px 0 0">' + money(sp) + ' spent</span>') + pace + '</div>' + strip +
+        '<div class="vp-acts"><button type="button" data-act="editItem" data-pc="' + pc.id + '" data-id="' + it.id + '">Edit</button>' +
+          (it.paid ? "" : '<button type="button" data-act="vaultWrap" data-pc="' + pc.id + '" data-id="' + it.id + '">Wrap up</button>') + '</div>' +
+        (list || '<p class="vp-empty">Nothing spent yet. Tap Add spending each time you pay for something.</p>'),
+      onSave: () => { vaultAddSheet(pcId, id, null, true); return false; }
+    });
+  }
+  // add what you spent (or fix one): amount, what for, and for a fix, the day
+  function vaultAddSheet(pcId, id, sid, fromPage){
+    const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id); if (!it || !it.vault) return;
+    const x = sid ? it.vault.spends.find(y => y.id === sid) : null; if (sid && !x) return;
+    const names = [...new Set(it.vault.spends.slice().reverse().map(y => y.what).filter(Boolean))].slice(0, 6);
+    const back = fromPage ? () => vaultPage(pcId, id) : null;
+    openSheet({
+      title: x ? "Edit spending" : "Add spending", saveText: x ? "Save" : "Add", focus: x ? null : "amt", back,
+      body: '<p class="hint" style="margin:-8px 0 12px">' + esc(it.name) + ' · ' + money(vLeft(it)) + ' left</p>' +
+        '<label class="field va-amt"><span>Amount</span><input name="amt" inputmode="decimal" placeholder="$0" autocomplete="off" value="' + (x ? x.amt : "") + '"></label>' +
+        '<p class="va-hint" id="vaHint"></p>' +
+        field("What for (optional)", '<input name="what" autocomplete="off" maxlength="60" value="' + esc(x ? x.what : "") + '">') +
+        (names.length && !x ? '<div class="chips va-chips">' + names.map(nm => '<button type="button" class="chip" data-act="vaultChip" data-v="' + esc(nm) + '">' + esc(nm) + '</button>').join("") + '</div>' : "") +
+        (x ? field("Day", '<input name="on" type="date" value="' + esc(x.on) + '">') : ""),
+      onInput: () => {
+        const a = toNum($("#sheetForm").elements.amt.value), was = x ? x.amt : 0, after = r2((+it.amount || 0) - vSpent(it) + was - a), h = $("#vaHint");
+        if (it.paid){ h.className = "va-hint"; h.textContent = a ? money(r2(vSpent(it) - was + a)) + " spent in all" : ""; return; }
+        h.className = "va-hint" + (after < -0.004 ? " bad" : "");
+        h.textContent = !a ? "" : after < -0.004 ? "Goes " + money(-after) + " over. That comes out of Extra on this check." : money(after) + " left after this";
+      },
+      onSave: fd => {
+        const a = toNum(fd.get("amt")); if (!(a > 0)){ setStatus("Type how much you spent"); return false; }
+        const what = String(fd.get("what") || "").trim().slice(0, 60), from = vPct(it);
+        if (x){ x.amt = a; x.what = what; x.on = String(fd.get("on") || x.on); }
+        else it.vault.spends.push({id: uid(), amt: a, what, on: iso(today())});
+        vFit(it); vJust = {id: it.id, from, at: Date.now()};
+        setStatus((x ? "Saved" : "Added " + money(a)) + (it.paid ? "" : " · " + money(vLeft(it)) + " left"));
+      },
+      onDelete: x ? () => { it.vault.spends = it.vault.spends.filter(y => y !== x); vFit(it); if (fromPage) setTimeout(() => vaultPage(pcId, id), 0); } : null
+    });
     sheetCfg.onInput();
+  }
+  // the trip is over: what's left goes back to Extra, to Savings, or stays in the vault
+  function vaultWrapSheet(pcId, id){
+    const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id); if (!it || !it.vault) return;
+    const left = vLeft(it), sp = vSpent(it), def = it.vault.end || "extra";
+    if (left <= 0.004){ vaultEnd(pc, it, "extra"); return; }
+    const opts = [["extra", "Back to Extra", "Extra on the " + dayLabel(pc.date) + " check goes up by " + money(left)],
+      ["savings", "Move to Savings", "Adds a Savings row for " + money(left) + " on this check"],
+      ["keep", "Keep it in the vault", "It stays open with " + money(left)]].sort((a, b) => (b[0] === def) - (a[0] === def));
+    openSheet({
+      title: "What about the " + money(left) + " left?", noSave: true, back: () => vaultPage(pcId, id),
+      body: '<p class="hint" style="margin:-8px 0 14px">You spent ' + money(sp) + ' of ' + money(vBudget(it)) + ' on ' + esc(it.name) + '.</p><div class="spend-less">' +
+        opts.map((o, k) => '<button type="button" class="' + (k ? "ghost" : "primary") + '" data-act="vaultEnd" data-mode="' + o[0] + '" data-pc="' + pc.id + '" data-id="' + it.id + '">' + o[1] + '<small>' + o[2] + '</small></button>').join("") + '</div>'
+    });
+  }
+  function vaultEnd(pc, it, mode){
+    const snap = JSON.parse(JSON.stringify(it)), items = pc.items.slice(), left = vLeft(it), sp = vSpent(it);
+    if (mode === "keep"){ it.vault.to = ""; closeSheet(); commit(); setStatus("Kept " + money(left) + " in the vault"); return; }
+    if (typeof it.vault.plan !== "number") it.vault.plan = +it.amount || 0;
+    it.amount = sp; it.paid = true; it.paidOn = iso(today());
+    if (mode === "savings" && left > 0.004) pc.items.push({id: uid(), name: "Savings", amount: left, paid: false, due: "", cat: "savings"});
+    closeSheet(); commit();
+    toast(left > 0.004 ? (mode === "savings" ? money(left) + " moved to Savings" : money(left) + " back to Extra") : it.name + " is all spent", () => {
+      for (const k of Object.keys(it)) delete it[k]; Object.assign(it, snap); pc.items = items; });
+    setTimeout(() => maybeClose(pc), 0);
   }
   function spendLessSheet(r, o, amt, left, pcId){
     const pc = findPc(pcId);
@@ -4370,6 +4650,12 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       }
     }
     else if (act === "editItem") editItem(pcId, id);
+    else if (act === "vaultOpen") vaultPage(pcId, id);
+    else if (act === "vaultAdd") vaultAddSheet(pcId, id);
+    else if (act === "vaultSpend") vaultAddSheet(pcId, id, b.dataset.sid, true);
+    else if (act === "vaultWrap") vaultWrapSheet(pcId, id);
+    else if (act === "vaultEnd"){ const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id); if (it && it.vault) vaultEnd(pc, it, b.dataset.mode); }
+    else if (act === "vaultChip"){ const f = $("#sheetForm").elements.what; if (f){ f.value = b.dataset.v; document.querySelectorAll(".va-chips .chip").forEach(c => c.setAttribute("aria-pressed", c === b ? "true" : "false")); } }
     else if (act === "editPc") editPc(id);
     else if (act === "newPc") newPc();
     else if (act === "pickCat"){ const fn = catPending; closeSheet(); if (fn) fn(b.dataset.cat); }
