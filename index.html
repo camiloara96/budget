@@ -708,10 +708,26 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 @keyframes vShrink{from{width:var(--from)}}
 .row.vault.v-new .v-left .num{animation:vPop .6s cubic-bezier(.2,.8,.2,1)}
 @keyframes vPop{40%{transform:scale(1.12)}}
-.v-last{flex-basis:100%;display:flex;align-items:center;gap:8px;margin-left:44px;padding:4px 0 8px;font-size:12.5px;color:var(--muted);min-width:0}
-.v-last span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.v-last button{flex:none;border:0;background:none;color:var(--ink);font-weight:700;font-size:12.5px;padding:6px 0}
 .row.vault .v-pad{flex-basis:100%;height:6px}
+.v-tog{flex-basis:100%;display:flex;align-items:center;gap:6px;margin-left:44px;padding:8px 0 10px;border:0;background:none;color:var(--muted);font-size:12.5px;font-weight:600;text-align:left;min-width:0;max-width:calc(100% - 44px)}
+.v-tog svg{flex:none;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .22s ease}
+.v-tog[aria-expanded="true"]{color:var(--ink);padding-bottom:4px}
+.v-tog[aria-expanded="true"] svg{transform:rotate(180deg)}
+.v-tog span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-subs{flex-basis:100%;margin:0 0 8px 44px;max-width:calc(100% - 44px)}
+.v-subs.anim .v-sub{animation:vSubIn .28s cubic-bezier(.2,.8,.2,1) both}
+.v-subs.anim .v-sub:nth-child(2){animation-delay:.03s} .v-subs.anim .v-sub:nth-child(3){animation-delay:.06s} .v-subs.anim .v-sub:nth-child(n+4){animation-delay:.09s}
+@keyframes vSubIn{from{opacity:0;transform:translateY(-6px)}}
+.v-sub{display:flex;align-items:center;gap:10px;width:100%;border:0;border-top:.5px solid var(--line);background:none;color:var(--ink);padding:8px 0;text-align:left}
+.v-sub .cat-ico{width:24px;height:24px;border-radius:7px}
+.v-sub .cat-ico svg{width:14px;height:14px}
+.v-sub .n{flex:1;min-width:0;display:flex;flex-direction:column;font-size:14.5px;font-weight:600;line-height:1.25}
+.v-sub .n b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-sub .n small{font-size:12px;color:var(--muted);font-weight:500}
+.v-sub .a{flex:none;font-size:14.5px;font-weight:700}
+.v-ck{flex:none;width:20px;height:20px;margin-right:3px;border-radius:50%;background:var(--check);display:grid;place-items:center}
+.v-ck svg{width:11px;height:11px;fill:none;stroke:var(--check-ink);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.v-more{display:block;width:100%;border:0;border-top:.5px solid var(--line);background:none;color:var(--ink);font-size:13px;font-weight:700;text-align:left;padding:10px 0 2px}
 .vp{display:flex;flex-direction:column;align-items:center;gap:4px;margin:-6px 0 10px}
 .vp-when{font-size:13px;color:var(--muted);text-align:center;margin:0 0 6px}
 .vp-ring{position:relative;width:168px;height:168px}
@@ -2521,6 +2537,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (sp > (+i.amount || 0) + 0.004){ v.plan = +i.amount || 0; i.amount = sp; }
   }
   let vJust = null;   // the vault you just added to, so its bar shrinks into place
+  const vOpen = new Set((() => { try { const a = JSON.parse(lsGet("vault-open") || "[]"); return Array.isArray(a) ? a : []; } catch(e){ return []; } })());
+  let vAnim = null;
+  const V_DOWN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  function vDay(d){ const t = iso(today()); return d === t ? "Today" : d === addDays(t, -1) ? "Yesterday" : d ? dayLabel(d) : ""; }
   function vaultRow(i, pc){
     const sp = vSpent(i), left = vLeft(i), over = vOver(i), ended = vEnded(i), pct = vPct(i), t = iso(today());
     const n = i.vault.spends.length, j = vJust && vJust.id === i.id && Date.now() - vJust.at < 2000 ? vJust : null;
@@ -2537,8 +2557,22 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       (ended ? '<button type="button" class="v-wrap" data-act="vaultWrap" data-pc="' + pc.id + '" data-id="' + i.id + '">Wrap up</button>'
         : '<button type="button" class="tick v-add" data-act="vaultAdd" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-label="Add spending to ' + esc(i.name) + '">' + PLUS + '</button>') +
       '<div class="v-bar" role="img" aria-label="' + Math.round(pct) + '% left"><i class="' + (pct < 10 ? "low" : "") + (j ? " anim" : "") + '" style="width:' + pct.toFixed(1) + '%' + (j ? ";--from:" + j.from.toFixed(1) + "%" : "") + '"></i></div>' +
-      (n ? '<div class="v-last"><span>' + recent + '</span><button type="button" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">See all ' + n + '</button></div>' : '<div class="v-pad"></div>') +
+      (n ? vSubs(i, pc, recent) : '<div class="v-pad"></div>') +
       '</li>';
+  }
+  // what was spent, as small rows like the bills (each with its check), under an arrow that opens and closes them
+  function vSubs(i, pc, recent){
+    const n = i.vault.spends.length, open = vOpen.has(i.id), list = i.vault.spends.slice().reverse(), MAX = 8;
+    const word = n + (n === 1 ? " expense" : " expenses");
+    let out = '<button type="button" class="v-tog" data-act="vaultTog" data-id="' + i.id + '" aria-expanded="' + open + '">' + V_DOWN + '<span>' + (open ? word : word + " · " + recent) + '</span></button>';
+    if (!open) return out;
+    out += '<div class="v-subs' + (vAnim === i.id ? " anim" : "") + '">' +
+      list.slice(0, MAX).map(x => '<button type="button" class="v-sub" data-act="vaultSpendRow" data-pc="' + pc.id + '" data-id="' + i.id + '" data-sid="' + esc(x.id) + '">' + catIcon(i.cat) +
+        '<span class="n"><b>' + esc(x.what || "Spent") + '</b>' + (x.on ? '<small>' + vDay(x.on) + '</small>' : "") + '</span><span class="a num">' + money(x.amt) + '</span>' +
+        '<span class="v-ck" aria-label="Spent">' + TICK + '</span></button>').join("") +
+      (n > MAX ? '<button type="button" class="v-more" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">See all ' + n + '</button>' : "") + '</div>';
+    if (vAnim === i.id) vAnim = null;
+    return out;
   }
   function itemRow(i, pc, mv){
     if (i.vault && !i.paid && !i.carryTo) return vaultRow(i, pc);
@@ -4679,6 +4713,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "vaultOpen") vaultPage(pcId, id);
     else if (act === "vaultAdd") vaultAddSheet(pcId, id);
     else if (act === "vaultSpend") vaultAddSheet(pcId, id, b.dataset.sid, true);
+    else if (act === "vaultSpendRow") vaultAddSheet(pcId, id, b.dataset.sid, false);
+    else if (act === "vaultTog"){
+      if (vOpen.has(id)) vOpen.delete(id); else { vOpen.add(id); vAnim = id; }
+      lsSet("vault-open", JSON.stringify([...vOpen].slice(-50))); render();
+    }
     else if (act === "vaultWrap") vaultWrapSheet(pcId, id);
     else if (act === "vaultEnd"){ const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id); if (it && it.vault) vaultEnd(pc, it, b.dataset.mode); }
     else if (act === "vaultChip"){ const f = $("#sheetForm").elements.what; if (f){ f.value = b.dataset.v; document.querySelectorAll(".va-chips .chip").forEach(c => c.setAttribute("aria-pressed", c === b ? "true" : "false")); } }
