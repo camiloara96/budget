@@ -674,6 +674,10 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 /* drag a bill onto a paycheck when both pages show (phone sideways, or windows on a computer) */
 #paneExp li.item.rec, #paneExp .xcard{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:pan-y}
 .bd-src{opacity:.35;transition:opacity .2s ease}
+.bd-grip{display:none;flex:none;width:34px;align-self:stretch;place-items:center;margin-right:-8px;color:var(--dim);touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;cursor:grab}
+.bd-grip svg{width:12px;height:18px;fill:currentColor}
+@media (orientation: landscape) and (min-width: 640px){ html:not(.desk) #paneExp .bd-grip{display:grid} }
+.xrow .bd-grip{align-self:center;height:44px}
 .bd-ghost{position:fixed;left:0;top:0;z-index:2000;pointer-events:none;width:280px;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;
   background:var(--surface);border:1.5px solid var(--edge);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.55);color:var(--ink);
   transition:transform .18s ease,border-color .15s ease}
@@ -3123,8 +3127,11 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg></button>' +
       '<button class="item-main" data-act="editRec" data-id="' + r.id + '">' + catIcon(r.cat, "sm") + '<span class="item-name">' + esc(r.name) + (r.auto ? '<span class="pill">Auto</span>' : "") + (r.debtId ? '<span class="pill">Debt</span>' : "") +
       '<span class="due' + (red ? " bad" : "") + '">' + sub + '</span></span>' + (showAdd ? "" : '<span class="num">' + money(r.amount) + '</span>') + '</button>' +
-      (showAdd ? addChkBtn("rec", r.id, r.name) + '<button class="amt-btn num" data-act="editRec" data-id="' + r.id + '">' + money(r.amount) + '</button>' : "") + '</li>';
+      (showAdd ? addChkBtn("rec", r.id, r.name) + '<button class="amt-btn num" data-act="editRec" data-id="' + r.id + '">' + money(r.amount) + '</button>' : "") +
+      (showAdd ? gripHtml("rec", r.id) : !paid && ls.some(l => !l.it.paid) ? gripHtml("recmove", r.id) : "") + '</li>';
   }
+  const GRIP_SVG = '<svg viewBox="0 0 12 18" aria-hidden="true"><circle cx="3" cy="3" r="1.6"/><circle cx="9" cy="3" r="1.6"/><circle cx="3" cy="9" r="1.6"/><circle cx="9" cy="9" r="1.6"/><circle cx="3" cy="15" r="1.6"/><circle cx="9" cy="15" r="1.6"/></svg>';
+  const gripHtml = (kind, id) => '<span class="bd-grip" data-kind="' + kind + '" data-id="' + id + '" aria-hidden="true">' + GRIP_SVG + '</span>';
   function addChkBtn(kind, id, name){
     return '<button class="addchk" data-act="addTo" data-kind="' + kind + '" data-id="' + id + '" aria-label="Add ' + esc(name) + ' to a check">' + PLUS + 'Add</button>';
   }
@@ -3353,7 +3360,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         '<button class="xbtn" data-act="xPay" data-id="' + i.id + '" aria-label="Erase ' + esc(i.name) + '">' + XSVG + '</button>' +
         '<div class="xrow"><button class="item-main" data-act="editPay" data-id="' + i.id + '"><span class="item-name">' + esc(i.name) +
         '<span class="due' + (red ? " bad" : "") + '">' + (i.due ? dueText(days, i.due) : "no due date") + '</span></span></button>' +
-        addChkBtn("pay", i.id, i.name) + '<button class="amt-btn num" data-act="editPay" data-id="' + i.id + '">' + money(i.amount) + '</button></div></div>';
+        addChkBtn("pay", i.id, i.name) + '<button class="amt-btn num" data-act="editPay" data-id="' + i.id + '">' + money(i.amount) + '</button>' + gripHtml("pay", i.id) + '</div></div>';
     }).join("");
     h += '<div class="addcard"><form class="add add-wrap" data-form="addPay">' +
       '<input name="what" placeholder="Something to pay" aria-label="Payment" autocomplete="off" required style="flex-basis:100%">' +
@@ -4184,7 +4191,20 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     justIn = {id: added.id, at: Date.now()};
     return to;
   }
+  // a bill that's already on a check (not paid yet): its rows move to another check
+  function moveToCheck(id, pcId){
+    const to = findPc(pcId), r = recById(id); if (!to || !r) return null;
+    const ls = linkedAll(r, openOcc(r)).filter(l => !l.it.paid && l.pc !== to);
+    if (!ls.length) return null;
+    for (const l of ls){ l.pc.items = l.pc.items.filter(i => i !== l.it); to.items.push(l.it); }
+    justIn = {id: ls[0].it.id, at: Date.now()};
+    return to;
+  }
   function bdInfo(kind, id){
+    if (kind === "recmove"){
+      const r = recById(id); if (!r) return null; const o = openOcc(r), ls = linkedAll(r, o).filter(l => !l.it.paid); if (!ls.length) return null;
+      return {name: r.name, amount: sum(ls.map(l => l.it)), cat: r.cat || "", due: noDay(r) ? "" : o, occ: o, move: true, from: ls.map(l => l.pc)};
+    }
     if (kind === "rec"){ const r = recById(id); if (!r) return null; const o = openOcc(r); return {name: r.name, amount: recLeft(r, o) || r.amount, cat: r.cat || "", due: noDay(r) ? "" : o, occ: o}; }
     const it = state.payments.find(i => i.id === id); if (!it) return null;
     return {name: it.name, amount: it.amount, cat: it.cat || "", due: it.due || "", occ: ""};
@@ -4210,7 +4230,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     return p && !isFinished(p) ? p : null;
   }
   function bdHint(p, info){
-    const after = pcFunds(p) - sum(realItems(p)) - info.amount, late = !!info.due && p.date > info.due;
+    const here = info.move ? sum(linkedAll(recById(bd.id), info.occ).filter(l => !l.it.paid && l.pc === p).map(l => l.it)) : 0;
+    const after = pcFunds(p) - sum(realItems(p)) + here - info.amount, late = !!info.due && p.date > info.due;
+    if (info.move && info.from.length === 1 && info.from[0] === p) return {ok: true, text: "It's on " + dayLabel(p.date) + " now"};
     return {ok: after >= 0 && !late, text: dayLabel(p.date) + ": " + (after >= 0 ? "leaves " + money(after) + " extra" : "goes " + money(-after) + " over") + (late ? ", past due" : "")};
   }
   function bdStart(x, y){
@@ -4218,7 +4240,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const info = bdInfo(bd.kind, bd.id); if (!info){ bd = null; return; }
     bd.on = true; bd.info = info;
     const g = document.createElement("div"); g.className = "bd-ghost"; g.setAttribute("aria-hidden", "true");
-    g.innerHTML = catIcon(info.cat, "sm") + '<span class="bd-t"><b>' + esc(info.name) + '</b><span class="bd-s">Drop it on a paycheck</span></span><span class="num">' + money(info.amount) + '</span>';
+    g.innerHTML = catIcon(info.cat, "sm") + '<span class="bd-t"><b>' + esc(info.name) + '</b><span class="bd-s">' + (info.move ? "Move it to a paycheck" : "Drop it on a paycheck") + '</span></span><span class="num">' + money(info.amount) + '</span>';
     document.body.appendChild(g); bd.g = g;
     const r = bd.li.getBoundingClientRect(); bd.gx = Math.min(Math.max(bd.sx - r.left, 24), 240); bd.gy = 28;
     bd.li.classList.add("bd-src");
@@ -4230,7 +4252,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
   function bdMove(x, y){
     bd.lx = x; bd.ly = y;
-    bd.g.style.left = (x - bd.gx) + "px"; bd.g.style.top = (y - bd.gy) + "px";
+    bd.g.style.left = Math.max(8, Math.min(innerWidth - 288, x - bd.gx)) + "px"; bd.g.style.top = (y - bd.gy) + "px";   // stays on screen
     bdAim(x, y);
     // hold near the top or bottom of the Paychecks page to scroll it (up to the cards, or down the list)
     const sc = bd.sc;
@@ -4246,7 +4268,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function bdAim(x, y){
     const p = bdTarget(x, y);
     document.querySelectorAll("#pcRail .pc-card.bd-over").forEach(c => { if (!p || c.dataset.pc !== p.id) c.classList.remove("bd-over", "bd-bad"); });
-    let ok = null, text = "Drop it on a paycheck";
+    let ok = null, text = bd.info.move ? "Move it to a paycheck" : "Drop it on a paycheck";
     if (p){
       const h = bdHint(p, bd.info); ok = h.ok; text = h.text;
       const card = document.querySelector('#pcRail .pc-card[data-pc="' + p.id + '"]');
@@ -4280,7 +4302,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       // the copy shrinks into the check; the bill shows up in its list
       const card = document.querySelector('#pcRail .pc-card[data-pc="' + p.id + '"]') || $("#pcItems"), r = card.getBoundingClientRect();
       Object.assign(g.style, {left: (r.left + r.width / 2 - 140) + "px", top: (r.top + r.height / 2 - 28) + "px", transform: "scale(.5)", opacity: "0"});
-      if (addToCheck(d.kind, d.id, p.id, d.info.occ)){ selPc = p.id; finView = null; commit(); setStatus("Added to " + dayLabel(p.date)); }
+      if (d.kind === "recmove"){ if (moveToCheck(d.id, p.id)){ selPc = p.id; finView = null; commit(); setStatus("Moved to " + dayLabel(p.date)); } }
+      else if (addToCheck(d.kind, d.id, p.id, d.info.occ)){ selPc = p.id; finView = null; commit(); setStatus("Added to " + dayLabel(p.date)); }
     } else {
       // dropped somewhere else: the copy slides back into its row
       const r = d.li.getBoundingClientRect();
@@ -4291,15 +4314,18 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   document.addEventListener("pointerdown", e => {
     if (bd || readOnly || (e.button != null && e.button > 0)) return;
     const li = e.target.closest && e.target.closest("#paneExp li.item.rec, #paneExp .xcard"); if (!li) return;
-    const add = li.querySelector('[data-act="addTo"]'); if (!add || !bdPayShown()) return;
-    bd = {li, kind: add.dataset.kind, id: add.dataset.id, sx: e.clientX, sy: e.clientY, pid: e.pointerId, touch: e.pointerType !== "mouse", on: false};
+    const src = li.querySelector('[data-act="addTo"]') || li.querySelector(".bd-grip"); if (!src || !bdPayShown()) return;
+    const grip = !!e.target.closest(".bd-grip");
+    bd = {li, kind: src.dataset.kind, id: src.dataset.id, sx: e.clientX, sy: e.clientY, pid: e.pointerId, touch: e.pointerType !== "mouse", on: false, grip};
+    if (grip){ e.preventDefault(); return; }
     if (bd.touch) bd.timer = setTimeout(() => { if (bd && !bd.on) bdStart(bd.sx, bd.sy); }, 380);
   }, true);
   document.addEventListener("pointermove", e => {
     if (!bd || e.pointerId !== bd.pid) return;
     if (!bd.on){
       const dx = e.clientX - bd.sx, dy = e.clientY - bd.sy;
-      if (bd.touch){
+      if (bd.grip){ if (Math.hypot(dx, dy) < 3) return; }
+      else if (bd.touch){
         if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)){ clearTimeout(bd.timer); bd = null; return; }   // that's a scroll
         if (Math.abs(dx) < 12) return;
       } else if (Math.hypot(dx, dy) < 6) return;
@@ -4309,7 +4335,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }, true);
   document.addEventListener("pointerup", e => { if (bd && e.pointerId === bd.pid) bdEnd(e.clientX, e.clientY, false); }, true);
   document.addEventListener("pointercancel", e => { if (bd && e.pointerId === bd.pid) bdEnd(0, 0, true); }, true);
-  document.addEventListener("touchmove", e => { if (bd && bd.on) e.preventDefault(); }, {passive: false});
+  document.addEventListener("touchmove", e => { if (bd && (bd.on || bd.grip)) e.preventDefault(); }, {passive: false});
+  // iPhone: holding the handle mustn't start a scroll or text selection
+  document.addEventListener("touchstart", e => { if (e.target.closest && e.target.closest(".bd-grip")) e.preventDefault(); }, {passive: false});
   document.addEventListener("contextmenu", e => { if (bd) e.preventDefault(); }, true);
   document.addEventListener("click", e => { if (bdJust){ e.stopPropagation(); e.preventDefault(); bdJust = false; } }, true);
 
