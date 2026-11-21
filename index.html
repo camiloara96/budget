@@ -686,6 +686,29 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 .bd-side.r svg{transform:rotate(180deg)}
 .bd-side.go{animation:bdGo .4s ease}
 @keyframes bdGo{40%{transform:scale(1.18)}}
+/* each slide while dragging: the list swings out to one side and the next check's list swings in from the other,
+   the card you land on pops, and a label at the top says which check you're on */
+.bd-dragging #pcItems{overflow-x:hidden;overflow-x:clip}   /* the sliding list never sticks out past the screen */
+#pcItems.bd-out-l > *{animation:bdOutL .2s ease-in both}
+#pcItems.bd-out-r > *{animation:bdOutR .2s ease-in both}
+#pcItems.bd-in-l > *{animation:bdInL .32s cubic-bezier(.2,.8,.2,1) both}
+#pcItems.bd-in-r > *{animation:bdInR .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bdOutL{to{transform:translateX(-38%);opacity:0}}
+@keyframes bdOutR{to{transform:translateX(38%);opacity:0}}
+@keyframes bdInL{from{transform:translateX(38%);opacity:0}}
+@keyframes bdInR{from{transform:translateX(-38%);opacity:0}}
+#pcRail .pc-card.bd-arrive{animation:bdArrive .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes bdArrive{35%{transform:scale(1.04)}}
+.bd-now{position:fixed;z-index:2001;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);display:flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:15px;font-weight:700;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.bd-now small{font-size:13px;font-weight:600;opacity:.7}
+.bd-now.on{opacity:1}
+.bd-now.go-l{animation:bdNowL .35s cubic-bezier(.2,.8,.2,1)}
+.bd-now.go-r{animation:bdNowR .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes bdNowL{from{transform:translateX(calc(-50% + 70px));opacity:.2}}
+@keyframes bdNowR{from{transform:translateX(calc(-50% - 70px));opacity:.2}}
+@media (prefers-reduced-motion: reduce){ #pcItems[class*="bd-"] > *, .bd-now, #pcRail .pc-card.bd-arrive{animation:none} }
 .bd-grip{display:none;flex:none;width:34px;align-self:stretch;place-items:center;margin-right:-8px;color:var(--dim);touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;cursor:grab}
 .bd-grip svg{width:12px;height:18px;fill:currentColor}
 @media (orientation: landscape) and (min-width: 640px){ html:not(.desk) #paneExp .bd-grip{display:grid} }
@@ -4275,6 +4298,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     bd.sc = bdScroller($("#pcRail")) || (bd.kind === "item" ? document.scrollingElement : null);
     const sd = document.createElement("div"); sd.className = "bd-side"; sd.setAttribute("aria-hidden", "true");
     sd.innerHTML = '<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>'; document.body.appendChild(sd); bd.side = sd;
+    const nw = document.createElement("div"); nw.className = "bd-now"; nw.setAttribute("role", "status"); document.body.appendChild(nw); bd.now = nw;
     document.documentElement.classList.add("bd-dragging");
     bdMove(x, y);
     requestAnimationFrame(() => g.classList.add("lift"));
@@ -4320,9 +4344,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         const go = () => {
           if (!bd || !bd.on) return;
           if (railStep(dir) && bd.side){ bd.side.classList.remove("go"); void bd.side.offsetWidth; bd.side.classList.add("go"); }
-          setTimeout(() => { if (bd && bd.on) bdAim(bd.lx, bd.ly); }, 560);
         };
-        bd.edgeT0 = setTimeout(() => { go(); if (bd) bd.edgeT = setInterval(go, 900); }, 350);
+        bd.edgeT0 = setTimeout(() => { go(); if (bd) bd.edgeT = setInterval(go, 1000); }, 350);
       }
     }
   }
@@ -4346,13 +4369,40 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     let k = 0, best = Infinity;
     cs.forEach((c, i) => { const d = Math.abs(c.offsetLeft - pad - rail.scrollLeft); if (d < best){ best = d; k = i; } });
     const t = cs[k + dir]; if (!t || !t.dataset.pc || t.dataset.pc === "add" || t.dataset.pc === "done") return false;
-    rail.scrollTo({left: t.offsetLeft - pad, behavior: "smooth"});
+    const p = findPc(t.dataset.pc), items = $("#pcItems"), from = rail.scrollLeft, to = t.offsetLeft - pad, side = dir > 0 ? "l" : "r";
+    // the list swings out now and the new one swings in when the cards arrive
+    if (items){
+      // keep the list's height while dragging, so a short list doesn't make the page jump
+      if (!items.style.minHeight) items.style.minHeight = items.offsetHeight + "px";
+      items.classList.remove("bd-in-l", "bd-in-r", "bd-out-l", "bd-out-r"); void items.offsetWidth; items.classList.add("bd-out-" + side);
+    }
+    if (bd && bd.now && p){
+      bd.now.innerHTML = '<span>' + dayLabel(p.date) + '</span><small>' + whenLabel(p).replace(/<[^>]+>/g, "").replace(/^ · /, "") + '</small>';
+      bd.now.classList.add("on"); bd.now.classList.remove("go-l", "go-r"); void bd.now.offsetWidth; bd.now.classList.add("go-" + side);
+    }
+    // glide the cards (the snapping is paused so it doesn't jump ahead)
+    const ms = 460, t0 = performance.now(), ease = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+    rail.style.scrollSnapType = "none";
+    const step = now => {
+      const u = Math.min(1, (now - t0) / ms); rail.scrollLeft = from + (to - from) * ease(u);
+      if (u < 1){ requestAnimationFrame(step); return; }
+      rail.style.scrollSnapType = "";
+      selPc = t.dataset.pc; finView = null;
+      bdParkIfDragging();
+      if (items){ items.innerHTML = itemsFor(selPc); items.classList.remove("bd-out-l", "bd-out-r"); void items.offsetWidth; items.classList.add("bd-in-" + side); }
+      const dots = $("#pcDots"); if (dots) dots.innerHTML = dotsHtml(selPc);
+      t.classList.remove("bd-arrive"); void t.offsetWidth; t.classList.add("bd-arrive");
+      if (bd && bd.on) bdAim(bd.lx, bd.ly);
+    };
+    requestAnimationFrame(step);
     return true;
   }
   function bdEnd(x, y, cancel){
     const d = bd; bd = null; if (!d) return;
     clearTimeout(d.timer); clearTimeout(d.edgeT0); clearInterval(d.edgeT); cancelAnimationFrame(d.sr);
     if (d.side) d.side.remove();
+    { const it = $("#pcItems"); if (it){ it.classList.remove("bd-in-l", "bd-in-r", "bd-out-l", "bd-out-r"); it.style.minHeight = ""; } }
+    if (d.now){ d.now.classList.remove("on"); setTimeout(() => d.now.remove(), 250); }
     if (d.parked) setTimeout(() => d.li.remove(), 0);
     if (!d.on) return;
     bdJust = true; setTimeout(() => { bdJust = false; }, 0);
