@@ -674,6 +674,18 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 /* drag a bill onto a paycheck when both pages show (phone sideways, or windows on a computer) */
 #paneExp li.item.rec, #paneExp .xcard{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:pan-y}
 .bd-src{opacity:.35;transition:opacity .2s ease}
+/* bills on a paycheck: hold one to pick it up (no text selection or callout on the hold) */
+#pcItems li.row{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+/* hold at the side of the screen while dragging: the paychecks slide to the next or previous one */
+#bdHold{position:fixed;left:-9999px;top:0;width:320px;opacity:0;pointer-events:none}
+.bd-side{position:fixed;z-index:2001;top:0;width:34px;height:96px;margin-top:-48px;border-radius:17px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .15s ease}
+.bd-side svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.bd-side.on{opacity:.9}
+.bd-side.l{left:6px}
+.bd-side.r{right:6px}
+.bd-side.r svg{transform:rotate(180deg)}
+.bd-side.go{animation:bdGo .4s ease}
+@keyframes bdGo{40%{transform:scale(1.18)}}
 .bd-grip{display:none;flex:none;width:34px;align-self:stretch;place-items:center;margin-right:-8px;color:var(--dim);touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;cursor:grab}
 .bd-grip svg{width:12px;height:18px;fill:currentColor}
 @media (orientation: landscape) and (min-width: 640px){ html:not(.desk) #paneExp .bd-grip{display:grid} }
@@ -2498,6 +2510,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   }
 
   function render(){
+    bdParkIfDragging();
     document.querySelectorAll('.tabbar button').forEach(b => { if (b.dataset.tab === tab) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
     const bc = $("#expCount");
     if (ready){
@@ -3041,6 +3054,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       for (const c of rail.children){ const d = Math.abs(c.offsetLeft - pad - rail.scrollLeft); if (d < bd){ bd = d; best = c; } }
       if (!best || best.dataset.pc === curSel()) return;
       selPc = best.dataset.pc; finView = selPc === "done" ? stackView() : null;
+      bdParkIfDragging();
       const items = $("#pcItems"); if (items) items.innerHTML = itemsFor(selPc);
       const dots = $("#pcDots"); if (dots) dots.innerHTML = dotsHtml(selPc);
     }, 90);
@@ -4200,7 +4214,20 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     justIn = {id: ls[0].it.id, at: Date.now()};
     return to;
   }
+  // the phone keeps sending the touch to the row you picked up: when the list below is redrawn mid-drag,
+  // that row is tucked away (hidden) instead of thrown out, so the drop still arrives
+  function bdPark(){
+    if (!bd || !bd.on || !bd.li || !bd.li.isConnected || bd.parked) return;
+    let h = $("#bdHold");
+    if (!h){ h = document.createElement("div"); h.id = "bdHold"; h.setAttribute("aria-hidden", "true"); document.body.appendChild(h); }
+    h.appendChild(bd.li); bd.parked = true;
+  }
+  function bdParkIfDragging(){ try { bdPark(); } catch(e){} }
   function bdInfo(kind, id){
+    if (kind === "item"){
+      for (const p of state.paychecks){ const it = p.items.find(i => i.id === id); if (it && !it.carryTo) return {name: it.name, amount: +it.amount || 0, cat: it.cat || "", due: it.due || "", occ: "", item: true, fromPc: p}; }
+      return null;
+    }
     if (kind === "recmove"){
       const r = recById(id); if (!r) return null; const o = openOcc(r), ls = linkedAll(r, o).filter(l => !l.it.paid); if (!ls.length) return null;
       return {name: r.name, amount: sum(ls.map(l => l.it)), cat: r.cat || "", due: noDay(r) ? "" : o, occ: o, move: true, from: ls.map(l => l.pc)};
@@ -4233,6 +4260,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const here = info.move ? sum(linkedAll(recById(bd.id), info.occ).filter(l => !l.it.paid && l.pc === p).map(l => l.it)) : 0;
     const after = pcFunds(p) - sum(realItems(p)) + here - info.amount, late = !!info.due && p.date > info.due;
     if (info.move && info.from.length === 1 && info.from[0] === p) return {ok: true, text: "It's on " + dayLabel(p.date) + " now"};
+    if (info.item && info.fromPc === p) return {ok: true, text: "It's on " + dayLabel(p.date) + " now"};
     return {ok: after >= 0 && !late, text: dayLabel(p.date) + ": " + (after >= 0 ? "leaves " + money(after) + " extra" : "goes " + money(-after) + " over") + (late ? ", past due" : "")};
   }
   function bdStart(x, y){
@@ -4240,11 +4268,13 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const info = bdInfo(bd.kind, bd.id); if (!info){ bd = null; return; }
     bd.on = true; bd.info = info;
     const g = document.createElement("div"); g.className = "bd-ghost"; g.setAttribute("aria-hidden", "true");
-    g.innerHTML = catIcon(info.cat, "sm") + '<span class="bd-t"><b>' + esc(info.name) + '</b><span class="bd-s">' + (info.move ? "Move it to a paycheck" : "Drop it on a paycheck") + '</span></span><span class="num">' + money(info.amount) + '</span>';
+    g.innerHTML = catIcon(info.cat, "sm") + '<span class="bd-t"><b>' + esc(info.name) + '</b><span class="bd-s">' + (info.move || info.item ? "Move it to a paycheck" : "Drop it on a paycheck") + '</span></span><span class="num">' + money(info.amount) + '</span>';
     document.body.appendChild(g); bd.g = g;
     const r = bd.li.getBoundingClientRect(); bd.gx = Math.min(Math.max(bd.sx - r.left, 24), 240); bd.gy = 28;
     bd.li.classList.add("bd-src");
-    bd.sc = bdScroller($("#pcRail"));
+    bd.sc = bdScroller($("#pcRail")) || (bd.kind === "item" ? document.scrollingElement : null);
+    const sd = document.createElement("div"); sd.className = "bd-side"; sd.setAttribute("aria-hidden", "true");
+    sd.innerHTML = '<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>'; document.body.appendChild(sd); bd.side = sd;
     document.documentElement.classList.add("bd-dragging");
     bdMove(x, y);
     requestAnimationFrame(() => g.classList.add("lift"));
@@ -4257,7 +4287,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     // hold near the top or bottom of the Paychecks page to scroll it (up to the cards, or down the list)
     const sc = bd.sc;
     if (sc){
-      const r = sc.getBoundingClientRect(), inX = x >= r.left && x <= r.right;
+      const r = sc === document.scrollingElement ? {left: 0, right: innerWidth, top: 0, bottom: innerHeight - 96} : sc.getBoundingClientRect(), inX = x >= r.left && x <= r.right;
       const v = !inX ? 0 : y < r.top + 56 ? -1 : y > r.bottom - 56 ? 1 : 0;
       if (v !== (bd.sv || 0)){
         bd.sv = v; cancelAnimationFrame(bd.sr);
@@ -4268,7 +4298,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   function bdAim(x, y){
     const p = bdTarget(x, y);
     document.querySelectorAll("#pcRail .pc-card.bd-over").forEach(c => { if (!p || c.dataset.pc !== p.id) c.classList.remove("bd-over", "bd-bad"); });
-    let ok = null, text = bd.info.move ? "Move it to a paycheck" : "Drop it on a paycheck";
+    let ok = null, text = bd.info.move || bd.info.item ? "Move it to a paycheck" : "Drop it on a paycheck";
+    // the row you picked up stays dimmed, even after the list below changes to another check and back
+    if (bd.kind === "item"){ const m = document.querySelector('#pcItems .row-main[data-id="' + bd.id + '"]'); if (m && !m.closest("li").classList.contains("bd-src")) m.closest("li").classList.add("bd-src"); }
     if (p){
       const h = bdHint(p, bd.info); ok = h.ok; text = h.text;
       const card = document.querySelector('#pcRail .pc-card[data-pc="' + p.id + '"]');
@@ -4276,21 +4308,52 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     }
     bd.g.classList.toggle("ok", ok === true); bd.g.classList.toggle("bad", ok === false);
     bd.g.querySelector(".bd-s").textContent = text;
-    // hold near the side of the cards to slide to the next or previous check
-    const rail = $("#pcRail"), rr = rail.getBoundingClientRect();
-    const inRail = y >= rr.top && y <= rr.bottom && x >= rr.left - 12 && x <= rr.right + 12;
-    const dir = !inRail ? 0 : x < rr.left + 40 ? -1 : x > rr.right - 40 ? 1 : 0;
-    if (dir !== (bd.edgeDir || 0)){
-      bd.edgeDir = dir; clearInterval(bd.edgeT);
-      if (dir) bd.edgeT = setInterval(() => {
-        const c = rail.querySelector(".pc-card"); rail.scrollBy({left: dir * (c ? c.offsetWidth + 10 : 300), behavior: "smooth"});
-        setTimeout(() => { if (bd && bd.on) bdAim(bd.lx, bd.ly); }, 420);
-      }, 700);
+    // hold at the side to slide to the next or previous check
+    const dir = bdZone(x, y), sd = bd.side;
+    if (sd){
+      sd.classList.toggle("on", !!dir); sd.classList.toggle("l", dir < 0); sd.classList.toggle("r", dir > 0);
+      if (dir) sd.style.top = Math.max(70, Math.min(innerHeight - 150, y)) + "px";
     }
+    if (dir !== (bd.edgeDir || 0)){
+      bd.edgeDir = dir; clearTimeout(bd.edgeT0); clearInterval(bd.edgeT);
+      if (dir){
+        const go = () => {
+          if (!bd || !bd.on) return;
+          if (railStep(dir) && bd.side){ bd.side.classList.remove("go"); void bd.side.offsetWidth; bd.side.classList.add("go"); }
+          setTimeout(() => { if (bd && bd.on) bdAim(bd.lx, bd.ly); }, 560);
+        };
+        bd.edgeT0 = setTimeout(() => { go(); if (bd) bd.edgeT = setInterval(go, 900); }, 350);
+      }
+    }
+  }
+  // which side the finger is holding: a bill from a paycheck uses the whole height of the Paychecks page;
+  // one coming from Expenses uses the sides of the cards (so passing over the middle on the way doesn't slide)
+  function bdZone(x, y){
+    const rail = $("#pcRail"); if (!rail) return 0;
+    if (bd.kind === "item" && !document.documentElement.classList.contains("desk")){
+      const r = $("#panePay").getBoundingClientRect(), L = Math.max(r.left, 0), R = Math.min(r.right, innerWidth);
+      if (y < 0 || y > innerHeight - 96) return 0;
+      return x < L + 36 ? -1 : x > R - 36 ? 1 : 0;
+    }
+    const rr = rail.getBoundingClientRect();
+    const inRail = y >= rr.top && y <= rr.bottom && x >= rr.left - 12 && x <= rr.right + 12;
+    return !inRail ? 0 : x < rr.left + 40 ? -1 : x > rr.right - 40 ? 1 : 0;
+  }
+  // slide the cards one paycheck over (never onto the Finished stack or the add-a-paycheck card)
+  function railStep(dir){
+    const rail = $("#pcRail"); if (!rail) return false;
+    const pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0, cs = [...rail.children];
+    let k = 0, best = Infinity;
+    cs.forEach((c, i) => { const d = Math.abs(c.offsetLeft - pad - rail.scrollLeft); if (d < best){ best = d; k = i; } });
+    const t = cs[k + dir]; if (!t || !t.dataset.pc || t.dataset.pc === "add" || t.dataset.pc === "done") return false;
+    rail.scrollTo({left: t.offsetLeft - pad, behavior: "smooth"});
+    return true;
   }
   function bdEnd(x, y, cancel){
     const d = bd; bd = null; if (!d) return;
-    clearTimeout(d.timer); clearInterval(d.edgeT); cancelAnimationFrame(d.sr);
+    clearTimeout(d.timer); clearTimeout(d.edgeT0); clearInterval(d.edgeT); cancelAnimationFrame(d.sr);
+    if (d.side) d.side.remove();
+    if (d.parked) setTimeout(() => d.li.remove(), 0);
     if (!d.on) return;
     bdJust = true; setTimeout(() => { bdJust = false; }, 0);
     document.documentElement.classList.remove("bd-dragging");
@@ -4302,17 +4365,35 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       // the copy shrinks into the check; the bill shows up in its list
       const card = document.querySelector('#pcRail .pc-card[data-pc="' + p.id + '"]') || $("#pcItems"), r = card.getBoundingClientRect();
       Object.assign(g.style, {left: (r.left + r.width / 2 - 140) + "px", top: (r.top + r.height / 2 - 28) + "px", transform: "scale(.5)", opacity: "0"});
-      if (d.kind === "recmove"){ if (moveToCheck(d.id, p.id)){ selPc = p.id; finView = null; commit(); setStatus("Moved to " + dayLabel(p.date)); } }
+      if (d.kind === "item"){
+        const from = d.info.fromPc, it = from.items.find(i => i.id === d.id);
+        if (it && p !== from){
+          const k = from.items.indexOf(it); from.items.splice(k, 1); p.items.push(it);
+          justIn = {id: it.id, at: Date.now()}; selPc = p.id; finView = null; commit();
+          toast("Moved " + it.name + " to " + dayLabel(p.date), () => { p.items = p.items.filter(i => i !== it); from.items.splice(Math.min(k, from.items.length), 0, it); selPc = from.id; });
+        }
+      }
+      else if (d.kind === "recmove"){ if (moveToCheck(d.id, p.id)){ selPc = p.id; finView = null; commit(); setStatus("Moved to " + dayLabel(p.date)); } }
       else if (addToCheck(d.kind, d.id, p.id, d.info.occ)){ selPc = p.id; finView = null; commit(); setStatus("Added to " + dayLabel(p.date)); }
     } else {
-      // dropped somewhere else: the copy slides back into its row
-      const r = d.li.getBoundingClientRect();
+      // dropped somewhere else: the copy slides back into its row (or just fades if the list changed)
+      const back = d.kind === "item" ? document.querySelector('#pcItems .row-main[data-id="' + d.id + '"]') : d.li;
+      if (back && back.closest("li")) back.closest("li").classList.remove("bd-src");
+      const r = back && back.isConnected ? back.getBoundingClientRect() : {left: d.lx - d.gx, top: d.ly - 28, height: 56};
       Object.assign(g.style, {left: (r.left + 8) + "px", top: (r.top + r.height / 2 - 28) + "px", transform: "none", opacity: "0"});
     }
     setTimeout(() => g.remove(), 360);
   }
   document.addEventListener("pointerdown", e => {
     if (bd || readOnly || (e.button != null && e.button > 0)) return;
+    const row = e.target.closest && e.target.closest("#pcItems li.row");
+    if (row){
+      const m = row.querySelector(".row-main[data-pc][data-id]"); if (!m || !$("#pcRail")) return;
+      const pc = findPc(m.dataset.pc), it = pc && pc.items.find(i => i.id === m.dataset.id); if (!it || it.carryTo) return;
+      bd = {li: row, kind: "item", id: it.id, sx: e.clientX, sy: e.clientY, pid: e.pointerId, touch: e.pointerType !== "mouse", on: false, row: true};
+      if (bd.touch) bd.timer = setTimeout(() => { if (bd && !bd.on) bdStart(bd.sx, bd.sy); }, 380);
+      return;
+    }
     const li = e.target.closest && e.target.closest("#paneExp li.item.rec, #paneExp .xcard"); if (!li) return;
     const src = li.querySelector('[data-act="addTo"]') || li.querySelector(".bd-grip"); if (!src || !bdPayShown()) return;
     const grip = !!e.target.closest(".bd-grip");
@@ -4325,6 +4406,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (!bd.on){
       const dx = e.clientX - bd.sx, dy = e.clientY - bd.sy;
       if (bd.grip){ if (Math.hypot(dx, dy) < 3) return; }
+      else if (bd.row && bd.touch){ if (Math.hypot(dx, dy) > 10){ clearTimeout(bd.timer); bd = null; } return; }
       else if (bd.touch){
         if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)){ clearTimeout(bd.timer); bd = null; return; }   // that's a scroll
         if (Math.abs(dx) < 12) return;
@@ -4334,7 +4416,10 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     bdMove(e.clientX, e.clientY);
   }, true);
   document.addEventListener("pointerup", e => { if (bd && e.pointerId === bd.pid) bdEnd(e.clientX, e.clientY, false); }, true);
-  document.addEventListener("pointercancel", e => { if (bd && e.pointerId === bd.pid) bdEnd(0, 0, true); }, true);
+  document.addEventListener("pointercancel", e => { if (bd && e.pointerId === bd.pid){ if (bd.on && bd.touch) bd.tc = true; else bdEnd(0, 0, true); } }, true);
+  document.addEventListener("touchmove", e => { if (bd && bd.tc && e.touches[0]) bdMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive: true});
+  document.addEventListener("touchend", e => { if (bd && bd.tc){ const t = e.changedTouches[0]; bdEnd(t ? t.clientX : bd.lx, t ? t.clientY : bd.ly, false); } });
+  document.addEventListener("touchcancel", () => { if (bd && bd.tc) bdEnd(0, 0, true); });
   document.addEventListener("touchmove", e => { if (bd && (bd.on || bd.grip)) e.preventDefault(); }, {passive: false});
   // iPhone: holding the handle mustn't start a scroll or text selection
   document.addEventListener("touchstart", e => { if (e.target.closest && e.target.closest(".bd-grip")) e.preventDefault(); }, {passive: false});
