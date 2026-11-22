@@ -741,9 +741,16 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 .row-sub.bad{color:var(--bad)}
 .tick.v-add::before{background:var(--ink);box-shadow:none}
 .tick.v-add svg{opacity:1;stroke:var(--accent-ink);width:15px;height:15px;stroke-width:3}
+.tick.v-arrow svg{width:16px;height:16px;stroke-width:2.8;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.tick.v-arrow[aria-expanded="true"] svg{transform:rotate(180deg)}
+.v-acts{display:flex;gap:8px;padding-top:10px}
+.v-acts .newitem{margin:0;flex:1;height:36px;border-radius:13px;gap:6px;font-size:14px;background:var(--extra-bg);color:var(--extra-ink);border-color:var(--extra-ink);border-color:color-mix(in srgb, var(--extra-ink) 45%, transparent)}
+.v-acts .newitem svg{width:14px;height:14px}
+.v-acts .v-wrap{margin:0;height:36px;padding:0 14px;border-radius:13px;font-size:14px}
 .v-wrap{flex:none;border:0;border-radius:999px;background:var(--ink);color:var(--accent-ink);font-weight:700;font-size:13px;padding:9px 12px;margin-left:4px}
 .v-bar{flex-basis:100%;margin:2px 0 0 44px;height:8px;border-radius:4px;background:var(--soft);overflow:hidden}
 .v-bar i{display:block;height:100%;border-radius:4px;background:var(--xbar)}
+.v-bar i[style*="--free"]{background:linear-gradient(90deg,var(--xbar) 0 var(--free),color-mix(in srgb,var(--xbar) 38%,transparent) var(--free) 100%)}
 .v-bar i.low{background:var(--bad)}
 .v-bar i.anim{animation:vShrink .8s cubic-bezier(.2,.8,.2,1) both}
 @keyframes vShrink{from{width:var(--from)}}
@@ -751,23 +758,28 @@ body[data-tab="pay"] #panePay, body[data-tab="exp"] #paneExp, body[data-tab="deb
 @keyframes vPop{40%{transform:scale(1.12)}}
 .row.vault .v-pad{flex-basis:100%;height:6px}
 .v-tog{flex-basis:100%;display:flex;align-items:center;gap:6px;margin-left:44px;padding:8px 0 10px;border:0;background:none;color:var(--muted);font-size:12.5px;font-weight:600;text-align:left;min-width:0;max-width:calc(100% - 44px)}
-.v-tog svg{flex:none;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .22s ease}
 .v-tog[aria-expanded="true"]{color:var(--ink);padding-bottom:4px}
-.v-tog[aria-expanded="true"] svg{transform:rotate(180deg)}
 .v-tog span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .v-subs{flex-basis:100%;margin:0 0 8px 44px;max-width:calc(100% - 44px)}
 .v-subs.anim .v-sub{animation:vSubIn .28s cubic-bezier(.2,.8,.2,1) both}
+.v-subs.anim .v-acts{animation:vSubIn .28s .1s cubic-bezier(.2,.8,.2,1) both}
 .v-subs.anim .v-sub:nth-child(2){animation-delay:.03s} .v-subs.anim .v-sub:nth-child(3){animation-delay:.06s} .v-subs.anim .v-sub:nth-child(n+4){animation-delay:.09s}
 @keyframes vSubIn{from{opacity:0;transform:translateY(-6px)}}
-.v-sub{display:flex;align-items:center;gap:10px;width:100%;border:0;border-top:.5px solid var(--line);background:none;color:var(--ink);padding:8px 0;text-align:left}
+.v-sub{display:flex;align-items:center;width:100%;border-top:.5px solid var(--line)}
+.v-sub-main{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;color:var(--ink);padding:8px 0;text-align:left}
 .v-sub .cat-ico{width:24px;height:24px;border-radius:7px}
 .v-sub .cat-ico svg{width:14px;height:14px}
 .v-sub .n{flex:1;min-width:0;display:flex;flex-direction:column;font-size:14.5px;font-weight:600;line-height:1.25}
 .v-sub .n b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .v-sub .n small{font-size:12px;color:var(--muted);font-weight:500}
 .v-sub .a{flex:none;font-size:14.5px;font-weight:700}
-.v-ck{flex:none;width:20px;height:20px;margin-right:3px;border-radius:50%;background:var(--check);display:grid;place-items:center}
-.v-ck svg{width:11px;height:11px;fill:none;stroke:var(--check-ink);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.v-ck{flex:none;width:44px;height:40px;margin:0 -12px 0 -2px;border:0;background:none;display:grid;place-items:center;cursor:pointer}
+.v-ckc{width:20px;height:20px;border-radius:50%;background:var(--check);display:grid;place-items:center;box-sizing:border-box;transition:background .2s ease,transform .2s ease}
+.v-ckc svg{width:11px;height:11px;fill:none;stroke:var(--check-ink);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;transition:opacity .15s ease}
+.v-ck[aria-pressed="false"] .v-ckc{background:transparent;border:2px solid var(--e5a)}
+.v-ck[aria-pressed="false"] .v-ckc svg{opacity:0}
+.v-ck:active .v-ckc{transform:scale(.88)}
+.v-sub.plan .a{color:var(--muted)}
 .v-more{display:block;width:100%;border:0;border-top:.5px solid var(--line);background:none;color:var(--ink);font-size:13px;font-weight:700;text-align:left;padding:10px 0 2px}
 .vp{display:flex;flex-direction:column;align-items:center;gap:4px;margin:-6px 0 10px}
 .vp-when{font-size:13px;color:var(--muted);text-align:center;margin:0 0 6px}
@@ -1161,7 +1173,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         const v = it.vault;
         o.vault = {from: isoOr(v.from), to: isoOr(v.to), end: ["extra", "savings", "keep"].includes(v.end) ? v.end : "extra",
           spends: arr(v.spends).filter(x => x && typeof x === "object").slice(-500)
-            .map(x => ({id: str(x.id) || uid(), amt: Math.round(num(x.amt) * 100) / 100, what: str(x.what).slice(0, 60), on: isoOr(x.on)})).filter(x => x.amt > 0)};
+            .map(x => Object.assign({id: str(x.id) || uid(), amt: Math.round(num(x.amt) * 100) / 100, what: str(x.what).slice(0, 60), on: isoOr(x.on)}, x.done === false ? {done: false} : {})).filter(x => x.amt > 0)};
         if (typeof v.plan === "number" && isFinite(v.plan) && v.plan >= 0) o.vault.plan = v.plan;
       }
       return o; };
@@ -2562,7 +2574,9 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
   const seenTent = new Set();   // auto rows already shown, so the lift plays only once
   // ---------- vaults: money set aside on a check that you spend bit by bit (a trip, a project) ----------
   const r2 = n => Math.round(n * 100) / 100;
-  const vSpent = i => i.vault ? r2(i.vault.spends.reduce((a, x) => a + (+x.amt || 0), 0)) : 0;
+  const vSpent = i => i.vault ? r2(i.vault.spends.reduce((a, x) => a + (x.done === false ? 0 : +x.amt || 0), 0)) : 0;
+  // unticked expenses: planned out of the vault, not spent yet
+  const vPlanned = i => i.vault ? r2(i.vault.spends.reduce((a, x) => a + (x.done === false ? +x.amt || 0 : 0), 0)) : 0;
   const vBudget = i => i.vault && typeof i.vault.plan === "number" ? i.vault.plan : (+i.amount || 0);
   const vLeft = i => i.paid ? 0 : Math.max(0, r2((+i.amount || 0) - vSpent(i)));
   const vOver = i => !i.paid && i.vault && typeof i.vault.plan === "number" ? Math.max(0, r2((+i.amount || 0) - i.vault.plan)) : 0;
@@ -2588,6 +2602,8 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     const n = i.vault.spends.length, j = vJust && vJust.id === i.id && Date.now() - vJust.at < 2000 ? vJust : null;
     const sub = over ? '<span class="row-sub bad">Went ' + money(over) + ' over</span>'
       : ended ? '<span class="row-sub">Trip\'s over, wrap it up</span>'
+      : vPlanned(i) > 0.004 && vPlanned(i) > left + 0.004 ? '<span class="row-sub bad">Planned goes ' + money(r2(vPlanned(i) - left)) + ' over</span>'
+      : vPlanned(i) > 0.004 ? '<span class="row-sub">' + money(sp) + ' spent · ' + money(vPlanned(i)) + ' planned</span>'
       : sp > 0.004 ? '<span class="row-sub">Vault · ' + money(sp) + ' spent</span>'
       : i.vault.from && i.vault.from > t ? '<span class="row-sub">Vault · starts ' + dayLabel(i.vault.from) + '</span>'
       : '<span class="row-sub">Vault · nothing spent yet</span>';
@@ -2596,23 +2612,25 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
       '<button class="row-main" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">' + catIcon(i.cat) +
         '<span class="row-name">' + esc(i.name) + sub + '</span>' +
         '<span class="v-left"><span class="num">' + money(left) + '</span><small>left of ' + money(vBudget(i)) + '</small></span></button>' +
-      (ended ? '<button type="button" class="v-wrap" data-act="vaultWrap" data-pc="' + pc.id + '" data-id="' + i.id + '">Wrap up</button>'
-        : '<button type="button" class="tick v-add" data-act="vaultAdd" data-pc="' + pc.id + '" data-id="' + i.id + '" aria-label="Add spending to ' + esc(i.name) + '">' + PLUS + '</button>') +
-      '<div class="v-bar" role="img" aria-label="' + Math.round(pct) + '% left"><i class="' + (pct < 10 ? "low" : "") + (j ? " anim" : "") + '" style="width:' + pct.toFixed(1) + '%' + (j ? ";--from:" + j.from.toFixed(1) + "%" : "") + '"></i></div>' +
-      (n ? vSubs(i, pc, recent) : '<div class="v-pad"></div>') +
+      '<button type="button" class="tick v-add v-arrow" data-act="vaultTog" data-id="' + i.id + '" aria-expanded="' + vOpen.has(i.id) + '" aria-label="' + (vOpen.has(i.id) ? "Hide" : "Show") + ' what was spent from ' + esc(i.name) + '">' + V_DOWN + '</button>' +
+      '<div class="v-bar" role="img" aria-label="' + Math.round(pct) + '% left' + (vPlanned(i) > 0.004 ? ", part of it planned" : "") + '"><i class="' + (pct < 10 ? "low" : "") + (j ? " anim" : "") + '" style="width:' + pct.toFixed(1) + '%' + (j ? ";--from:" + j.from.toFixed(1) + "%" : "") + (left > 0.004 && vPlanned(i) > 0.004 ? ";--free:" + Math.max(0, (left - vPlanned(i)) / left * 100).toFixed(1) + "%" : "") + '"></i></div>' +
+      vSubs(i, pc, recent, ended) +
       '</li>';
   }
   // what was spent, as small rows like the bills (each with its check), under an arrow that opens and closes them
-  function vSubs(i, pc, recent){
+  function vSubs(i, pc, recent, ended){
     const n = i.vault.spends.length, open = vOpen.has(i.id), list = i.vault.spends.slice().reverse(), MAX = 8;
-    const word = n + (n === 1 ? " expense" : " expenses");
-    let out = '<button type="button" class="v-tog" data-act="vaultTog" data-id="' + i.id + '" aria-expanded="' + open + '">' + V_DOWN + '<span>' + (open ? word : word + " · " + recent) + '</span></button>';
+    const word = n ? n + (n === 1 ? " expense" : " expenses") : "No expenses yet";
+    let out = '<button type="button" class="v-tog" data-act="vaultTog" data-id="' + i.id + '" aria-expanded="' + open + '"><span>' + (open || !n ? word : word + " · " + recent) + '</span></button>';
     if (!open) return out;
     out += '<div class="v-subs' + (vAnim === i.id ? " anim" : "") + '">' +
-      list.slice(0, MAX).map(x => '<button type="button" class="v-sub" data-act="vaultSpendRow" data-pc="' + pc.id + '" data-id="' + i.id + '" data-sid="' + esc(x.id) + '">' + catIcon(i.cat) +
-        '<span class="n"><b>' + esc(x.what || "Spent") + '</b>' + (x.on ? '<small>' + vDay(x.on) + '</small>' : "") + '</span><span class="a num">' + money(x.amt) + '</span>' +
-        '<span class="v-ck" aria-label="Spent">' + TICK + '</span></button>').join("") +
-      (n > MAX ? '<button type="button" class="v-more" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">See all ' + n + '</button>' : "") + '</div>';
+      list.slice(0, MAX).map(x => { const done = x.done !== false;
+        return '<div class="v-sub' + (done ? "" : " plan") + '"><button type="button" class="v-sub-main" data-act="vaultSpendRow" data-pc="' + pc.id + '" data-id="' + i.id + '" data-sid="' + esc(x.id) + '">' + catIcon(i.cat) +
+        '<span class="n"><b>' + esc(x.what || "Spent") + '</b><small>' + (done ? vDay(x.on) : "Not paid yet") + '</small></span><span class="a num">' + money(x.amt) + '</span></button>' +
+        '<button type="button" class="v-ck" data-act="vaultSpendTick" data-pc="' + pc.id + '" data-id="' + i.id + '" data-sid="' + esc(x.id) + '" aria-pressed="' + done + '" aria-label="' + esc(x.what || "Expense") + (done ? ", paid. Tap to mark not paid" : ", not paid. Tap to mark paid") + '"><span class="v-ckc">' + TICK + '</span></button></div>'; }).join("") +
+      (n > MAX ? '<button type="button" class="v-more" data-act="vaultOpen" data-pc="' + pc.id + '" data-id="' + i.id + '">See all ' + n + '</button>' : "") +
+      '<div class="v-acts"><button type="button" class="newitem" data-act="vaultAdd" data-pc="' + pc.id + '" data-id="' + i.id + '">' + PLUS + 'New item</button>' +
+        (ended ? '<button type="button" class="v-wrap" data-act="vaultWrap" data-pc="' + pc.id + '" data-id="' + i.id + '">Wrap up</button>' : "") + '</div></div>';
     if (vAnim === i.id) vAnim = null;
     return out;
   }
@@ -3621,6 +3639,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     if (a && b && b < a){ const x = a; a = b; b = x; }
     v.from = a; v.to = b; v.end = ["extra", "savings", "keep"].includes(fd.get("vend")) ? fd.get("vend") : "extra";
     if (amountChanged) delete v.plan;
+    if (!it.vault){ vOpen.add(it.id); lsSet("vault-open", JSON.stringify([...vOpen].slice(-50))); }
     it.vault = v; vFit(it);
   }
   function vaultPage(pcId, id){
@@ -3631,15 +3650,15 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     let pace = "";
     if (it.paid) pace = '<p class="vp-pace">Wrapped up</p>';
     else if (over) pace = '<p class="vp-pace bad">Went ' + money(over) + ' over. It came out of Extra on this check.</p>';
-    else if (v.from && v.to && t <= v.to && left > 0.004){
-      const days = span(t < v.from ? v.from : t, v.to);
-      pace = '<p class="vp-pace">' + (days === 1 ? money(left) + " for today" : "About " + money(r2(left / days)) + " a day for " + (t < v.from ? "" : "the ") + days + " days" + (t < v.from ? "" : " left")) + '</p>';
+    else if (v.from && v.to && t <= v.to && left - vPlanned(it) > 0.004){
+      const days = span(t < v.from ? v.from : t, v.to), free = r2(left - vPlanned(it));
+      pace = '<p class="vp-pace">' + (days === 1 ? money(free) + " for today" : "About " + money(r2(free / days)) + " a day for " + (t < v.from ? "" : "the ") + days + " days" + (t < v.from ? "" : " left")) + (vPlanned(it) > 0.004 ? ", after what's planned" : "") + '</p>';
     } else if (vEnded(it)) pace = '<p class="vp-pace">The trip ended ' + dayLabel(v.to) + '</p>';
     let strip = "";
     if (v.from && v.to && span(v.from, v.to) <= 14){
       strip = '<div class="vp-days">';
       for (let d = v.from; d <= v.to; d = addDays(d, 1)){
-        const amt = r2(v.spends.filter(x => x.on === d).reduce((a, x) => a + x.amt, 0)), dt = parseISO(d);
+        const amt = r2(v.spends.filter(x => x.on === d && x.done !== false).reduce((a, x) => a + x.amt, 0)), dt = parseISO(d);
         strip += '<div class="vp-day' + (d === t ? " today" : "") + (amt ? "" : " none") + '"><small>' + (d === t ? "Today" : DAYS[dt.getDay()]) + '</small><b>' + dt.getDate() + '</b><span>' + (amt ? money(amt) : "–") + '</span></div>';
       }
       strip += '</div>';
@@ -3652,7 +3671,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         day = x.on;
         list += '<p class="vp-h">' + (day === t ? "Today" : day === addDays(t, -1) ? "Yesterday" : day ? dayLabel(day) : "Earlier") + '</p><div class="vp-list">';
       }
-      list += '<button type="button" data-act="vaultSpend" data-pc="' + pc.id + '" data-id="' + it.id + '" data-sid="' + esc(x.id) + '"><span>' + esc(x.what || "Spent") + '</span><span class="num">' + money(x.amt) + '</span></button>';
+      list += '<button type="button" data-act="vaultSpend" data-pc="' + pc.id + '" data-id="' + it.id + '" data-sid="' + esc(x.id) + '"><span>' + esc(x.what || "Spent") + (x.done === false ? ' <small style="color:var(--muted)">· not paid yet</small>' : "") + '</span><span class="num"' + (x.done === false ? ' style="color:var(--muted)"' : "") + '>' + money(x.amt) + '</span></button>';
     }
     if (day !== null) list += '</div>';
     const when = (v.from && v.to ? dayLabel(v.from) + " – " + dayLabel(v.to) + " · " : v.from ? "From " + dayLabel(v.from) + " · " : "") + "from the " + dayLabel(pc.date) + " check";
@@ -3683,7 +3702,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
         (names.length && !x ? '<div class="chips va-chips">' + names.map(nm => '<button type="button" class="chip" data-act="vaultChip" data-v="' + esc(nm) + '">' + esc(nm) + '</button>').join("") + '</div>' : "") +
         (x ? field("Day", '<input name="on" type="date" value="' + esc(x.on) + '">') : ""),
       onInput: () => {
-        const a = toNum($("#sheetForm").elements.amt.value), was = x ? x.amt : 0, after = r2((+it.amount || 0) - vSpent(it) + was - a), h = $("#vaHint");
+        const a = toNum($("#sheetForm").elements.amt.value), was = x && x.done !== false ? x.amt : 0, after = r2((+it.amount || 0) - vSpent(it) + was - a), h = $("#vaHint");
         if (it.paid){ h.className = "va-hint"; h.textContent = a ? money(r2(vSpent(it) - was + a)) + " spent in all" : ""; return; }
         h.className = "va-hint" + (after < -0.004 ? " bad" : "");
         h.textContent = !a ? "" : after < -0.004 ? "Goes " + money(-after) + " over. That comes out of Extra on this check." : money(after) + " left after this";
@@ -4879,6 +4898,15 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").ca
     else if (act === "vaultAdd") vaultAddSheet(pcId, id);
     else if (act === "vaultSpend") vaultAddSheet(pcId, id, b.dataset.sid, true);
     else if (act === "vaultSpendRow") vaultAddSheet(pcId, id, b.dataset.sid, false);
+    else if (act === "vaultSpendTick"){
+      const pc = findPc(pcId), it = pc && pc.items.find(i => i.id === id), x = it && it.vault && it.vault.spends.find(y => y.id === b.dataset.sid);
+      if (x){
+        const from = vPct(it);
+        if (x.done === false){ delete x.done; x.on = iso(today()); } else x.done = false;   // ticking it means you just paid it
+        vFit(it); vJust = {id: it.id, from, at: Date.now()}; commit();
+        setStatus((x.what || "Expense") + (x.done === false ? ": not paid yet" : ": paid") + (it.paid ? "" : " · " + money(vLeft(it)) + " left"));
+      }
+    }
     else if (act === "vaultTog"){
       if (vOpen.has(id)) vOpen.delete(id); else { vOpen.add(id); vAnim = id; }
       lsSet("vault-open", JSON.stringify([...vOpen].slice(-50))); render();
